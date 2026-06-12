@@ -1,0 +1,7 @@
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self), payment=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://www.oakhillparkcafe.co.uk https://maps.gstatic.com https://maps.googleapis.com; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-src https://maps.google.com https://www.google.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
