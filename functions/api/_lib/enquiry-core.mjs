@@ -41,7 +41,9 @@ export function validateEnquiry(e) {
 export function spamReason(body) {
   if (clean(body?.company, 200)) return "honeypot";          // hidden field must stay empty
   const elapsed = Number(body?.elapsed_ms);
-  if (Number.isFinite(elapsed) && elapsed < 2000) return "too_fast";
+  // Timer runs from page load: a real visitor who filled the form practically never
+  // submits in under 1s, but scripted bots do. Kept conservative to avoid dropping leads.
+  if (Number.isFinite(elapsed) && elapsed < 1000) return "too_fast";
   return null;                                                // absent timing must NOT block humans
 }
 
