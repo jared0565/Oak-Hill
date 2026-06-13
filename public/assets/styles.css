@@ -556,6 +556,24 @@ button.button {
   object-fit: cover;
 }
 
+.party-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.party-gallery figure {
+  margin: 0;
+}
+
+.party-gallery img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: 0 14px 30px rgba(38, 50, 56, 0.13);
+}
+
 .stat-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
