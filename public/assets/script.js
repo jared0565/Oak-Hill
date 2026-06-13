@@ -51,11 +51,35 @@
   }
 
   document.querySelectorAll("[data-static-form]").forEach((form) => {
-    form.addEventListener("submit", (event) => {
+    const renderedAt = Date.now();
+    const status = form.querySelector("[data-form-status]");
+    const submitBtn = form.querySelector("button[type=submit], button:not([type])");
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const status = form.querySelector("[data-form-status]");
-      if (status) {
-        status.textContent = "Thanks. Please call 0208 361 1013 to complete this enquiry.";
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.type = form.getAttribute("data-enquiry-type") || "general";
+      data.elapsed_ms = Date.now() - renderedAt;
+      data.source = location.pathname;
+      if (status) status.textContent = "Sending…";
+      if (submitBtn) submitBtn.disabled = true;
+      try {
+        const res = await fetch("/api/enquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const out = await res.json().catch(() => ({}));
+        if (res.ok && out.ok) {
+          if (status) status.textContent =
+            "Thanks — we've got your message and will reply. For anything urgent call 0208 361 1013.";
+          form.reset();
+        } else if (status) {
+          status.textContent = out.error || "Sorry, something went wrong. Please call 0208 361 1013.";
+        }
+      } catch {
+        if (status) status.textContent = "Sorry, something went wrong. Please call 0208 361 1013.";
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
   });

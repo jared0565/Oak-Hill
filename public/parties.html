@@ -127,7 +127,10 @@
           <div class="calculator-output" data-party-output aria-live="polite"></div>
         </aside>
 
-        <form class="form-panel" data-static-form>
+        <form class="form-panel" data-static-form data-enquiry-type="party">
+          <div aria-hidden="true" style="position:absolute;left:-5000px;top:auto;width:1px;height:1px;overflow:hidden">
+            <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
+          </div>
           <span class="kicker">Enquiry</span>
           <h2>Start a party enquiry</h2>
           <div class="field-grid">
@@ -141,7 +144,7 @@
           <label>Notes
             <textarea name="message" rows="5" placeholder="Preferred time, food questions, or anything the team should know"></textarea>
           </label>
-          <button class="button" type="submit">Prepare enquiry</button>
+          <button class="button" type="submit">Send enquiry</button>
           <p class="form-status" data-form-status aria-live="polite"></p>
           <p class="form-note">We use these details only to plan your party and reply to you. See the <a href="privacy.html">privacy policy</a> and <a href="terms.html">booking terms</a>.</p>
         </form>

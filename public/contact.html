@@ -69,13 +69,16 @@
           <p class="section-lede">The highest-intent actions are phone and directions, so they stay visible across mobile. For parties, use the dedicated party page so pricing and capacity are clear before the enquiry.</p>
           <div class="cluster"><a class="button" href="parties.html">Party page</a><a class="button ghost" href="menu.html">Menu</a></div>
         </div>
-        <form class="form-panel" data-static-form>
+        <form class="form-panel" data-static-form data-enquiry-type="general">
+          <div aria-hidden="true" style="position:absolute;left:-5000px;top:auto;width:1px;height:1px;overflow:hidden">
+            <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
+          </div>
           <span class="kicker">General enquiry</span>
           <h2>Send a message</h2>
           <label>Name <input name="name" autocomplete="name" required></label>
           <label>Email <input name="email" type="email" autocomplete="email" required></label>
           <label>Message <textarea name="message" rows="5" required></textarea></label>
-          <button class="button" type="submit">Prepare message</button>
+          <button class="button" type="submit">Send message</button>
           <p class="form-status" data-form-status aria-live="polite"></p>
           <p class="form-note">We use these details only to reply to you. See the <a href="privacy.html">privacy policy</a>.</p>
         </form>
