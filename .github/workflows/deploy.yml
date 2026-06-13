@@ -18,5 +18,10 @@ jobs:
           # Token needs Cloudflare Pages: Edit and D1: Edit permissions.
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # wrangler-action@v3 defaults to wrangler 3.90.0, which predates wrangler.jsonc
+          # support and fails with "Must specify a directory of assets to deploy". Pin a
+          # v4 wrangler so CI reads pages_build_output_dir and the D1 binding from config,
+          # exactly like a local `wrangler pages deploy`.
+          wranglerVersion: "4.100.0"
           # Config-driven: reads pages_build_output_dir and the D1 binding from wrangler.jsonc.
           command: pages deploy --commit-dirty=true
