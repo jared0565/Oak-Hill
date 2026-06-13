@@ -1,0 +1,11 @@
+{
+  "name": "Oak Hill Park Cafe",
+  "short_name": "Oak Hill Cafe",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#1d4633",
+  "background_color": "#fff7ea",
+  "display": "browser"
+}

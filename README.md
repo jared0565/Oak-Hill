@@ -17,7 +17,8 @@ Open `index.html` directly in a browser. No build step is required.
 ## Launch Checklist
 
 - Connect party and contact forms to a secure backend, CRM, or email endpoint.
-- Add GA4 and ad conversion events for call clicks, directions clicks, menu views, party enquiry starts, and party enquiry submits.
+- Add GA4 and ad conversion events for call clicks, directions clicks, menu views, party enquiry starts, and party enquiry submits. Set `GA_MEASUREMENT_ID` in `assets/consent.js`; the cookie banner (Consent Mode v2) already gates loading on consent.
+- Have the owner review `privacy.html`, `terms.html`, and `cookies.html` so the legal copy matches how the cafe actually operates (deposit policy, data retention, allergen handling).
 - Confirm final opening hours, party prices, allergens, and any parking/accessibility details with the cafe.
 - Replace or supplement legacy photos with a current photo shoot when available.
 - Deploy with `_headers` security headers where supported, or translate them into the hosting provider's config.

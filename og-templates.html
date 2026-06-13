@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { background: #555; font-family: Georgia, "Times New Roman", serif; }
+  .card {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto;
+    color: white;
+    background: #1d4633;
+  }
+  .photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(29, 70, 51, 0.96) 0%, rgba(29, 70, 51, 0.88) 46%, rgba(29, 70, 51, 0.30) 100%);
+  }
+  .content {
+    position: absolute;
+    inset: 0;
+    padding: 64px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .brand-row { display: flex; align-items: center; gap: 24px; }
+  .brand-row img { width: 110px; height: 82px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
+  .brand-row span {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  h1 {
+    max-width: 740px;
+    font-size: 92px;
+    line-height: 0.98;
+    font-weight: 700;
+    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.3);
+  }
+  .sub {
+    max-width: 700px;
+    margin-top: 26px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 34px;
+    line-height: 1.25;
+    color: rgba(255, 255, 255, 0.95);
+  }
+  .pill-row { display: flex; gap: 18px; margin-top: 8px; }
+  .pill {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    padding: 16px 30px;
+    border-radius: 999px;
+    background: #d94f30;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+  .pill.gold { background: #f4b942; color: #1d4633; }
+  .pill.plain { background: rgba(255, 255, 255, 0.16); border: 2px solid rgba(255, 255, 255, 0.55); }
+
+  #card-parties { background: #d94f30; }
+  #card-parties .scrim { background: linear-gradient(90deg, rgba(217, 79, 48, 0.97) 0%, rgba(217, 79, 48, 0.92) 52%, rgba(150, 40, 18, 0.55) 100%); }
+  #card-parties .pill { background: #1d4633; }
+  #card-parties .pill.gold { background: #f4b942; color: #1d4633; }
+
+  #card-soft-play .scrim { background: linear-gradient(115deg, #2f6b4f 0%, #1d4633 70%); }
+  #card-soft-play .blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.9;
+  }
+  #card-contact .scrim { background: linear-gradient(115deg, #1d4633 0%, #2f6b4f 100%); }
+  .address-line {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 32px;
+    margin-top: 24px;
+    color: rgba(255, 255, 255, 0.92);
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="card-home">
+  <img class="photo" src="assets/images/park.jpg" alt="">
+  <div class="scrim"></div>
+  <div class="content">
+    <div class="brand-row">
+      <img src="assets/images/oak-hill-logo.png" alt="">
+      <span>Barnet &middot; family-run since 1996</span>
+    </div>
+    <h1>Food, soft play &amp; kids parties in the park.</h1>
+    <div class="pill-row">
+      <span class="pill">Soft play from &pound;2</span>
+      <span class="pill gold">Homemade pierogi</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="card-menu">
+  <img class="photo" src="assets/images/breakfast.jpg" alt="">
+  <div class="scrim"></div>
+  <div class="content">
+    <div class="brand-row">
+      <img src="assets/images/oak-hill-logo.png" alt="">
+      <span>The menu</span>
+    </div>
+    <h1>Big breakfasts. Homemade pierogi.</h1>
+    <div class="pill-row">
+      <span class="pill gold">Kids meals</span>
+      <span class="pill plain">In Oak Hill Park, Barnet</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="card-soft-play">
+  <div class="scrim"></div>
+  <span class="blob" style="width:420px;height:420px;background:#f4b942;right:-90px;top:-110px;"></span>
+  <span class="blob" style="width:240px;height:240px;background:#d94f30;right:230px;bottom:-80px;"></span>
+  <span class="blob" style="width:130px;height:130px;background:#78b7c5;right:120px;bottom:170px;"></span>
+  <div class="content">
+    <div class="brand-row">
+      <img src="assets/images/oak-hill-logo.png" alt="">
+      <span>Malibu's soft play</span>
+    </div>
+    <h1>Soft play from &pound;2. Coffee within sight.</h1>
+    <div class="pill-row">
+      <span class="pill">Ages 0&ndash;6</span>
+      <span class="pill plain">Open 9am&ndash;5pm daily</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="card-parties">
+  <div class="scrim"></div>
+  <div class="content">
+    <div class="brand-row">
+      <img src="assets/images/oak-hill-logo.png" alt="">
+      <span>Children's birthday parties</span>
+    </div>
+    <div>
+      <h1>Birthday sorted.</h1>
+      <p class="sub">2 hours &middot; soft play to yourselves &middot; food, drinks &amp; cake ceremony included</p>
+    </div>
+    <div class="pill-row">
+      <span class="pill">From &pound;170</span>
+      <span class="pill gold">Up to 25 children</span>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="card-contact">
+  <div class="scrim"></div>
+  <div class="content">
+    <div class="brand-row">
+      <img src="assets/images/oak-hill-logo.png" alt="">
+      <span>Visit us</span>
+    </div>
+    <div>
+      <h1>Find us in Oak Hill Park.</h1>
+      <p class="address-line">Parkside Gardens, Barnet EN4 8JP &middot; Open 8am&ndash;5pm</p>
+    </div>
+    <div class="pill-row">
+      <span class="pill">0208 361 1013</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
