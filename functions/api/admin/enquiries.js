@@ -1,7 +1,7 @@
 // /api/admin/enquiries — list and update status of contact/party enquiries.
 // Auth is enforced automatically by _middleware.js — no auth code here.
 
-const STATUS = { read: "read", archive: "archived", new: "new" };
+const STATUS = { read: "read", archive: "archived" };
 
 export async function onRequestGet(ctx) {
   const { results } = await ctx.env.DB
@@ -13,11 +13,12 @@ export async function onRequestGet(ctx) {
   return Response.json({ enquiries: results });
 }
 
-// POST { id, action: "read" | "archive" | "new" }
+// POST { id, action: "read" | "archive" }
 export async function onRequestPost(ctx) {
   const b = await ctx.request.json().catch(() => ({}));
   const id = Number(b.id);
-  const status = STATUS[b.action];
+  // Own-property check so inherited keys ("constructor", etc.) can't slip past the guard.
+  const status = Object.prototype.hasOwnProperty.call(STATUS, b.action) ? STATUS[b.action] : null;
   if (!Number.isInteger(id) || id <= 0 || !status) {
     return Response.json({ error: "Bad request." }, { status: 400 });
   }
