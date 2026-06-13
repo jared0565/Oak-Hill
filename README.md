@@ -44,6 +44,26 @@ wrangler pages secret put ADMIN_TOKEN --project-name oak-hill-park-cafe
 
 Local secrets live in `.dev.vars` (gitignored). `wrangler pages dev` can crash on Windows paths with spaces; if so, test against a deploy.
 
+### Website enquiry forms
+
+The contact form (`contact.html`) and party-enquiry form (`parties.html`) POST to
+`/api/enquiry`, which:
+1. Drops obvious bots (a hidden honeypot field + a too-fast-submit check).
+2. Saves the enquiry to the `enquiries` table in D1 (the source of truth).
+3. Best-effort emails the cafe via Resend — only when `RESEND_API_KEY` is set;
+   otherwise this is a silent no-op and the enquiry is still saved.
+
+Read submissions in the **Messages** section of `/admin.html`.
+
+**To turn email on (owner):**
+- `npx wrangler pages secret put RESEND_API_KEY` (key from resend.com).
+- Set `ENQUIRY_NOTIFY_TO` (where notifications go) and `ENQUIRY_FROM` (a verified
+  Resend sender on a domain with SPF/DKIM) in `wrangler.jsonc` `vars` or the Pages
+  dashboard.
+
+The D1 table is created by migration `migrations/0002_enquiries.sql`
+(`npx wrangler d1 migrations apply oak-hill-bookings --remote`).
+
 ## Launch Checklist
 
 - **Booking deposit (Stripe):** add online card payment for the £100 deposit so a booking can be confirmed without a phone call. Needs a Stripe account; integrate Stripe Checkout in `functions/api/book.js` (create a Checkout Session) and confirm the booking on the Stripe webhook.
