@@ -4,15 +4,22 @@ Static, dependency-free website rebuild focused on mobile conversion, local SEO,
 
 ## Preview
 
-Open `index.html` directly in a browser. No build step is required.
+Open `public/index.html` directly in a browser. No build step is required.
+
+## Deployment
+
+Pushing to `master` deploys `public/` to the `oak-hill-park-cafe` Cloudflare Pages project via GitHub Actions (`.github/workflows/deploy.yml`). The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN` (a token with Cloudflare Pages edit permission) and `CLOUDFLARE_ACCOUNT_ID`. Manual deploys still work with `wrangler pages deploy public --project-name oak-hill-park-cafe`.
 
 ## Pages
+
+All site files live in `public/`:
 
 - `index.html` - conversion-led homepage
 - `menu.html` - HTML-first cafe, kids, drinks, and Polish specials menu
 - `soft-play.html` - soft play pricing, age ranges, rules, and trust copy
 - `parties.html` - party package landing page with estimate calculator
 - `contact.html` - phone, directions, hours, map, and general enquiry flow
+- `privacy.html`, `terms.html`, `cookies.html` - legal pages linked from the footer
 
 ## Launch Checklist
 
