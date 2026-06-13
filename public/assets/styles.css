@@ -226,31 +226,42 @@ button.button {
 .hero {
   position: relative;
   overflow: hidden;
-  background: var(--park-dark);
+  background:
+    radial-gradient(125% 120% at 80% 16%, rgba(120, 183, 197, 0.20), transparent 52%),
+    radial-gradient(135% 120% at 10% 96%, rgba(244, 185, 66, 0.14), transparent 50%),
+    linear-gradient(158deg, #235543 0%, var(--park-dark) 58%, #143526 100%);
   color: white;
 }
 
-.hero::before {
-  content: "";
+.hero-decor {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(29, 70, 51, 0.94) 0%, rgba(29, 70, 51, 0.78) 44%, rgba(29, 70, 51, 0.28) 100%),
-    image-set(url("images/park.jpg") 1x);
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
+  pointer-events: none;
 }
+
+.hero-dot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(9px);
+}
+
+.hero-dot--pink { width: 70px; height: 70px; top: 20%; left: 9%; background: #ff5ca8; opacity: 0.26; }
+.hero-dot--sky { width: 110px; height: 110px; bottom: 16%; left: 16%; background: var(--sky); opacity: 0.22; }
+.hero-dot--honey { width: 54px; height: 54px; top: 24%; right: 38%; background: var(--honey); opacity: 0.28; }
+.hero-dot--lime { width: 80px; height: 80px; bottom: 20%; right: 10%; background: #8bc34a; opacity: 0.22; }
 
 .hero-inner {
   position: relative;
+  z-index: 1;
   width: min(var(--max), calc(100% - 32px));
-  min-height: 650px;
+  min-height: 600px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 640px) minmax(260px, 1fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 460px);
   align-items: center;
-  gap: 2rem;
-  padding: 4rem 0 5.5rem;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(4rem, 7vw, 5.5rem);
 }
 
 .eyebrow {
@@ -274,9 +285,10 @@ button.button {
 .page-hero h1 {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3rem, 7vw, 6.7rem);
-  line-height: 0.92;
-  letter-spacing: 0;
+  font-size: clamp(2.5rem, 4.8vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .hero-copy {
@@ -294,34 +306,67 @@ button.button {
   margin-top: 1.55rem;
 }
 
-.hero-card {
-  align-self: end;
-  background: var(--paper);
-  color: var(--ink);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+.hero-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero-card img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+.hero-badge::before {
+  content: "";
+  position: absolute;
+  width: 86%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255, 253, 240, 0.24), transparent 68%);
+  filter: blur(8px);
 }
 
-.hero-card-body {
-  padding: 1.2rem;
+.hero-badge img {
+  position: relative;
+  width: min(100%, 440px);
+  height: auto;
+  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.4));
 }
 
-.hero-card-body strong {
-  display: block;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.5rem;
+.hero-note {
+  margin: 1.4rem 0 0;
+  max-width: 560px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.hero-card-body p {
-  margin: 0.35rem 0 0;
-  color: var(--muted);
+.hero-chip {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--honey);
+  color: var(--park-dark);
+  font-size: 0.96rem;
+  font-weight: 900;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-text > * {
+    animation: heroRise 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  .hero-text > :nth-child(1) { animation-delay: 60ms; }
+  .hero-text > :nth-child(2) { animation-delay: 140ms; }
+  .hero-text > :nth-child(3) { animation-delay: 220ms; }
+  .hero-text > :nth-child(4) { animation-delay: 300ms; }
+  .hero-text > :nth-child(5) { animation-delay: 380ms; }
+
+  .hero-badge {
+    animation: heroBadgeIn 850ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
+  }
+}
+
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes heroBadgeIn {
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
 }
 
 .quick-strip {
@@ -393,7 +438,8 @@ button.button {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(2.1rem, 4vw, 4rem);
-  line-height: 1;
+  line-height: 1.05;
+  text-wrap: balance;
 }
 
 .section-lede {
@@ -798,11 +844,18 @@ textarea {
 
   .hero-inner {
     min-height: auto;
-    padding: 3.5rem 0 5rem;
+    padding: 3.25rem 0 4.5rem;
+    justify-items: start;
   }
 
-  .hero-card {
-    max-width: 460px;
+  .hero-badge {
+    order: -1;
+    align-self: start;
+    width: 100%;
+  }
+
+  .hero-badge img {
+    width: min(300px, 64vw);
   }
 
   .quick-grid,
@@ -842,17 +895,9 @@ textarea {
     display: none;
   }
 
-  .hero::before {
-    background:
-      linear-gradient(180deg, rgba(29, 70, 51, 0.92) 0%, rgba(29, 70, 51, 0.77) 56%, rgba(29, 70, 51, 0.5) 100%),
-      image-set(url("images/park.jpg") 1x);
-    background-size: cover;
-    background-position: center;
-  }
-
   .hero h1,
   .page-hero h1 {
-    font-size: clamp(2.65rem, 16vw, 4rem);
+    font-size: clamp(2.25rem, 8vw, 3.1rem);
   }
 
   .quick-grid,
