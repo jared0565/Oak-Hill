@@ -825,6 +825,64 @@ textarea {
   box-shadow: 0 14px 30px rgba(38, 50, 56, 0.1);
 }
 
+.embed-block {
+  display: grid;
+  place-content: center;
+  padding: 2rem;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 120% at 80% 12%, rgba(120, 183, 197, 0.18), transparent 55%),
+    linear-gradient(158deg, #235543, var(--park-dark));
+  color: white;
+  text-align: center;
+}
+
+.embed-block--calendar {
+  min-height: 560px;
+  margin-top: 0.5rem;
+}
+
+.embed-block--map {
+  min-height: 460px;
+}
+
+.embed-block-inner {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+  max-width: 440px;
+}
+
+.embed-block-inner strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+}
+
+.embed-block-inner p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.embed-block-inner .button {
+  margin-top: 0.5rem;
+}
+
+.embed-block-note {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.embed-block-note button,
+.embed-block-note a {
+  border: none;
+  padding: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.92);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .mobile-actions {
   display: none;
 }

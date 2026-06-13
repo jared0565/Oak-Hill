@@ -34,6 +34,25 @@
     }
   }
 
+  // Replace a blocked embed placeholder with its real Google iframe.
+  function loadEmbed(placeholder) {
+    if (!placeholder || placeholder.dataset.embedLoaded === "true") return;
+    placeholder.dataset.embedLoaded = "true";
+    var iframe = document.createElement("iframe");
+    iframe.src = placeholder.getAttribute("data-embed-src");
+    iframe.title = placeholder.getAttribute("data-embed-title") || "";
+    iframe.className = placeholder.getAttribute("data-embed-class") || "";
+    iframe.loading = "lazy";
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
+    placeholder.replaceWith(iframe);
+  }
+
+  function applyEmbeds(consent) {
+    if (!consent || !consent.embeds) return;
+    document.querySelectorAll("[data-embed]").forEach(loadEmbed);
+  }
+
   var gaLoaded = false;
 
   function applyConsent(consent) {
@@ -53,6 +72,8 @@
       gtag("js", new Date());
       gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true });
     }
+
+    applyEmbeds(consent);
   }
 
   function buildBanner() {
@@ -64,12 +85,13 @@
     banner.innerHTML =
       '<div class="consent-text">' +
       '<strong>Cookies at the cafe</strong>' +
-      '<p>We use optional cookies only to count visits and improve the site. Nothing is set unless you allow it. See the <a href="cookies.html">cookie policy</a>.</p>' +
+      '<p>We use optional cookies for visitor stats and to show Google maps and calendars. Nothing loads until you allow it. See the <a href="cookies.html">cookie policy</a>.</p>' +
       '</div>' +
       '<form class="consent-options" hidden>' +
       '<label><input type="checkbox" checked disabled> Strictly necessary (always on)</label>' +
       '<label><input type="checkbox" name="analytics"> Analytics: count visits anonymously</label>' +
       '<label><input type="checkbox" name="advertising"> Advertising: measure if our local ads work</label>' +
+      '<label><input type="checkbox" name="embeds"> Maps &amp; calendar: load Google Maps and Calendar</label>' +
       '</form>' +
       '<div class="consent-actions">' +
       '<button type="button" class="button" data-consent-accept>Accept all cookies</button>' +
@@ -93,6 +115,7 @@
       if (stored) {
         options.querySelector("[name='analytics']").checked = !!stored.analytics;
         options.querySelector("[name='advertising']").checked = !!stored.advertising;
+        options.querySelector("[name='embeds']").checked = !!stored.embeds;
       }
       if (withOptions) {
         options.hidden = false;
@@ -111,11 +134,11 @@
     }
 
     banner.querySelector("[data-consent-accept]").addEventListener("click", function () {
-      decide({ analytics: true, advertising: true });
+      decide({ analytics: true, advertising: true, embeds: true });
     });
 
     banner.querySelector("[data-consent-reject]").addEventListener("click", function () {
-      decide({ analytics: false, advertising: false });
+      decide({ analytics: false, advertising: false, embeds: false });
     });
 
     customiseButton.addEventListener("click", function () {
@@ -125,13 +148,22 @@
     saveButton.addEventListener("click", function () {
       decide({
         analytics: options.querySelector("[name='analytics']").checked,
-        advertising: options.querySelector("[name='advertising']").checked
+        advertising: options.querySelector("[name='advertising']").checked,
+        embeds: options.querySelector("[name='embeds']").checked
       });
     });
 
     document.querySelectorAll("[data-cookie-settings]").forEach(function (trigger) {
       trigger.addEventListener("click", function () {
         showBanner(true);
+      });
+    });
+
+    // Per-embed "Load" buttons: load that one embed on explicit click,
+    // even when the visitor hasn't granted the category for every visit.
+    document.querySelectorAll("[data-embed-load]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        loadEmbed(button.closest("[data-embed]"));
       });
     });
 
