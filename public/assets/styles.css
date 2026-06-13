@@ -453,7 +453,7 @@ button.button {
 }
 
 .section {
-  padding: clamp(3.75rem, 8vw, 7rem) 0;
+  padding: clamp(2.5rem, 5vw, 4.25rem) 0;
 }
 
 .section.alt {
@@ -465,7 +465,7 @@ button.button {
   grid-template-columns: minmax(0, 0.86fr) minmax(260px, 0.5fr);
   gap: 2rem;
   align-items: end;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .section h2,
@@ -602,7 +602,7 @@ button.button {
 .page-hero {
   background: linear-gradient(135deg, var(--park-dark), var(--park));
   color: white;
-  padding: clamp(3rem, 8vw, 6rem) 0;
+  padding: clamp(2.5rem, 5vw, 4.25rem) 0;
 }
 
 .page-hero .section-lede {
@@ -1161,7 +1161,7 @@ textarea {
   }
 
   .section {
-    padding: 3.25rem 0;
+    padding: 2.25rem 0;
   }
 
   .menu-item {
