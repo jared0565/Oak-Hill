@@ -504,7 +504,8 @@ button.button {
 .price-card h3,
 .menu-group h2,
 .form-panel h2,
-.info-panel h2 {
+.info-panel h2,
+.calendar-panel h2 {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.7rem;
@@ -783,13 +784,45 @@ textarea {
   display: grid;
   grid-template-columns: minmax(300px, 0.55fr) minmax(0, 1fr);
   gap: 1rem;
+  align-items: start;
+}
+
+.calendar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.calendar-panel p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.calendar-frame {
+  width: 100%;
+  min-height: 560px;
+  margin-top: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: white;
+  box-shadow: 0 14px 30px rgba(38, 50, 56, 0.1);
+}
+
+.map-head {
+  max-width: 760px;
+  margin-bottom: 1.3rem;
+}
+
+.map-head .section-lede {
+  margin-top: 0.6rem;
 }
 
 .map-frame {
   width: 100%;
-  min-height: 430px;
-  border: 0;
+  min-height: 460px;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
+  box-shadow: 0 14px 30px rgba(38, 50, 56, 0.1);
 }
 
 .mobile-actions {
@@ -1132,39 +1165,6 @@ textarea {
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 1rem;
-}
-
-.map-placeholder {
-  min-height: 430px;
-  display: grid;
-  place-content: center;
-  gap: 1rem;
-  border-radius: var(--radius);
-  padding: 2rem;
-  background: var(--park-dark);
-  color: white;
-  text-align: center;
-}
-
-.map-placeholder .cluster {
-  justify-content: center;
-  margin-top: 0;
-}
-
-.map-placeholder strong {
-  display: block;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.45rem;
-}
-
-.map-placeholder p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.map-placeholder .map-note {
-  color: rgba(255, 255, 255, 0.68);
-  font-size: 0.85rem;
 }
 
 .form-note {

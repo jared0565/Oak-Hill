@@ -50,18 +50,6 @@
     update();
   }
 
-  const mapEmbed = document.querySelector("[data-map-embed]");
-  if (mapEmbed) {
-    const loadButton = mapEmbed.querySelector("[data-map-load]");
-    loadButton.addEventListener("click", () => {
-      const iframe = document.createElement("iframe");
-      iframe.className = "map-frame";
-      iframe.title = "Map to Oak Hill Park Cafe";
-      iframe.src = mapEmbed.getAttribute("data-map-src");
-      mapEmbed.replaceWith(iframe);
-    });
-  }
-
   document.querySelectorAll("[data-static-form]").forEach((form) => {
     form.addEventListener("submit", (event) => {
       event.preventDefault();
