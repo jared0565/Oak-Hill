@@ -12,9 +12,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy public/ to Cloudflare Pages
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
+          # Token needs Cloudflare Pages: Edit and D1: Edit permissions.
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=oak-hill-park-cafe
+          # Config-driven: reads pages_build_output_dir and the D1 binding from wrangler.jsonc.
+          command: pages deploy --commit-dirty=true

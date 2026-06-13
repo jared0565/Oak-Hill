@@ -825,6 +825,172 @@ textarea {
   min-height: 680px;
 }
 
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.8rem;
+}
+
+.booking-slot {
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.booking-slot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(38, 50, 56, 0.12);
+}
+
+.booking-slot strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+}
+
+.booking-slot span {
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.booking-slot-label {
+  color: var(--tomato) !important;
+  font-size: 0.74rem;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.booking-slot[aria-pressed="true"] {
+  border-color: var(--park);
+  box-shadow: 0 0 0 2px var(--park);
+  background: white;
+}
+
+.booking-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.booking-note a,
+.booking-fallback a {
+  color: var(--park-dark);
+  font-weight: 750;
+}
+
+.booking-fallback {
+  margin-top: 1.25rem;
+  color: var(--muted);
+}
+
+.booking-form {
+  margin-top: 1.25rem;
+  max-width: 720px;
+}
+
+.booking-form h3 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+}
+
+.booking-success {
+  margin-top: 1.25rem;
+  max-width: 720px;
+  padding: 1.25rem;
+  border: 1px solid rgba(47, 107, 79, 0.3);
+  border-radius: var(--radius);
+  background: rgba(47, 107, 79, 0.08);
+}
+
+.booking-success strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+  color: var(--park-dark);
+}
+
+.booking-success p {
+  margin: 0.5rem 0 0;
+}
+
+.booking-success a {
+  color: var(--park-dark);
+  font-weight: 750;
+}
+
+.admin {
+  max-width: 1100px;
+}
+
+.admin > h1 {
+  margin: 0.3rem 0 1.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.admin-login {
+  max-width: 420px;
+}
+
+.admin-block {
+  margin-top: 2.5rem;
+}
+
+.admin-block h2 {
+  margin: 0 0 0.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.6rem;
+}
+
+.admin-table-wrap {
+  margin-top: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--paper);
+  font-size: 0.92rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.admin-table th {
+  color: var(--park-dark);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.button.admin-mini {
+  min-height: 0;
+  margin: 0 0.2rem 0.2rem 0;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+}
+
 .map-head {
   max-width: 760px;
   margin-bottom: 1.3rem;

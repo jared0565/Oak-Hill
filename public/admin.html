@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking admin | Oak Hill Park Cafe</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <main id="main" class="section">
+    <div class="section-inner admin">
+      <span class="kicker">Owner only</span>
+      <h1>Booking admin</h1>
+
+      <div data-admin-login>
+        <p class="section-lede">Enter the admin password to manage party slots and bookings.</p>
+        <form data-admin-login-form class="form-panel admin-login">
+          <label>Admin password <input type="password" name="token" autocomplete="current-password" required></label>
+          <button class="button" type="submit">Sign in</button>
+          <p class="form-status" data-admin-login-status aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div data-admin-app hidden>
+        <section class="admin-block">
+          <h2>Add a party slot</h2>
+          <p class="section-lede">Each slot you add here appears on the public booking page for customers to book.</p>
+          <form data-admin-slot-form class="form-panel">
+            <div class="field-grid">
+              <label>Date <input type="date" name="date" required></label>
+              <label>Start time <input type="time" name="start_time" required></label>
+              <label>End time <input type="time" name="end_time" required></label>
+              <label>Label <input name="label" value="Party slot" maxlength="60"></label>
+            </div>
+            <button class="button" type="submit">Add slot</button>
+            <p class="form-status" data-admin-slot-status aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="admin-block">
+          <h2>Slots</h2>
+          <div class="admin-table-wrap" data-admin-slots><p class="booking-note">Loading&hellip;</p></div>
+        </section>
+
+        <section class="admin-block">
+          <h2>Bookings</h2>
+          <div class="admin-table-wrap" data-admin-bookings><p class="booking-note">Loading&hellip;</p></div>
+        </section>
+
+        <p><button class="button ghost" type="button" data-admin-logout>Sign out</button></p>
+      </div>
+    </div>
+  </main>
+  <script src="assets/admin.js" defer></script>
+</body>
+</html>

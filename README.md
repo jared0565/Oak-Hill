@@ -1,14 +1,14 @@
 # Oak Hill Park Cafe Website
 
-Static, dependency-free website rebuild focused on mobile conversion, local SEO, accessibility, and fast deployment.
+Mostly-static website with a real-time party booking system. Static pages are dependency-free HTML/CSS/JS; bookings are served by Cloudflare Pages Functions backed by a D1 database.
 
 ## Preview
 
-Open `public/index.html` directly in a browser. No build step is required.
+Open `public/index.html` directly in a browser for the static pages. The booking system needs the Cloudflare runtime — run `wrangler pages dev` (with the local D1 migrated, see below) to exercise `/api/*` locally.
 
 ## Deployment
 
-Pushing to `master` deploys `public/` to the `oak-hill-park-cafe` Cloudflare Pages project via GitHub Actions (`.github/workflows/deploy.yml`). The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN` (a token with Cloudflare Pages edit permission) and `CLOUDFLARE_ACCOUNT_ID`. Manual deploys still work with `wrangler pages deploy public --project-name oak-hill-park-cafe`.
+Config-driven via `wrangler.jsonc` (`pages_build_output_dir: public`, plus the D1 binding). Deploy with `wrangler pages deploy`. Pushing to `master` also deploys via GitHub Actions (`.github/workflows/deploy.yml`); the workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN` (a token with **Cloudflare Pages: Edit and D1: Edit**) and `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Pages
 
@@ -17,13 +17,39 @@ All site files live in `public/`:
 - `index.html` - conversion-led homepage
 - `menu.html` - HTML-first cafe, kids, drinks, and Polish specials menu
 - `soft-play.html` - soft play pricing, age ranges, rules, and trust copy
-- `parties.html` - party package landing page with estimate calculator
+- `parties.html` - party package landing page with estimate calculator and real party photos
+- `calendar.html` - real-time party booking (open slots + booking form) and the Google Calendar overview
 - `contact.html` - phone, directions, hours, map, and general enquiry flow
+- `admin.html` - owner booking admin (noindex; not in nav). Password = the `ADMIN_TOKEN` secret
 - `privacy.html`, `terms.html`, `cookies.html` - legal pages linked from the footer
+
+## Booking system
+
+Real-time party booking, no third-party SaaS.
+
+- **Database:** Cloudflare D1 `oak-hill-bookings` (`slots`, `bookings`). Schema in `migrations/0001_init.sql`.
+- **API (`functions/api/`):** `GET /api/slots` (open slots), `POST /api/book` (atomic slot claim via a conditional `UPDATE`, so no double-booking), and token-protected `/api/admin/slots` and `/api/admin/bookings`.
+- **Owner admin:** `/admin.html`. Sign in with the `ADMIN_TOKEN` secret, then add party slots (they appear instantly on `/calendar.html`) and confirm/cancel bookings.
+- **Deposit:** a booking holds the slot and is marked `pending`; the owner takes the £100 deposit by phone and clicks **Confirm**. (Online card deposit via Stripe is the next step, see checklist.)
+
+### Working on the booking system
+
+```bash
+wrangler d1 migrations apply oak-hill-bookings --local    # set up local DB
+wrangler d1 migrations apply oak-hill-bookings --remote    # set up production DB (run once)
+wrangler pages dev                                         # local dev with Functions + local D1
+# Production admin password:
+wrangler pages secret put ADMIN_TOKEN --project-name oak-hill-park-cafe
+```
+
+Local secrets live in `.dev.vars` (gitignored). `wrangler pages dev` can crash on Windows paths with spaces; if so, test against a deploy.
 
 ## Launch Checklist
 
-- Connect party and contact forms to a secure backend, CRM, or email endpoint.
+- **Booking deposit (Stripe):** add online card payment for the £100 deposit so a booking can be confirmed without a phone call. Needs a Stripe account; integrate Stripe Checkout in `functions/api/book.js` (create a Checkout Session) and confirm the booking on the Stripe webhook.
+- **Booking confirmations (email):** email the customer their reference and notify the cafe on each booking. Needs an email provider (Resend, or Cloudflare Email) and an API key; send from `functions/api/book.js`.
+- **Change the admin password:** rotate `ADMIN_TOKEN` with `wrangler pages secret put ADMIN_TOKEN --project-name oak-hill-park-cafe`. Consider Cloudflare Access for stronger owner auth.
+- Connect the general contact and party-enquiry forms to a secure backend, CRM, or email endpoint.
 - Add GA4 and ad conversion events for call clicks, directions clicks, menu views, party enquiry starts, and party enquiry submits. Set `GA_MEASUREMENT_ID` in `assets/consent.js`; the cookie banner (Consent Mode v2) already gates loading on consent.
 - Have the owner review `privacy.html`, `terms.html`, and `cookies.html` so the legal copy matches how the cafe actually operates (deposit policy, data retention, allergen handling).
 - Confirm final opening hours, party prices, allergens, and any parking/accessibility details with the cafe.

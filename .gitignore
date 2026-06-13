@@ -1,5 +1,8 @@
 screenshots/
 .wrangler/
+.dev.vars
+.party-src/
+node_modules/
 .gh-auth-refresh.*.log
 .playwright-mcp/
 .DS_Store

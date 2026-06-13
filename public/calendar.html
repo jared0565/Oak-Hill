@@ -39,35 +39,64 @@
   <main id="main">
     <section class="page-hero">
       <div class="section-inner">
-        <span class="eyebrow">Events &amp; availability</span>
-        <h1>What's on, and when you can book.</h1>
-        <p class="section-lede">We keep this calendar up to date with booked party slots, events and cafe closures. Open dates are free to book, so check here first, then call or send a party enquiry to lock in your time.</p>
-        <div class="cluster"><a class="button" href="parties.html#enquiry">Start a party enquiry</a><a class="button ghost" href="tel:+442083611013">Call 0208 361 1013</a></div>
+        <span class="eyebrow">Book a party</span>
+        <h1>See open slots and book in seconds.</h1>
+        <p class="section-lede">Pick an open party slot below and send your details; we'll hold it while we take your &pound;100 deposit by phone. The calendar further down shows everything else that's on, including closures.</p>
+        <div class="cluster"><a class="button" href="#book">See open slots</a><a class="button ghost" href="tel:+442083611013">Call 0208 361 1013</a></div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="book">
       <div class="section-inner">
         <div class="section-head">
           <div>
-            <span class="kicker">The calendar</span>
-            <h2>Check a date before you book.</h2>
+            <span class="kicker">Book a slot</span>
+            <h2>Pick an open party slot.</h2>
           </div>
-          <p class="section-lede">Entries you see are slots already booked, events, or days the cafe or soft play is closed. Anything not marked is available. Tap an entry for the details.</p>
+          <p class="section-lede">These are our open party slots right now. Choose one and send your details; we'll hold it for you and call to take the &pound;100 deposit. The deposit confirms the booking.</p>
         </div>
-        <iframe class="calendar-frame calendar-frame--tall" title="Oak Hill Park Cafe events, party slots and closure calendar" loading="lazy" src="https://calendar.google.com/calendar/embed?src=ohpcwebsite%40gmail.com&amp;ctz=Europe%2FLondon&amp;mode=MONTH&amp;wkst=2&amp;hl=en_GB&amp;bgcolor=%23ffffff&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;color=%232f6b4f"></iframe>
+
+        <div class="booking" data-booking>
+          <div class="booking-slots" data-booking-slots aria-live="polite">
+            <p class="booking-note">Loading open slots&hellip;</p>
+          </div>
+
+          <form class="booking-form form-panel" data-booking-form hidden>
+            <span class="kicker">Your details</span>
+            <h3 data-booking-chosen>Hold this slot</h3>
+            <div class="field-grid">
+              <label>Your name <input name="name" autocomplete="name" required></label>
+              <label>Telephone <input name="phone" type="tel" autocomplete="tel" required></label>
+              <label>Email <input name="email" type="email" autocomplete="email" required></label>
+              <label>Child's age <input name="child_age" inputmode="numeric"></label>
+              <label>Number of children <input name="children" type="number" min="1" max="25" value="10"></label>
+            </div>
+            <label>Notes <textarea name="notes" rows="3" placeholder="Preferred food, anything we should know"></textarea></label>
+            <div class="cluster">
+              <button class="button" type="submit" data-booking-submit>Hold this slot</button>
+              <button class="button ghost" type="button" data-booking-cancel>Choose a different slot</button>
+            </div>
+            <p class="form-status" data-booking-status aria-live="polite"></p>
+            <p class="form-note">We use these details only to arrange your party. See the <a href="privacy.html">privacy policy</a> and <a href="terms.html">booking terms</a>.</p>
+          </form>
+
+          <div class="booking-success" data-booking-success hidden></div>
+        </div>
+
+        <p class="booking-fallback">Prefer to talk to someone? <a href="tel:+442083611013">Call 0208 361 1013</a> or <a href="parties.html#enquiry">send a party enquiry</a>.</p>
       </div>
     </section>
 
     <section class="section alt">
-      <div class="section-inner two-col">
-        <div>
-          <span class="kicker">Ready to book</span>
-          <h2>Found a free date? Let's get it held.</h2>
-          <p class="section-lede">A &pound;100 deposit secures your party slot. Send a party enquiry with your preferred date, or call the cafe and we will check the diary with you on the spot.</p>
-          <div class="cluster"><a class="button" href="parties.html#enquiry">Start a party enquiry</a><a class="button ghost" href="parties.html">See party prices</a></div>
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Events &amp; closures</span>
+            <h2>Everything else that's on.</h2>
+          </div>
+          <p class="section-lede">Events, parties already booked, and days the cafe or soft play is closed. For a party booking use the open slots above; this calendar is the wider view.</p>
         </div>
-        <div class="image-stack"><img src="assets/images/party-room.jpg" width="1000" height="750" alt="A real birthday party in Malibu's soft play room, children and parents around the tables" loading="lazy"></div>
+        <iframe class="calendar-frame calendar-frame--tall" title="Oak Hill Park Cafe events, party slots and closure calendar" loading="lazy" src="https://calendar.google.com/calendar/embed?src=ohpcwebsite%40gmail.com&amp;ctz=Europe%2FLondon&amp;mode=MONTH&amp;wkst=2&amp;hl=en_GB&amp;bgcolor=%23ffffff&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;color=%232f6b4f"></iframe>
       </div>
     </section>
   </main>
@@ -76,5 +105,6 @@
   <nav class="mobile-actions" aria-label="Quick actions"><a href="tel:+442083611013">Call</a><a href="https://maps.google.com/?q=Oak%20Hill%20Park%20Cafe%20Parkside%20Gardens%20Barnet%20EN4%208JP">Map</a><a href="parties.html">Party</a><a href="contact.html">Contact</a></nav>
   <script src="assets/consent.js" defer></script>
   <script src="assets/script.js" defer></script>
+  <script src="assets/booking.js" defer></script>
 </body>
 </html>
