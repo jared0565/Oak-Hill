@@ -88,7 +88,7 @@
     e.preventDefault();
     if (!selected) return;
     submitBtn.disabled = true;
-    statusEl.textContent = "Holding your slot…";
+    statusEl.textContent = "Sending your request…";
     const fd = new FormData(form);
     const payload = {
       slot_id: selected.id,
@@ -109,16 +109,16 @@
       if (res.ok && data.ok) {
         form.hidden = true;
         const ref = document.createElement("strong");
-        ref.textContent = "Slot held. Your reference is " + data.ref + ".";
+        ref.textContent = "Thanks — your reference is " + data.ref + ".";
         const p = document.createElement("p");
         const tel = document.createElement("a");
         tel.href = "tel:+442083611013";
         tel.textContent = "0208 361 1013";
         p.append(
-          "We've held " + slotLabel(data.slot) +
-          " for you. We'll call to take the £100 deposit, which confirms your booking, or call us now on ",
+          "We've got your request for " + slotLabel(data.slot) +
+          ". The slot stays open until your £100 deposit is paid, which locks it in, so call ",
           tel,
-          "."
+          " soon to secure it."
         );
         successEl.replaceChildren(ref, p);
         successEl.hidden = false;

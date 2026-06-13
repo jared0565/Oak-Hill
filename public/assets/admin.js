@@ -80,7 +80,12 @@
       tr.appendChild(el("td", fmtDate(s.date)));
       tr.appendChild(el("td", s.start_time + "–" + s.end_time));
       tr.appendChild(el("td", s.label));
-      tr.appendChild(el("td", s.status));
+      const holds = Number(s.holds) || 0;
+      let statusText = s.status;
+      if (s.status === "available" && holds > 0) {
+        statusText = "available · " + holds + " hold" + (holds === 1 ? "" : "s");
+      }
+      tr.appendChild(el("td", statusText));
       const actions = el("td");
       if (s.status !== "booked") {
         const del = el("button", "Delete", "button ghost admin-mini");
@@ -127,13 +132,19 @@
       tr.appendChild(el("td", b.status));
       const actions = el("td");
       if (b.status === "pending") {
-        const confirmBtn = el("button", "Confirm", "button admin-mini");
-        confirmBtn.addEventListener("click", () => act(b.id, "confirm"));
+        const confirmBtn = el("button", "Mark paid", "button admin-mini");
+        confirmBtn.addEventListener("click", () => {
+          if (confirm("Mark this booking as paid? This locks the slot and declines any other holds on it.")) act(b.id, "confirm");
+        });
         actions.appendChild(confirmBtn);
       }
       if (b.status !== "cancelled") {
-        const cancelBtn = el("button", "Cancel", "button ghost admin-mini");
-        cancelBtn.addEventListener("click", () => { if (confirm("Cancel this booking and free the slot?")) act(b.id, "cancel"); });
+        const isPending = b.status === "pending";
+        const cancelBtn = el("button", isPending ? "Decline" : "Cancel", "button ghost admin-mini");
+        const msg = isPending
+          ? "Decline this enquiry? The slot stays open for others."
+          : "Cancel this booking and free the slot?";
+        cancelBtn.addEventListener("click", () => { if (confirm(msg)) act(b.id, "cancel"); });
         actions.appendChild(cancelBtn);
       }
       tr.appendChild(actions);

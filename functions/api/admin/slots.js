@@ -1,8 +1,15 @@
 // /api/admin/slots — owner slot management (auth enforced by _middleware.js).
 
 export async function onRequestGet(ctx) {
+  // `holds` = number of pending enquiries on a slot (soft holds awaiting a deposit).
+  // The slot is still available to book until one of those holds is confirmed (paid).
   const { results } = await ctx.env.DB.prepare(
-    "SELECT id, date, start_time, end_time, label, status FROM slots ORDER BY date, start_time"
+    `SELECT s.id, s.date, s.start_time, s.end_time, s.label, s.status,
+            SUM(CASE WHEN b.status = 'pending' THEN 1 ELSE 0 END) AS holds
+     FROM slots s
+     LEFT JOIN bookings b ON b.slot_id = s.id
+     GROUP BY s.id
+     ORDER BY s.date, s.start_time`
   ).all();
   return Response.json({ slots: results });
 }
@@ -33,18 +40,26 @@ export async function onRequestDelete(ctx) {
   if (!Number.isInteger(id) || id <= 0) {
     return Response.json({ error: "Missing slot id." }, { status: 400 });
   }
+  // Friendly pre-check for the common case.
   const booking = await ctx.env.DB
-    .prepare("SELECT id FROM bookings WHERE slot_id = ? AND status != 'cancelled'")
+    .prepare("SELECT id FROM bookings WHERE slot_id = ? AND status = 'confirmed'")
     .bind(id)
     .first();
   if (booking) {
-    return Response.json({ error: "That slot has a booking. Cancel the booking first." }, { status: 409 });
+    return Response.json({ error: "That slot has a confirmed booking. Cancel the booking first." }, { status: 409 });
   }
-  // Remove any cancelled-booking rows (they reference the slot via a foreign key)
-  // then delete the slot, atomically.
-  await ctx.env.DB.batch([
-    ctx.env.DB.prepare("DELETE FROM bookings WHERE slot_id = ?").bind(id),
-    ctx.env.DB.prepare("DELETE FROM slots WHERE id = ?").bind(id)
+  // The delete itself must be race-safe against a confirm that lands after that check.
+  // We only ever delete pending/cancelled booking rows (never a confirmed one), and the
+  // slot delete is guarded so it does nothing if a confirmed booking has appeared — which
+  // keeps the foreign key intact. Both run in one batch so they commit together.
+  const [, slotDel] = await ctx.env.DB.batch([
+    ctx.env.DB.prepare("DELETE FROM bookings WHERE slot_id = ? AND status IN ('pending', 'cancelled')").bind(id),
+    ctx.env.DB
+      .prepare("DELETE FROM slots WHERE id = ? AND NOT EXISTS (SELECT 1 FROM bookings WHERE slot_id = ? AND status = 'confirmed')")
+      .bind(id, id)
   ]);
+  if (slotDel.meta.changes !== 1) {
+    return Response.json({ error: "That slot just got a confirmed booking, so it was not deleted." }, { status: 409 });
+  }
   return Response.json({ ok: true });
 }

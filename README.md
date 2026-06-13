@@ -28,9 +28,9 @@ All site files live in `public/`:
 Real-time party booking, no third-party SaaS.
 
 - **Database:** Cloudflare D1 `oak-hill-bookings` (`slots`, `bookings`). Schema in `migrations/0001_init.sql`.
-- **API (`functions/api/`):** `GET /api/slots` (open slots), `POST /api/book` (atomic slot claim via a conditional `UPDATE`, so no double-booking), and token-protected `/api/admin/slots` and `/api/admin/bookings`.
-- **Owner admin:** `/admin.html`. Sign in with the `ADMIN_TOKEN` secret, then add party slots (they appear instantly on `/calendar.html`) and confirm/cancel bookings.
-- **Deposit:** a booking holds the slot and is marked `pending`; the owner takes the £100 deposit by phone and clicks **Confirm**. (Online card deposit via Stripe is the next step, see checklist.)
+- **API (`functions/api/`):** `GET /api/slots` (open slots), `POST /api/book` (creates a soft `pending` hold), and token-protected `/api/admin/slots` and `/api/admin/bookings`.
+- **Owner admin:** `/admin.html`. Sign in with the `ADMIN_TOKEN` secret, then add party slots (they appear instantly on `/calendar.html`) and confirm/decline bookings. The slot table shows how many holds each open slot has.
+- **Soft-hold workflow:** a customer enquiry creates a `pending` booking but does **not** remove the slot from availability, so the date stays open and others can still enquire. The owner takes the £100 deposit by phone and clicks **Mark paid**, which is the only step that locks the slot (`booked`) and auto-declines any other holds on it. The slot-locking `UPDATE` is conditional (`WHERE status='available'`), so two confirmations on the same slot can't both win (no double-booking). An unpaid hold never blocks the slot; the owner declines it at their discretion. (Online card deposit via Stripe is the next step, see checklist.)
 
 ### Working on the booking system
 
