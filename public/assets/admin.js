@@ -8,6 +8,7 @@
   const slotStatus = document.querySelector("[data-admin-slot-status]");
   const slotsEl = document.querySelector("[data-admin-slots]");
   const bookingsEl = document.querySelector("[data-admin-bookings]");
+  const enquiriesEl = document.querySelector("[data-admin-enquiries]");
   const logoutBtn = document.querySelector("[data-admin-logout]");
 
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -61,7 +62,7 @@
   });
 
   async function refresh() {
-    await Promise.all([loadSlots(), loadBookings()]);
+    await Promise.all([loadSlots(), loadBookings(), loadEnquiries()]);
   }
 
   async function loadSlots() {
@@ -158,6 +159,72 @@
     const r = await api("/api/admin/bookings", { method: "POST", body: JSON.stringify({ id, action }) });
     const d = await r.json().catch(() => ({}));
     if (r.ok) refresh(); else alert(d.error || "Action failed.");
+  }
+
+  async function actEnquiry(id, action) {
+    const r = await api("/api/admin/enquiries", { method: "POST", body: JSON.stringify({ id, action }) });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok) loadEnquiries(); else alert(d.error || "Action failed.");
+  }
+
+  async function loadEnquiries() {
+    if (!enquiriesEl) return;
+    const res = await api("/api/admin/enquiries");
+    if (res.status === 401) { showLogin(); return; }
+    const { enquiries } = await res.json();
+    if (!enquiries || !enquiries.length) {
+      enquiriesEl.replaceChildren(el("p", "No messages yet.", "booking-note"));
+      return;
+    }
+
+    const table = el("table", null, "admin-table");
+    const head = el("tr");
+    ["When", "Type", "Name", "Contact", "Message", "Status", ""].forEach((h) => head.appendChild(el("th", h)));
+    table.appendChild(el("thead")).appendChild(head);
+    const tbody = el("tbody");
+    for (const e of enquiries) {
+      const tr = el("tr");
+      tr.appendChild(el("td", e.created_at || ""));
+      tr.appendChild(el("td", e.type || ""));
+      tr.appendChild(el("td", e.name || ""));
+
+      // Contact cell: email + phone on separate lines
+      const contact = el("td");
+      if (e.email) contact.appendChild(document.createTextNode(e.email));
+      if (e.email && e.phone) contact.appendChild(el("br"));
+      if (e.phone) contact.appendChild(document.createTextNode(e.phone));
+      tr.appendChild(contact);
+
+      // Message cell: party details (if any) then message text
+      const msgCell = el("td");
+      const partyParts = [];
+      if (e.type === "party") {
+        if (e.party_date) partyParts.push("Date: " + e.party_date);
+        if (e.children != null) partyParts.push("Children: " + e.children);
+        if (e.child_age) partyParts.push("Age: " + e.child_age);
+      }
+      if (partyParts.length) {
+        msgCell.appendChild(document.createTextNode(partyParts.join(" · ")));
+        if (e.message) msgCell.appendChild(el("br"));
+      }
+      if (e.message) msgCell.appendChild(document.createTextNode(e.message));
+      tr.appendChild(msgCell);
+
+      tr.appendChild(el("td", e.status || ""));
+
+      const actions = el("td");
+      const markRead = el("button", "Mark read", "button ghost admin-mini");
+      markRead.addEventListener("click", () => actEnquiry(e.id, "read"));
+      const archive = el("button", "Archive", "button ghost admin-mini");
+      archive.addEventListener("click", () => actEnquiry(e.id, "archive"));
+      actions.appendChild(markRead);
+      actions.appendChild(archive);
+      tr.appendChild(actions);
+
+      tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+    enquiriesEl.replaceChildren(table);
   }
 
   if (token()) showApp();
