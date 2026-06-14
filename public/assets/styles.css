@@ -1644,3 +1644,15 @@ body.share-open { overflow: hidden; }
 .report-funnel { font-weight: 700; color: var(--ink); }
 .report-list { margin-top: 1rem; }
 .report-list ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }
+
+.contacts-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.contacts-bar input[type="search"] { flex: 1 1 220px; padding: 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); }
+.contacts-row { cursor: pointer; }
+.contacts-row:hover { background: rgba(47, 107, 79, 0.06); }
+.contact-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--paper); display: flex; flex-direction: column; gap: 0.5rem; }
+.contact-panel h3 { margin: 0; }
+.contact-panel textarea { width: 100%; }
+.contact-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+.tag-chip { background: rgba(120,183,197,0.22); color: #1d4633; border-radius: 999px; padding: 2px 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+.contact-timeline { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: 0.9rem; }
+.contact-erase { color: #b3403a; border-color: #b3403a; align-self: flex-start; margin-top: 0.5rem; }

@@ -45,6 +45,7 @@
     if (window.OHPAvailability) window.OHPAvailability.render();
     if (window.OHPTracking) window.OHPTracking.render();
     if (window.OHPReports) window.OHPReports.render();
+    if (window.OHPContacts) window.OHPContacts.render();
   }
 
   async function loadBookings() {
