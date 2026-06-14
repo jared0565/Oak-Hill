@@ -4,9 +4,6 @@
   const loginForm = document.querySelector("[data-admin-login-form]");
   const loginStatus = document.querySelector("[data-admin-login-status]");
   const app = document.querySelector("[data-admin-app]");
-  const slotForm = document.querySelector("[data-admin-slot-form]");
-  const slotStatus = document.querySelector("[data-admin-slot-status]");
-  const slotsEl = document.querySelector("[data-admin-slots]");
   const bookingsEl = document.querySelector("[data-admin-bookings]");
   const enquiriesEl = document.querySelector("[data-admin-enquiries]");
   const logoutBtn = document.querySelector("[data-admin-logout]");
@@ -43,66 +40,9 @@
 
   logoutBtn.addEventListener("click", () => { sessionStorage.removeItem(KEY); showLogin(); });
 
-  slotForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const fd = new FormData(slotForm);
-    slotStatus.textContent = "Adding…";
-    const res = await api("/api/admin/slots", {
-      method: "POST",
-      body: JSON.stringify({
-        date: fd.get("date"),
-        start_time: fd.get("start_time"),
-        end_time: fd.get("end_time"),
-        label: fd.get("label")
-      })
-    });
-    const data = await res.json().catch(() => ({}));
-    if (res.ok) { slotStatus.textContent = "Slot added."; slotForm.reset(); slotForm.querySelector("[name='label']").value = "Party slot"; refresh(); }
-    else { slotStatus.textContent = data.error || "Could not add the slot."; }
-  });
-
   async function refresh() {
-    await Promise.all([loadSlots(), loadBookings(), loadEnquiries()]);
-  }
-
-  async function loadSlots() {
-    const res = await api("/api/admin/slots");
-    if (res.status === 401) { showLogin(); return; }
-    const { slots } = await res.json();
-    if (!slots.length) { slotsEl.replaceChildren(el("p", "No slots yet. Add one above.", "booking-note")); return; }
-
-    const table = el("table", null, "admin-table");
-    const head = el("tr");
-    ["Date", "Time", "Label", "Status", ""].forEach((h) => head.appendChild(el("th", h)));
-    table.appendChild(el("thead")).appendChild(head);
-    const tbody = el("tbody");
-    for (const s of slots) {
-      const tr = el("tr");
-      tr.appendChild(el("td", fmtDate(s.date)));
-      tr.appendChild(el("td", s.start_time + "–" + s.end_time));
-      tr.appendChild(el("td", s.label));
-      const holds = Number(s.holds) || 0;
-      let statusText = s.status;
-      if (s.status === "available" && holds > 0) {
-        statusText = "available · " + holds + " hold" + (holds === 1 ? "" : "s");
-      }
-      tr.appendChild(el("td", statusText));
-      const actions = el("td");
-      if (s.status !== "booked") {
-        const del = el("button", "Delete", "button ghost admin-mini");
-        del.addEventListener("click", async () => {
-          if (!confirm("Delete this slot?")) return;
-          const r = await api("/api/admin/slots?id=" + s.id, { method: "DELETE" });
-          const d = await r.json().catch(() => ({}));
-          if (r.ok) refresh(); else alert(d.error || "Could not delete.");
-        });
-        actions.appendChild(del);
-      }
-      tr.appendChild(actions);
-      tbody.appendChild(tr);
-    }
-    table.appendChild(tbody);
-    slotsEl.replaceChildren(table);
+    await Promise.all([loadBookings(), loadEnquiries()]);
+    if (window.OHPAvailability) window.OHPAvailability.render();
   }
 
   async function loadBookings() {
