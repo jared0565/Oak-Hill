@@ -1,4 +1,5 @@
 // /api/admin/slots — owner slot management (auth enforced by _middleware.js).
+import { expandRecurrence, validateSlotEdit } from "../_lib/availability-core.mjs";
 
 export async function onRequestGet(ctx) {
   // `holds` = number of pending enquiries on a slot (soft holds awaiting a deposit).
@@ -16,6 +17,34 @@ export async function onRequestGet(ctx) {
 
 export async function onRequestPost(ctx) {
   const b = await ctx.request.json().catch(() => ({}));
+
+  // Bulk/recurring add.
+  if (b && b.recurrence) {
+    let rows;
+    try {
+      rows = expandRecurrence(b.recurrence, new Date().toISOString().slice(0, 10));
+    } catch (err) {
+      return Response.json({ error: err.message }, { status: 400 });
+    }
+    if (!rows.length) return Response.json({ ok: true, added: 0, skipped: 0 });
+    let minD = rows[0].date, maxD = rows[0].date;
+    for (const r of rows) { if (r.date < minD) minD = r.date; if (r.date > maxD) maxD = r.date; }
+    const { results: existing } = await ctx.env.DB
+      .prepare("SELECT date, start_time, end_time FROM slots WHERE date >= ? AND date <= ?")
+      .bind(minD, maxD).all();
+    const seen = new Set(existing.map((e) => `${e.date}|${e.start_time}|${e.end_time}`));
+    const toInsert = rows.filter((r) => !seen.has(`${r.date}|${r.start_time}|${r.end_time}`));
+    if (toInsert.length) {
+      await ctx.env.DB.batch(
+        toInsert.map((r) =>
+          ctx.env.DB.prepare("INSERT INTO slots (date, start_time, end_time, label, status) VALUES (?, ?, ?, ?, 'available')")
+            .bind(r.date, r.start_time, r.end_time, r.label))
+      );
+    }
+    return Response.json({ ok: true, added: toInsert.length, skipped: rows.length - toInsert.length });
+  }
+
+  // Single slot.
   const date = String(b.date || "").trim();
   const start = String(b.start_time || "").trim();
   const end = String(b.end_time || "").trim();
@@ -33,6 +62,31 @@ export async function onRequestPost(ctx) {
     .bind(date, start, end, label)
     .run();
   return Response.json({ ok: true, id: r.meta.last_row_id });
+}
+
+export async function onRequestPut(ctx) {
+  const b = await ctx.request.json().catch(() => ({}));
+  const v = validateSlotEdit(b);
+  if (!v.ok) return Response.json({ error: v.error }, { status: 400 });
+  const upd = v.value;
+
+  const slot = await ctx.env.DB.prepare("SELECT status FROM slots WHERE id = ?").bind(upd.id).first();
+  if (!slot) return Response.json({ error: "Slot not found." }, { status: 404 });
+
+  // Time/status changes are unsafe on a slot with a confirmed booking.
+  const changesTimeOrStatus = upd.start_time !== undefined || upd.status !== undefined;
+  if (changesTimeOrStatus && slot.status === "booked") {
+    return Response.json({ error: "That slot has a confirmed booking. Cancel it first to change the time or status." }, { status: 409 });
+  }
+
+  const sets = [], binds = [];
+  if (upd.label !== undefined) { sets.push("label = ?"); binds.push(upd.label); }
+  if (upd.start_time !== undefined) { sets.push("start_time = ?", "end_time = ?"); binds.push(upd.start_time, upd.end_time); }
+  if (upd.status !== undefined) { sets.push("status = ?"); binds.push(upd.status); }
+  binds.push(upd.id);
+  const r = await ctx.env.DB.prepare(`UPDATE slots SET ${sets.join(", ")} WHERE id = ?`).bind(...binds).run();
+  if (r.meta.changes !== 1) return Response.json({ error: "Could not update the slot." }, { status: 409 });
+  return Response.json({ ok: true });
 }
 
 export async function onRequestDelete(ctx) {
