@@ -1634,3 +1634,13 @@ body.share-open { overflow: hidden; }
 @media (max-width: 640px) { .pubcal-head h3 { font-size: 1.2rem; } }
 
 [data-tracking] textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
+
+.report-switch { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.report-switch .is-active { background: var(--park); color: #fff; }
+.report-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+.report-stat { border: 1px solid var(--line); border-radius: var(--radius); padding: 0.9rem; background: #fff; text-align: center; }
+.report-stat strong { display: block; font-size: 1.6rem; color: var(--park-dark); }
+.report-stat span { font-size: 0.8rem; color: var(--muted); }
+.report-funnel { font-weight: 700; color: var(--ink); }
+.report-list { margin-top: 1rem; }
+.report-list ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }

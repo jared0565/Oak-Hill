@@ -44,6 +44,7 @@
     await Promise.all([loadBookings(), loadEnquiries()]);
     if (window.OHPAvailability) window.OHPAvailability.render();
     if (window.OHPTracking) window.OHPTracking.render();
+    if (window.OHPReports) window.OHPReports.render();
   }
 
   async function loadBookings() {
