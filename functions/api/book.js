@@ -53,6 +53,13 @@ export async function onRequestPost(ctx) {
   if (slot.date < today) {
     return Response.json({ error: "That date has passed. Please choose another slot." }, { status: 409 });
   }
+  const closed = await ctx.env.DB
+    .prepare("SELECT 1 FROM calendar_events WHERE kind = 'closure' AND start_date <= ? AND end_date >= ? LIMIT 1")
+    .bind(slot.date, slot.date)
+    .first();
+  if (closed) {
+    return Response.json({ error: "Sorry, that date is now closed. Please choose another." }, { status: 409 });
+  }
   if (slot.status !== "available") {
     return Response.json(
       { error: "Sorry, that slot has just been booked. Please choose another." },
