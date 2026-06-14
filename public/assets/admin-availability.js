@@ -188,7 +188,7 @@
     addTimeRow();
     const addTimeBtn = el("button", "+ time", "button ghost admin-mini"); addTimeBtn.type = "button";
     addTimeBtn.addEventListener("click", () => addTimeRow());
-    form.append(el("span", "Weekdays"), timesWrap, addTimeBtn);
+    form.append(el("span", "Times"), timesWrap, addTimeBtn);
 
     const status = el("p", null, "form-status");
     const btn = el("button", "Generate slots", "button admin-mini"); btn.type = "submit";
