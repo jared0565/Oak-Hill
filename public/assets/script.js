@@ -7,6 +7,7 @@
       const isOpen = nav.getAttribute("data-open") === "true";
       nav.setAttribute("data-open", String(!isOpen));
       navToggle.setAttribute("aria-expanded", String(!isOpen));
+      navToggle.setAttribute("aria-label", isOpen ? "Open menu" : "Close menu");
       document.body.classList.toggle("menu-open", !isOpen);
     });
   }
