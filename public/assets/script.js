@@ -85,3 +85,155 @@
     });
   });
 })();
+
+/* ---- Share menu + QR code ---- */
+(function () {
+  var SHARE_TITLE = "Oak Hill Park Cafe";
+  var modal = null, lastFocus = null;
+
+  function shareUrl() {
+    var canon = document.querySelector('link[rel="canonical"]');
+    if (canon && canon.href) return canon.href;
+    return location.origin + location.pathname;
+  }
+
+  function build() {
+    modal = document.createElement("div");
+    modal.className = "share-modal";
+    modal.hidden = true;
+    modal.innerHTML =
+      '<div class="share-backdrop" data-share-close></div>' +
+      '<div class="share-dialog" role="dialog" aria-modal="true" aria-labelledby="share-h">' +
+        '<button class="share-x" type="button" data-share-close aria-label="Close">×</button>' +
+        '<div class="share-view" data-view="options">' +
+          '<h2 id="share-h">Share Oak Hill Park Cafe</h2>' +
+          '<p class="share-url" data-share-url></p>' +
+          '<div class="share-actions">' +
+            '<button class="share-opt" type="button" data-act="native" hidden>Share…</button>' +
+            '<button class="share-opt" type="button" data-act="copy">Copy link</button>' +
+            '<button class="share-opt" type="button" data-act="qr">QR code</button>' +
+          '</div>' +
+          '<div class="share-links">' +
+            '<a data-net="whatsapp" target="_blank" rel="noopener">WhatsApp</a>' +
+            '<a data-net="facebook" target="_blank" rel="noopener">Facebook</a>' +
+            '<a data-net="email">Email</a>' +
+          '</div>' +
+          '<p class="share-status" data-share-status aria-live="polite"></p>' +
+        '</div>' +
+        '<div class="share-view" data-view="qr" hidden>' +
+          '<button class="share-back" type="button" data-share-back>← Back</button>' +
+          '<h2>Scan to open on your phone</h2>' +
+          '<div class="share-qr" data-qr></div>' +
+          '<p class="share-url" data-share-url></p>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(modal);
+    modal.addEventListener("click", onClick);
+    document.addEventListener("keydown", function (e) {
+      if (!modal.hidden && e.key === "Escape") close();
+    });
+  }
+
+  function view(name) {
+    var vs = modal.querySelectorAll(".share-view");
+    for (var i = 0; i < vs.length; i++) vs[i].hidden = vs[i].getAttribute("data-view") !== name;
+  }
+
+  function open() {
+    if (!modal) build();
+    var url = shareUrl(), enc = encodeURIComponent(url);
+    var urls = modal.querySelectorAll("[data-share-url]");
+    for (var i = 0; i < urls.length; i++) urls[i].textContent = url;
+    modal.querySelector('[data-act="native"]').hidden = !navigator.share;
+    modal.querySelector('[data-net="whatsapp"]').href = "https://wa.me/?text=" + encodeURIComponent(SHARE_TITLE + " ") + enc;
+    modal.querySelector('[data-net="facebook"]').href = "https://www.facebook.com/sharer/sharer.php?u=" + enc;
+    modal.querySelector('[data-net="email"]').href = "mailto:?subject=" + encodeURIComponent(SHARE_TITLE) + "&body=" + enc;
+    modal.querySelector("[data-share-status]").textContent = "";
+    view("options");
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add("share-open");
+    var x = modal.querySelector(".share-x");
+    if (x) x.focus();
+  }
+
+  function close() {
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.classList.remove("share-open");
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function onClick(e) {
+    if (e.target.closest("[data-share-close]")) return close();
+    if (e.target.closest("[data-share-back]")) return view("options");
+    var act = e.target.closest("[data-act]");
+    if (act) doAct(act.getAttribute("data-act"));
+  }
+
+  function doAct(act) {
+    var url = shareUrl();
+    var status = modal.querySelector("[data-share-status]");
+    if (act === "native" && navigator.share) {
+      navigator.share({ title: SHARE_TITLE, url: url }).catch(function () {});
+    } else if (act === "copy") {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(
+          function () { status.textContent = "Link copied to clipboard."; },
+          function () { status.textContent = "Copy this link: " + url; }
+        );
+      } else {
+        status.textContent = "Copy this link: " + url;
+      }
+    } else if (act === "qr") {
+      showQr(url);
+    }
+  }
+
+  function showQr(url) {
+    view("qr");
+    var box = modal.querySelector("[data-qr]");
+    box.textContent = "Loading…";
+    loadLib(function (ok) {
+      if (!ok || !window.qrcode) { box.textContent = "Could not load the QR code."; return; }
+      try {
+        var qr = window.qrcode(0, "M");
+        qr.addData(url);
+        qr.make();
+        box.innerHTML = qr.createSvgTag({ cellSize: 8, scalable: true });
+      } catch (e) {
+        box.textContent = "Could not generate the QR code.";
+      }
+    });
+  }
+
+  var libState = 0, libCbs = [];
+  function flush(ok) { var c = libCbs; libCbs = []; for (var i = 0; i < c.length; i++) c[i](ok); }
+  function loadLib(cb) {
+    if (libState === 2) return cb(true);
+    if (libState === 3) return cb(false);
+    libCbs.push(cb);
+    if (libState === 1) return;
+    libState = 1;
+    var s = document.createElement("script");
+    s.src = "assets/qrcode.js";
+    s.onload = function () { libState = 2; flush(true); };
+    s.onerror = function () { libState = 3; flush(false); };
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    var triggers = document.querySelectorAll("[data-share]");
+    for (var i = 0; i < triggers.length; i++) triggers[i].addEventListener("click", open);
+    var bar = document.querySelector(".mobile-actions");
+    if (bar && !bar.querySelector("[data-share]")) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("data-share", "");
+      btn.textContent = "Share";
+      btn.addEventListener("click", open);
+      bar.appendChild(btn);
+    }
+  }
+  init();
+})();
