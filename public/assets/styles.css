@@ -689,6 +689,31 @@ button.button {
   gap: 0.8rem;
 }
 
+/* Photo at the top of a menu panel — used only where a genuinely matching
+   image exists (Breakfast, Drinks). Wide banner for landscape photos; the
+   --square modifier keeps square photos contained and centred. */
+.menu-hero {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 0 0 1.5rem;
+}
+
+.menu-hero--square {
+  aspect-ratio: 1 / 1;
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+@media (max-width: 680px) {
+  .menu-hero {
+    aspect-ratio: 16 / 7;
+  }
+}
+
 .menu-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
