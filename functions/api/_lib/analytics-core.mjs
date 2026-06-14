@@ -1,7 +1,7 @@
 // functions/api/_lib/analytics-core.mjs
 // Pure helpers for first-party analytics. No Workers globals — unit-testable with `node --test`.
 
-const TRACK_NAMES = new Set(["page_view", "slot_selected"]);
+const TRACK_NAMES = new Set(["page_view", "slot_selected", "lead_captured"]);
 
 export function clean(v, max) { return (v == null ? "" : String(v)).trim().slice(0, max); }
 

@@ -19,6 +19,7 @@ test("deriveSource: empty / garbage -> direct", () => {
 test("validateTrackName: allowlist only", () => {
   assert.equal(validateTrackName("page_view"), true);
   assert.equal(validateTrackName("slot_selected"), true);
+  assert.equal(validateTrackName("lead_captured"), true);
   assert.equal(validateTrackName("evil"), false);
   assert.equal(validateTrackName(""), false);
 });

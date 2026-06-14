@@ -31,6 +31,7 @@
       stat("Visits", r.visits),
       stat("Slot selections", r.slotSelected),
       stat("Enquiries", r.enquiries),
+      stat("Leads (opted in)", r.leads || 0),
       stat("Bookings (held)", r.bookings.pending),
       stat("Bookings (paid)", r.bookings.confirmed)
     );
