@@ -1632,3 +1632,5 @@ body.share-open { overflow: hidden; }
 .pubcal-row:last-child { border-bottom: 0; }
 .pubcal-row strong { min-width: 6.5rem; }
 @media (max-width: 640px) { .pubcal-head h3 { font-size: 1.2rem; } }
+
+[data-tracking] textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
