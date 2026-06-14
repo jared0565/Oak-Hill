@@ -1,7 +1,7 @@
 // tests/availability-core.test.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { expandRecurrence, isDateClosed } from "../functions/api/_lib/availability-core.mjs";
+import { expandRecurrence, isDateClosed, validateCalendarEvent, validateSlotEdit } from "../functions/api/_lib/availability-core.mjs";
 
 test("expandRecurrence: one weekday, one time, inside range", () => {
   // 2026-06-15 is a Monday. weekday 1 = Monday.
@@ -64,4 +64,36 @@ test("isDateClosed: inside, boundaries, outside, none", () => {
   assert.equal(isDateClosed("2026-06-13", closures), false);
   assert.equal(isDateClosed("2026-06-11", []), false);
   assert.equal(isDateClosed("2026-06-11", undefined), false);
+});
+
+test("validateCalendarEvent: valid closure defaults end_date and forces all_day", () => {
+  const v = validateCalendarEvent({ kind: "closure", title: "Bank holiday", start_date: "2026-08-31" });
+  assert.equal(v.ok, true);
+  assert.equal(v.value.kind, "closure");
+  assert.equal(v.value.end_date, "2026-08-31");
+  assert.equal(v.value.all_day, 1);
+});
+
+test("validateCalendarEvent: timed event keeps times", () => {
+  const v = validateCalendarEvent({ kind: "event", title: "Live music", start_date: "2026-07-01", all_day: 0, start_time: "18:00", end_time: "20:00" });
+  assert.equal(v.ok, true);
+  assert.equal(v.value.start_time, "18:00");
+});
+
+test("validateCalendarEvent: rejects bad data", () => {
+  assert.equal(validateCalendarEvent({ kind: "event", title: "", start_date: "2026-07-01" }).ok, false);
+  assert.equal(validateCalendarEvent({ kind: "event", title: "x", start_date: "nope" }).ok, false);
+  assert.equal(validateCalendarEvent({ kind: "event", title: "x", start_date: "2026-07-02", end_date: "2026-07-01" }).ok, false);
+  assert.equal(validateCalendarEvent({ kind: "event", title: "x", start_date: "2026-07-01", all_day: 0, start_time: "20:00", end_time: "18:00" }).ok, false);
+});
+
+test("validateSlotEdit: label only, times pair, status whitelist, nothing-to-update", () => {
+  assert.deepEqual(validateSlotEdit({ id: 5, label: "VIP" }).value, { id: 5, label: "VIP" });
+  const t = validateSlotEdit({ id: 5, start_time: "10:00", end_time: "12:00" });
+  assert.deepEqual(t.value, { id: 5, start_time: "10:00", end_time: "12:00" });
+  assert.equal(validateSlotEdit({ id: 5, status: "booked" }).ok, false);   // not a settable status
+  assert.equal(validateSlotEdit({ id: 5, status: "closed" }).ok, true);
+  assert.equal(validateSlotEdit({ id: 0 }).ok, false);
+  assert.equal(validateSlotEdit({ id: 5 }).ok, false);                     // nothing to update
+  assert.equal(validateSlotEdit({ id: 5, start_time: "12:00", end_time: "10:00" }).ok, false);
 });

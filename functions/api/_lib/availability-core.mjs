@@ -70,3 +70,48 @@ export function isDateClosed(date, closures) {
   if (!Array.isArray(closures)) return false;
   return closures.some((c) => c && c.start_date <= date && c.end_date >= date);
 }
+
+export function validateCalendarEvent(body) {
+  const kind = body?.kind === "closure" ? "closure" : "event";
+  const title = clean(body?.title, 120);
+  const start_date = clean(body?.start_date, 10);
+  const end_date = clean(body?.end_date, 10) || start_date;
+  if (!title) return { ok: false, error: "Give it a title." };
+  if (!DATE_RE.test(start_date)) return { ok: false, error: "Start date must be YYYY-MM-DD." };
+  if (!DATE_RE.test(end_date)) return { ok: false, error: "End date must be YYYY-MM-DD." };
+  if (end_date < start_date) return { ok: false, error: "End date must be on or after the start date." };
+  const allDayReq = body?.all_day === 0 || body?.all_day === false ? 0 : 1;
+  let start_time = null, end_time = null, all_day = allDayReq;
+  if (kind === "closure") {
+    all_day = 1;                       // closures are always day-level
+  } else if (!allDayReq) {
+    start_time = clean(body?.start_time, 5);
+    end_time = clean(body?.end_time, 5);
+    if (!TIME_RE.test(start_time) || !TIME_RE.test(end_time)) return { ok: false, error: "Times must be HH:MM." };
+    if (end_time <= start_time) return { ok: false, error: "End time must be after the start time." };
+  }
+  return { ok: true, value: { kind, title, start_date, end_date, all_day, start_time, end_time, notes: clean(body?.notes, 1000) || null } };
+}
+
+export function validateSlotEdit(body) {
+  const id = Number(body?.id);
+  if (!Number.isInteger(id) || id <= 0) return { ok: false, error: "Missing slot id." };
+  const out = { id };
+  if (body?.label != null) out.label = clean(body.label, 60) || "Party slot";
+  if (body?.start_time != null || body?.end_time != null) {
+    const start = clean(body?.start_time, 5);
+    const end = clean(body?.end_time, 5);
+    if (!TIME_RE.test(start) || !TIME_RE.test(end)) return { ok: false, error: "Times must be HH:MM." };
+    if (end <= start) return { ok: false, error: "End time must be after the start time." };
+    out.start_time = start; out.end_time = end;
+  }
+  if (body?.status != null) {
+    const status = clean(body.status, 20);
+    if (!["available", "closed"].includes(status)) return { ok: false, error: "Status must be available or closed." };
+    out.status = status;
+  }
+  if (out.label === undefined && out.start_time === undefined && out.status === undefined) {
+    return { ok: false, error: "Nothing to update." };
+  }
+  return { ok: true, value: out };
+}
