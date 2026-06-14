@@ -237,3 +237,23 @@
   }
   init();
 })();
+
+// ---- First-party, cookieless page analytics (no cookies, no localStorage, no IP, no identifiers) ----
+(function () {
+  function send(name) {
+    try {
+      var payload = JSON.stringify({
+        name: name,
+        path: location.pathname,
+        referrer: name === "page_view" ? document.referrer : "",
+        utm: name === "page_view" ? (new URLSearchParams(location.search).get("utm_source") || "") : ""
+      });
+      var blob = null;
+      try { blob = new Blob([payload], { type: "application/json" }); } catch (e) { blob = null; }
+      if (navigator.sendBeacon && blob) { navigator.sendBeacon("/api/track", blob); }
+      else { fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }); }
+    } catch (e) { /* analytics must never break the page */ }
+  }
+  window.OHPTrack = send;
+  window.OHPTrack("page_view");
+})();

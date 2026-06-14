@@ -66,6 +66,7 @@
   }
 
   function choose(slot, btn) {
+    if (window.OHPTrack) window.OHPTrack("slot_selected");
     selected = slot;
     slotsEl.querySelectorAll(".booking-slot").forEach((x) => x.removeAttribute("aria-pressed"));
     btn.setAttribute("aria-pressed", "true");
