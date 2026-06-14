@@ -1,7 +1,7 @@
 // tests/availability-core.test.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { expandRecurrence } from "../functions/api/_lib/availability-core.mjs";
+import { expandRecurrence, isDateClosed } from "../functions/api/_lib/availability-core.mjs";
 
 test("expandRecurrence: one weekday, one time, inside range", () => {
   // 2026-06-15 is a Monday. weekday 1 = Monday.
@@ -54,4 +54,14 @@ test("expandRecurrence: rejects oversized ranges (>500)", () => {
     { start_date: "2026-01-01", end_date: "2027-12-31", weekdays: [0,1,2,3,4,5,6], times: [{ start: "10:00", end: "12:00" }] },
     "2026-01-01"
   ), /too many slots/);
+});
+
+test("isDateClosed: inside, boundaries, outside, none", () => {
+  const closures = [{ start_date: "2026-06-10", end_date: "2026-06-12" }];
+  assert.equal(isDateClosed("2026-06-11", closures), true);
+  assert.equal(isDateClosed("2026-06-10", closures), true);   // start boundary
+  assert.equal(isDateClosed("2026-06-12", closures), true);   // end boundary
+  assert.equal(isDateClosed("2026-06-13", closures), false);
+  assert.equal(isDateClosed("2026-06-11", []), false);
+  assert.equal(isDateClosed("2026-06-11", undefined), false);
 });

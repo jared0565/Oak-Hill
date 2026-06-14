@@ -65,3 +65,8 @@ export function expandRecurrence({ start_date, end_date, weekdays, times } = {},
   });
   return out;
 }
+
+export function isDateClosed(date, closures) {
+  if (!Array.isArray(closures)) return false;
+  return closures.some((c) => c && c.start_date <= date && c.end_date >= date);
+}
