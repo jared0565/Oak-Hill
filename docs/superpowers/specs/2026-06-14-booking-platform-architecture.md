@@ -31,12 +31,13 @@ maybe one offer popup. We design for that size and resist gold-plating.
 
 | # | Sub-project | Owns | Depends on |
 |---|---|---|---|
-| **A** | **Advanced booking + availability dashboard** | Recurring/bulk slot creation, day templates, blackout dates, optional per-slot capacity, a calendar-grid editor in the dashboard | Foundation (settings, dashboard shell) |
+| **A1** | **Availability management (dashboard)** | Enhanced slots (bulk/recurring add, edit, status), `calendar_events` (events + closures) + admin CRUD, the month-grid editor, closure→booking suppression; also adds the CI migrate step | — |
+| **A2** | **Public calendar** | Replace the Google embed with our own rendered calendar (bookable slots + events + closures, mobile list fallback) | A1 |
 | **B** | **Tracking-code manager** | Free-text **Head/Body** code snippets the owner pastes (any tag), scoped **global or per-page**; parsed, consent-gated, injected so they execute; CSP allowlist; legal updates | Foundation, consent layer |
 | **C** | **Analytics & reporting** | First-party event capture (`events` table) + a reporting view (booking funnel, conversions, sources); pasted GA4/Ads tags receive the same key events | Foundation, A, B |
 | **D** | **CRM** | Unified `contacts` + timeline (bookings + enquiries + leads), tags, notes, simple segments, CSV export, right-to-erasure | Foundation |
 | **E** | **Lead capture** | Newsletter/lead form + one optional offer popup, feeding `contacts` as leads | Foundation, D |
-| **F** | **Platform foundation** *(folded into whichever starts first)* | `contacts` backbone + backfill, `settings` store, expanded dashboard shell, migration discipline | — |
+| **F** | **Platform foundation** *(distributed — not a standalone build)* | `contacts` backbone + backfill → built with **D**; `settings` store → built with **B**; CI migration step → built with **A1**; multi-section dashboard nav → deferred until sections justify it | — |
 
 **Foundation (F) is not built alone** — it rides along with the first feature so the first
 deliverable is something visible, not plumbing.
@@ -239,27 +240,30 @@ conditional-write treatment the current booking code uses.
 - **D4 — CSP:** **curated provider allowlist + `'unsafe-inline'`** baked into static
   `_headers` (see §6.1).
 
-### Open — my recommendation on each, please redline
-| # | Decision | Recommendation | Why |
+### Decided (accepted on map approval, 2026-06-14)
+| # | Topic | Decision | Why |
 |---|---|---|---|
 | **D1** | Analytics: first-party vs pasted tags vs both | **Both** | First-party `events` = owned, ad-blocker-proof reporting you control; pasted GA4/Ads still get conversions for ad optimisation. |
 | **D3** | Online deposit payments now? | **No — keep phone-deposit**, design Stripe-ready | Current flow works; Stripe is a self-contained future add-on, not a blocker. |
-| **D5** | D1 migrations in CI | **Add `d1 migrations apply --remote` to `deploy.yml`** | Schema and deploy stay in lockstep as tables grow. |
+| **D5** | D1 migrations in CI | **Add `d1 migrations apply --remote` to `deploy.yml`** (lands in A1) | Schema and deploy stay in lockstep as tables grow. |
 | **D6** | Contacts dedup key | **Normalized email primary, phone fallback** | Avoids merging unrelated people on shared/typo'd phone numbers. |
-| **D7** | First build target | **A (Booking + availability), foundation folded in** | Your headline ask; delivers visible value while laying the `contacts`/`settings` backbone. |
+| **D7** | First build target | **A1 (Availability management)**; A split into A1/A2 | Headline ask; ships standalone. Foundation deferred to where it's used (contacts→D, settings→B). |
 | **D8** | Do pasted snippets respect consent, or fire immediately? | **Respect consent** (per-snippet category; owner can mark `necessary` to fire early) | Keeps the legal promise + cookie policy honest; matches the existing banner. |
 
 ---
 
 ## 8. Recommended build sequence
 
-1. **A + Foundation** — advanced booking + availability dashboard, introducing `contacts`
-   (with backfill), `settings`, and the dashboard shell.
-2. **B — Tracking-code manager** — Head/Body snippet injector (CSP allowlist + consent + legal).
-3. **C — Analytics & reporting** — first-party events + reporting view; pasted tags get the
+1. **A1 — Availability management** — enhanced slots (bulk/recurring add, edit, status),
+   `calendar_events` (events + closures), month-grid editor, closure→booking suppression,
+   CI migrate step. Ships standalone; public site untouched.
+2. **A2 — Public calendar** — replace the Google embed with our own rendered calendar.
+3. **B — Tracking-code manager** — Head/Body snippet injector + `settings` store (CSP
+   allowlist + consent + legal).
+4. **C — Analytics & reporting** — first-party events + reporting view; pasted tags get the
    same conversions.
-4. **D — CRM** — contacts timeline, tags, notes, segments, export, erasure.
-5. **E — Lead capture** — lead form + optional offer popup → contacts.
+5. **D — CRM** — `contacts` backbone + backfill, timeline, tags, notes, segments, export, erasure.
+6. **E — Lead capture** — lead form + optional offer popup → contacts.
 
 Each step ends with a deploy and a working increment. We re-confirm scope at the start of
 each subsystem's own design.
