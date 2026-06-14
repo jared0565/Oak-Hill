@@ -2,6 +2,7 @@
 // Body: { type, name, email, phone?, message?, party_date?, children?, child_age?, source?, company?, elapsed_ms? }
 import { sanitizeEnquiry, validateEnquiry, spamReason } from "./_lib/enquiry-core.mjs";
 import { sendEnquiryEmail } from "./_lib/notify.mjs";
+import { upsertContact } from "./_lib/contacts-db.mjs";
 
 export async function onRequestPost(ctx) {
   let body;
@@ -23,7 +24,7 @@ export async function onRequestPost(ctx) {
   }
 
   try {
-    await ctx.env.DB
+    const ins = await ctx.env.DB
       .prepare(
         `INSERT INTO enquiries (type, name, email, phone, message, party_date, children, child_age, source)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
@@ -39,6 +40,11 @@ export async function onRequestPost(ctx) {
       { status: 500 }
     );
   }
+
+  try {
+    const cid = await upsertContact(ctx.env.DB, { email: enquiry.email, phone: enquiry.phone, name: enquiry.name });
+    if (cid) await ctx.env.DB.prepare("UPDATE enquiries SET contact_id = ? WHERE id = ?").bind(cid, ins.meta.last_row_id).run();
+  } catch (e) { /* best-effort */ }
 
   // Best-effort email; must never block or break the response.
   ctx.waitUntil(sendEnquiryEmail(ctx.env, enquiry));

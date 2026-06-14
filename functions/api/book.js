@@ -1,5 +1,6 @@
 // POST /api/book — claim a slot atomically and create a pending booking.
 // Body: { slot_id, name, phone, email, children?, child_age?, notes? }
+import { upsertContact } from "./_lib/contacts-db.mjs";
 
 function makeRef() {
   const bytes = new Uint8Array(5);
@@ -90,6 +91,11 @@ export async function onRequestPost(ctx) {
       { status: 409 }
     );
   }
+
+  try {
+    const cid = await upsertContact(ctx.env.DB, { email, phone, name });
+    if (cid) await ctx.env.DB.prepare("UPDATE bookings SET contact_id = ? WHERE id = ?").bind(cid, insert.meta.last_row_id).run();
+  } catch (e) { /* contact linkage is best-effort; booking already saved */ }
 
   return Response.json({ ok: true, ref, slot });
 }
