@@ -574,6 +574,11 @@ button.button {
   color: rgba(255, 255, 255, 0.86);
 }
 
+/* Quote cards keep dark text even inside a dark band (cream card background) */
+.band .quote-card p {
+  color: var(--muted);
+}
+
 .two-col {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.7fr);
