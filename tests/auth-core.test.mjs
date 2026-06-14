@@ -1,0 +1,80 @@
+// tests/auth-core.test.mjs
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import {
+  can, permissionsFor, PERMISSIONS,
+  hashPassword, verifyPassword, validatePassword,
+  newSessionToken, hashToken,
+  looksLikeBot, isLocked, nextFailedState,
+  MAX_FAILED, LOCK_MINUTES,
+} from "../functions/api/_lib/auth-core.mjs";
+
+test("can(): owner everything, staff only bookings+messages, manager not tracking/users/audit", () => {
+  assert.equal(can("owner", "users"), true);
+  assert.equal(can("owner", "contacts.erase"), true);
+  assert.equal(can("staff", "bookings"), true);
+  assert.equal(can("staff", "messages"), true);
+  assert.equal(can("staff", "reports"), false);
+  assert.equal(can("staff", "contacts"), false);
+  assert.equal(can("manager", "contacts.export"), true);
+  assert.equal(can("manager", "contacts.erase"), true);
+  assert.equal(can("manager", "tracking"), false);
+  assert.equal(can("manager", "users"), false);
+  assert.equal(can("manager", "audit"), false);
+  assert.equal(can("nobody", "bookings"), false);
+});
+
+test("permissionsFor() returns a copy matching the map", () => {
+  assert.deepEqual(permissionsFor("staff"), ["bookings", "messages"]);
+  const p = permissionsFor("owner");
+  p.push("x");
+  assert.equal(PERMISSIONS.owner.includes("x"), false); // not mutated
+});
+
+test("hashPassword/verifyPassword round-trip", async () => {
+  const rec = await hashPassword("correct horse battery staple");
+  assert.ok(rec.hash && rec.salt && rec.iterations > 0);
+  assert.equal(await verifyPassword("correct horse battery staple", rec), true);
+  assert.equal(await verifyPassword("wrong password here", rec), false);
+});
+
+test("verifyPassword rejects a tampered hash/salt", async () => {
+  const rec = await hashPassword("correct horse battery staple");
+  assert.equal(await verifyPassword("correct horse battery staple", { ...rec, hash: "AAAA" }), false);
+  assert.equal(await verifyPassword("correct horse battery staple", { hash: rec.hash, salt: "AAAA", iterations: rec.iterations }), false);
+});
+
+test("hashToken is stable hex; newSessionToken is unique", async () => {
+  const h1 = await hashToken("abc");
+  const h2 = await hashToken("abc");
+  assert.equal(h1, h2);
+  assert.match(h1, /^[0-9a-f]{64}$/);
+  assert.notEqual(newSessionToken(), newSessionToken());
+  assert.ok(newSessionToken().length >= 40);
+});
+
+test("validatePassword needs >=12 chars", () => {
+  assert.equal(validatePassword("short").ok, false);
+  assert.equal(validatePassword("elevenchars").ok, false); // 11
+  assert.equal(validatePassword("twelvechars!").ok, true); // 12
+});
+
+test("looksLikeBot flags missing/automation UAs only", () => {
+  assert.deepEqual(looksLikeBot({ user_agent: "" }), { is_bot: true, reason: "no_user_agent" });
+  assert.equal(looksLikeBot({ user_agent: "python-requests/2.31" }).is_bot, true);
+  assert.equal(looksLikeBot({ user_agent: "curl/8.0" }).is_bot, true);
+  assert.equal(looksLikeBot({ user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124" }).is_bot, false);
+});
+
+test("lockout trips on the MAX_FAILED-th failure and clears after the window", () => {
+  let u = { failed_attempts: MAX_FAILED - 2, locked_until: null };
+  const now = 1_000_000_000_000;
+  const s1 = nextFailedState(u, now);           // attempt MAX_FAILED-1
+  assert.equal(s1.locked, false);
+  const s2 = nextFailedState({ failed_attempts: s1.failed_attempts, locked_until: null }, now); // MAX_FAILED
+  assert.equal(s2.locked, true);
+  assert.ok(s2.locked_until);
+  assert.equal(isLocked({ locked_until: s2.locked_until }, now + 60_000), true);                 // 1 min later: still locked
+  assert.equal(isLocked({ locked_until: s2.locked_until }, now + (LOCK_MINUTES + 1) * 60_000), false); // after window
+  assert.equal(isLocked({ locked_until: null }, now), false);
+});
