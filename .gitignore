@@ -7,3 +7,5 @@ node_modules/
 .playwright-mcp/
 .DS_Store
 Thumbs.db
+HANDOVER.md
+pre-0006-backup.sql
