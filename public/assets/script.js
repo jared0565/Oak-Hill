@@ -257,3 +257,46 @@
   window.OHPTrack = send;
   window.OHPTrack("page_view");
 })();
+
+// ---- Footer newsletter signup (explicit marketing opt-in → CRM) ----
+(function () {
+  var footer = document.querySelector(".site-footer");
+  if (!footer) return;
+  var loadedAt = Date.now();
+
+  function el(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
+
+  var wrap = el("div", null, "footer-signup");
+  wrap.appendChild(el("strong", "Cafe news & party offers"));
+  var lead = el("p");
+  lead.appendChild(document.createTextNode("Get occasional emails about the cafe and party offers. Unsubscribe anytime. "));
+  var priv = el("a", "See our privacy policy"); priv.href = "privacy.html";
+  lead.appendChild(priv);
+  wrap.appendChild(lead);
+
+  var form = document.createElement("form"); form.className = "footer-signup-form";
+  var hp = document.createElement("input"); hp.type = "text"; hp.name = "company"; hp.tabIndex = -1; hp.autocomplete = "off";
+  hp.setAttribute("aria-hidden", "true"); hp.style.cssText = "position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden";
+  var email = document.createElement("input"); email.type = "email"; email.required = true; email.placeholder = "you@example.com"; email.setAttribute("aria-label", "Email address");
+  var btn = el("button", "Sign me up", "button"); btn.type = "submit";
+  var status = el("p", null, "footer-signup-status");
+  form.append(hp, email, btn);
+  wrap.append(form, status);
+  footer.insertBefore(wrap, footer.firstChild);
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    btn.disabled = true; status.textContent = "Signing you up…";
+    fetch("/api/lead", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.value, company: hp.value, elapsed_ms: Date.now() - loadedAt })
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (res.ok && res.d.ok) {
+          wrap.replaceChildren(el("strong", "Thanks — you’re on the list."), el("p", "We’ll only email you about the cafe and party offers."));
+          if (window.OHPTrack) window.OHPTrack("lead_captured");
+        } else { btn.disabled = false; status.textContent = (res.d && res.d.error) || "Could not sign you up. Please try again."; }
+      })
+      .catch(function () { btn.disabled = false; status.textContent = "Network problem. Please try again."; });
+  });
+})();

@@ -1656,3 +1656,10 @@ body.share-open { overflow: hidden; }
 .tag-chip { background: rgba(120,183,197,0.22); color: #1d4633; border-radius: 999px; padding: 2px 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
 .contact-timeline { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: 0.9rem; }
 .contact-erase { color: #b3403a; border-color: #b3403a; align-self: flex-start; margin-top: 0.5rem; }
+.footer-signup { border-bottom: 1px solid rgba(255,255,255,0.18); padding: 0 0 1.25rem; margin: 0 0 1.5rem; }
+.footer-signup strong { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; }
+.footer-signup p { margin: 0.35rem 0 0.75rem; color: rgba(255,255,255,0.82); font-size: 0.9rem; }
+.footer-signup a { text-decoration: underline; }
+.footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 480px; }
+.footer-signup-form input[type="email"] { flex: 1 1 220px; min-height: 46px; padding: 0.6rem 0.8rem; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius); background: rgba(255,255,255,0.95); color: var(--ink); }
+.footer-signup-status { min-height: 1.2em; }
