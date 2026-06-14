@@ -161,7 +161,14 @@
     });
 
     var stored = readConsent();
-    if (stored) { applyConsent(stored); } else { showBanner(false); }
+    if (stored) {
+      applyConsent(stored);
+    } else {
+      // No decision yet: still inject 'necessary' snippets immediately (no consent required);
+      // analytics/advertising stay gated until the visitor chooses.
+      injectConsented({ analytics: false, advertising: false });
+      showBanner(false);
+    }
   }
 
   if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", init); }
