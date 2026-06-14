@@ -26,23 +26,9 @@
 
       <div data-admin-app hidden>
         <section class="admin-block">
-          <h2>Add a party slot</h2>
-          <p class="section-lede">Each slot you add here appears on the public booking page for customers to book.</p>
-          <form data-admin-slot-form class="form-panel">
-            <div class="field-grid">
-              <label>Date <input type="date" name="date" required></label>
-              <label>Start time <input type="time" name="start_time" required></label>
-              <label>End time <input type="time" name="end_time" required></label>
-              <label>Label <input name="label" value="Party slot" maxlength="60"></label>
-            </div>
-            <button class="button" type="submit">Add slot</button>
-            <p class="form-status" data-admin-slot-status aria-live="polite"></p>
-          </form>
-        </section>
-
-        <section class="admin-block">
-          <h2>Slots</h2>
-          <div class="admin-table-wrap" data-admin-slots><p class="booking-note">Loading&hellip;</p></div>
+          <h2>Availability</h2>
+          <p class="section-lede">Manage party slots, events and closures. A closure stops that day's slots being bookable on the website.</p>
+          <div data-availability><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
         <section class="admin-block">
@@ -60,6 +46,7 @@
       </div>
     </div>
   </main>
+  <script src="assets/admin-availability.js" defer></script>
   <script src="assets/admin.js" defer></script>
 </body>
 </html>
