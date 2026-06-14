@@ -600,6 +600,8 @@ export async function onRequestPost(ctx) {
   // 5. Success.
   await recordLoginResult(ctx.env.DB, user, true, now);
   const { token } = await createSession(ctx.env.DB, user.id, now);
+  // Best-effort housekeeping: drop expired sessions so the table can't grow unbounded.
+  ctx.waitUntil(ctx.env.DB.prepare("DELETE FROM sessions WHERE expires_at <= ?").bind(new Date(now).toISOString()).run());
   await recordAudit(ctx.env.DB, { actor_user_id: user.id, actor_email: user.email, action: "auth.login", ...c });
   return Response.json({ token, user: { name: user.name, email: user.email, role: user.role, permissions: permissionsFor(user.role) } });
 }
@@ -694,6 +696,8 @@ git commit -m "Rewrite admin middleware to authenticate Bearer sessions (drop AD
 **Files (modify):** `functions/api/admin/bookings.js`, `slots.js`, `calendar-events.js`, `enquiries.js`, `reports.js`, `contacts.js`, `code-snippets.js`
 
 Every route gets `requirePermission(...)` at the top of each handler; mutating routes also call `auditFromCtx(...)` after a successful change. Apply each edit exactly.
+
+> **Reviewer note:** these audit insertions are the *only* non-exact-string edits in the plan. A misplaced `auditFromCtx` won't fail `node --check` or the Task 14 matrix — it just logs the wrong thing — so diff each file and confirm every audit call sits immediately before its intended success `return`.
 
 - [ ] **Step 1: `bookings.js`**
   - Add import at the top (after the file's opening comment):
@@ -1771,12 +1775,12 @@ node --check functions/api/auth/*.js functions/api/admin/*.js functions/api/_lib
 git status   # only intended files changed; .dev.vars NOT staged
 ```
 
-- [ ] **Step 2: Measure a login's CPU cost and tune `PBKDF2_ITERATIONS` if needed.** With the local server running, time a login:
+- [ ] **Step 2: Local login sanity check (NOT the CPU gate).** With the local server running, time a login — local wall-clock is only a rough sanity check; it **cannot** see the production CPU ceiling, which is the real risk:
 
 ```bash
 curl -s -o /dev/null -w "login wall time: %{time_total}s\n" -X POST "$B/api/auth/login" -H 'Content-Type: application/json' -d '{"email":"owner@example.com","password":"owner-pass-1234"}'
 ```
-If the login is comfortably fast (well under ~0.3s of compute locally), the `150000` default is fine. If it's sluggish, lower `PBKDF2_ITERATIONS` in `functions/api/_lib/auth-core.mjs` (and the matching `DUMMY.iterations` in `functions/api/auth/login.js`) to `100000`, re-run Task 2's tests, and re-commit. (Existing users keep their stored `password_iterations`; this only affects new/reset passwords.)
+If this is already seconds-slow locally, lower the iterations now. Otherwise leave `150000` — **the true gate is the live bootstrap in Step 4**, which runs one real PBKDF2 under the production CPU limit. (Tuning down means editing `PBKDF2_ITERATIONS` in `functions/api/_lib/auth-core.mjs` **and** the matching `DUMMY.iterations` in `functions/api/auth/login.js`, then re-running Task 2's tests. Existing users keep their stored `password_iterations`; this only affects new/reset passwords.)
 
 - [ ] **Step 3: Merge to master and push (this triggers CI: apply migration 0008 → deploy)**
 
@@ -1799,6 +1803,8 @@ echo "admin.html    $(code "$BASE/admin.html")"                  # 200
 echo "login GET     $(code "$BASE/api/auth/login")"              # 405 (POST-only) — reachable, not 404
 ```
 Then in a browser at `$BASE/admin`: the **first-run setup panel** shows. Create the real first Owner using the **production `ADMIN_TOKEN`**. Sign in; confirm all sections render and the Activity log shows your `auth.bootstrap` + `auth.login` with a real country/IP/device. Confirm the console has no CSP errors.
+
+  **⚠️ This bootstrap POST is the real PBKDF2 CPU gate.** If it returns `500` (or the Cloudflare log shows error `1102` "Worker exceeded CPU time"), the iteration count is too high for this project's plan: lower `PBKDF2_ITERATIONS` (and `DUMMY.iterations` in `login.js`) to `100000`, re-run Task 2's tests, commit, push, and bootstrap again. Dividing line: the **free Workers tier (~10ms CPU)** may reject 150k, whereas **paid** handles it easily — so a CPU error here is also a signal to confirm the project is on Workers Paid. Don't drop below ~`100000`.
 
 - [ ] **Step 5: Operational follow-ups (hand to the owner / do together).**
   - Create the real staff accounts (Manager/Staff) in the **Users** section and hand out initial passwords.
