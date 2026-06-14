@@ -23,8 +23,9 @@ export async function onRequestPost(ctx) {
     return Response.json({ error: valid.error }, { status: 400 });
   }
 
+  let ins;
   try {
-    const ins = await ctx.env.DB
+    ins = await ctx.env.DB
       .prepare(
         `INSERT INTO enquiries (type, name, email, phone, message, party_date, children, child_age, source)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
