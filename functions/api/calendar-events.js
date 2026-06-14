@@ -10,6 +10,10 @@ export async function onRequestGet(ctx) {
   if (!DATE_RE.test(from || "") || !DATE_RE.test(to || "")) {
     return Response.json({ events: [] }, { headers: { "Cache-Control": "no-store" } });
   }
+  // Cap the window (~14 months) so an absurd range can't force a full-table scan.
+  if (to < from || (Date.parse(to) - Date.parse(from)) > 430 * 86400000) {
+    return Response.json({ events: [] }, { headers: { "Cache-Control": "no-store" } });
+  }
   const { results } = await ctx.env.DB.prepare(
     `SELECT id, kind, title, start_date, end_date, all_day, start_time, end_time
      FROM calendar_events

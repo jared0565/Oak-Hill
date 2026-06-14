@@ -66,7 +66,7 @@
       tr.appendChild(el("td", b.name));
       const phone = el("td");
       const tel = el("a", b.phone);
-      tel.href = "tel:" + b.phone.replace(/\s+/g, "");
+      tel.href = "tel:" + b.phone.replace(/[^\d+]/g, "");
       phone.appendChild(tel);
       tr.appendChild(phone);
       tr.appendChild(el("td", b.email));

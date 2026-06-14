@@ -55,7 +55,10 @@ export async function onRequestPut(ctx) {
   if (!Number.isInteger(id) || id <= 0) return Response.json({ error: "Missing id." }, { status: 400 });
   const sets = [], binds = [];
   if (b.notes !== undefined) { sets.push("notes = ?"); binds.push((b.notes == null ? "" : String(b.notes)).slice(0, 2000) || null); }
-  if (b.marketing_opt_in !== undefined) { sets.push("marketing_opt_in = ?"); binds.push(b.marketing_opt_in ? 1 : 0); }
+  if (b.marketing_opt_in !== undefined) {
+    sets.push("marketing_opt_in = ?"); binds.push(b.marketing_opt_in ? 1 : 0);
+    if (b.marketing_opt_in) sets.push("marketing_opt_in_at = COALESCE(marketing_opt_in_at, datetime('now'))");
+  }
   if (!sets.length) return Response.json({ error: "Nothing to update." }, { status: 400 });
   binds.push(id);
   const r = await ctx.env.DB.prepare(`UPDATE contacts SET ${sets.join(", ")} WHERE id = ?`).bind(...binds).run();
@@ -86,8 +89,8 @@ export async function onRequestDelete(ctx) {
   if (!row) return Response.json({ error: "Not found." }, { status: 404 });
   const email = (row.email || "").toLowerCase();
   await ctx.env.DB.batch([
-    ctx.env.DB.prepare("UPDATE bookings SET name='(erased)', email='(erased)', phone='(erased)', notes=NULL, child_age=NULL, children=NULL, contact_id=NULL WHERE contact_id = ? OR LOWER(TRIM(email)) = ?").bind(id, email),
-    ctx.env.DB.prepare("UPDATE enquiries SET name='(erased)', email='(erased)', phone=NULL, message=NULL, child_age=NULL, children=NULL, contact_id=NULL WHERE contact_id = ? OR LOWER(TRIM(email)) = ?").bind(id, email),
+    ctx.env.DB.prepare("UPDATE bookings SET name='(erased)', email='(erased)', phone='(erased)', notes=NULL, child_age=NULL, children=NULL, contact_id=NULL WHERE contact_id = ? OR (? <> '' AND LOWER(TRIM(email)) = ?)").bind(id, email, email),
+    ctx.env.DB.prepare("UPDATE enquiries SET name='(erased)', email='(erased)', phone=NULL, message=NULL, child_age=NULL, children=NULL, contact_id=NULL WHERE contact_id = ? OR (? <> '' AND LOWER(TRIM(email)) = ?)").bind(id, email, email),
     ctx.env.DB.prepare("DELETE FROM contact_tags WHERE contact_id = ?").bind(id),
     ctx.env.DB.prepare("DELETE FROM contacts WHERE id = ?").bind(id),
   ]);
