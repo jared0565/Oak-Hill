@@ -2,6 +2,29 @@
 import { validateTag, csvCell } from "../_lib/contacts-core.mjs";
 import { requirePermission, auditFromCtx } from "../_lib/auth-db.mjs";
 
+// Build a single-person data export (DSAR): contact fields + tags, then their bookings and
+// enquiries, as sectioned CSV. Every value goes through csvCell (handles null, newlines, quoting
+// and =+-@ formula-injection), so it opens safely in a spreadsheet.
+function contactExportCsv(contact, bookings, enquiries) {
+  const rows = [];
+  rows.push(["Oak Hill Park Cafe — personal data export"]);
+  rows.push(["Contact ID", contact.id]);
+  rows.push([]);
+  rows.push(["[Contact details]"]);
+  rows.push(["field", "value"]);
+  for (const k of ["name", "email", "phone", "marketing_opt_in", "first_seen", "last_seen", "notes"]) rows.push([k, contact[k]]);
+  rows.push(["tags", (contact.tags || []).join("|")]);
+  rows.push([]);
+  rows.push(["[Bookings]"]);
+  rows.push(["ref", "status", "created_at", "date", "start_time", "end_time"]);
+  for (const b of bookings) rows.push([b.ref, b.status, b.created_at, b.date, b.start_time, b.end_time]);
+  rows.push([]);
+  rows.push(["[Enquiries]"]);
+  rows.push(["type", "message", "party_date", "status", "created_at"]);
+  for (const e of enquiries) rows.push([e.type, e.message, e.party_date, e.status, e.created_at]);
+  return rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+}
+
 async function listContacts(ctx, url) {
   const q = (url.searchParams.get("q") || "").trim();
   const tag = (url.searchParams.get("tag") || "").trim().toLowerCase();
@@ -28,6 +51,12 @@ export async function onRequestGet(ctx) {
   const id = Number(url.searchParams.get("id"));
 
   if (Number.isInteger(id) && id > 0) {
+    // ?format=csv on a single id = a DSAR/portability export of everything held on this person
+    // (Art.15/20). Exporting personal data is the same privilege as the bulk CSV → gate on
+    // contacts.export and audit it.
+    const wantCsv = url.searchParams.get("format") === "csv";
+    if (wantCsv) { const denyExport = requirePermission(ctx, "contacts.export"); if (denyExport) return denyExport; }
+
     const contact = await ctx.env.DB.prepare("SELECT id, name, email, phone, marketing_opt_in, first_seen, last_seen, notes FROM contacts WHERE id = ?").bind(id).first();
     if (!contact) return Response.json({ error: "Not found." }, { status: 404 });
     const { results: tags } = await ctx.env.DB.prepare("SELECT tag FROM contact_tags WHERE contact_id = ? ORDER BY tag").bind(id).all();
@@ -38,6 +67,13 @@ export async function onRequestGet(ctx) {
       "SELECT type, message, party_date, status, created_at FROM enquiries WHERE contact_id = ? ORDER BY created_at DESC"
     ).bind(id).all();
     contact.tags = tags.map((t) => t.tag);
+
+    if (wantCsv) {
+      await auditFromCtx(ctx, { action: "contact.dsar_export", target_type: "contact", target_id: id });
+      return new Response(contactExportCsv(contact, bookings, enquiries), {
+        headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename=contact-${id}-data-export.csv` },
+      });
+    }
     return Response.json({ contact, bookings, enquiries });
   }
 

@@ -81,6 +81,10 @@
     if (!bookings.length && !enquiries.length) tl.appendChild(el("li", "No bookings or enquiries."));
     panel.appendChild(tl);
 
+    const exportBtn = el("button", "Export this person's data", "button ghost admin-mini"); exportBtn.type = "button";
+    exportBtn.addEventListener("click", () => exportContact(id));
+    panel.appendChild(exportBtn);
+
     const erase = el("button", "Erase this person's data", "button ghost admin-mini contact-erase"); erase.type = "button";
     erase.addEventListener("click", async () => {
       if (!confirm("This permanently removes this person's personal data from contacts, bookings and enquiries. It cannot be undone. Continue?")) return;
@@ -102,6 +106,16 @@
     const text = await res.text();
     const url = URL.createObjectURL(new Blob([text], { type: "text/csv" }));
     const a = document.createElement("a"); a.href = url; a.download = "contacts.csv"; document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // One-click DSAR/portability export of a single person's full record (contact + bookings + enquiries).
+  async function exportContact(id) {
+    const res = await api("/api/admin/contacts?id=" + id + "&format=csv");
+    if (!res.ok) { alert("Could not export this contact."); return; }
+    const text = await res.text();
+    const url = URL.createObjectURL(new Blob([text], { type: "text/csv" }));
+    const a = document.createElement("a"); a.href = url; a.download = "contact-" + id + "-data-export.csv"; document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
 
