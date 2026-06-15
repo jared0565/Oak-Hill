@@ -1,6 +1,6 @@
 // /api/admin/users — Owner-only staff account management (authz + audit enforced here).
 import { requirePermission, auditFromCtx, listUsers, getUserById, findUserByEmail, createUser, updateUser, deleteUser, deleteUserSessions, countOwners } from "../_lib/auth-db.mjs";
-import { validatePassword } from "../_lib/auth-core.mjs";
+import { validatePassword, protectedBlock } from "../_lib/auth-core.mjs";
 import { normalizeEmail, clean } from "../_lib/contacts-core.mjs";
 
 const ROLES = ["owner", "manager", "staff"];
@@ -40,6 +40,10 @@ export async function onRequestPut(ctx) {
   if (b.password !== undefined) { const pv = validatePassword(String(b.password)); if (!pv.ok) return Response.json({ error: pv.error }, { status: 400 }); fields.password = String(b.password); }
   if (!Object.keys(fields).length) return Response.json({ error: "Nothing to update." }, { status: 400 });
 
+  // Protected (break-glass) owner: can't be demoted or disabled. Password reset is allowed.
+  const prot = protectedBlock(target, { role: fields.role, status: fields.status });
+  if (prot) return Response.json({ error: prot }, { status: 409 });
+
   // Last-owner guard: never demote or disable the only active owner.
   const demoting = fields.role !== undefined && fields.role !== "owner" && target.role === "owner";
   const disabling = fields.status === "disabled" && target.role === "owner";
@@ -64,6 +68,8 @@ export async function onRequestDelete(ctx) {
   if (ctx.data.user.id === id) return Response.json({ error: "You can't delete your own account while signed in." }, { status: 409 });
   const target = await getUserById(ctx.env.DB, id);
   if (!target) return Response.json({ error: "Not found." }, { status: 404 });
+  const protDel = protectedBlock(target, { deleting: true });
+  if (protDel) return Response.json({ error: protDel }, { status: 409 });
   if (target.role === "owner" && (await countOwners(ctx.env.DB)) <= 1) {
     return Response.json({ error: "This is the last active owner — promote another owner first." }, { status: 409 });
   }

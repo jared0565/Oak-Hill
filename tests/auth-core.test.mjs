@@ -7,6 +7,7 @@ import {
   newSessionToken, hashToken,
   looksLikeBot, isLocked, nextFailedState,
   MAX_FAILED, LOCK_MINUTES,
+  protectedBlock,
 } from "../functions/api/_lib/auth-core.mjs";
 
 test("can(): owner everything, staff only bookings+messages, manager not tracking/users/audit", () => {
@@ -64,6 +65,24 @@ test("looksLikeBot flags missing/automation UAs only", () => {
   assert.equal(looksLikeBot({ user_agent: "python-requests/2.31" }).is_bot, true);
   assert.equal(looksLikeBot({ user_agent: "curl/8.0" }).is_bot, true);
   assert.equal(looksLikeBot({ user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124" }).is_bot, false);
+});
+
+test("protectedBlock guards the break-glass owner; password reset stays allowed", () => {
+  const plain = { protected: 0, role: "manager" };
+  assert.equal(protectedBlock(plain, { deleting: true }), null);
+  assert.equal(protectedBlock(plain, { role: "staff" }), null);
+  assert.equal(protectedBlock(plain, { status: "disabled" }), null);
+
+  const root = { protected: 1, role: "owner" };
+  assert.match(protectedBlock(root, { deleting: true }), /can't be deleted/);
+  assert.match(protectedBlock(root, { role: "manager" }), /can't be demoted/);
+  assert.match(protectedBlock(root, { status: "disabled" }), /can't be disabled/);
+
+  // No-op / allowed actions return null.
+  assert.equal(protectedBlock(root, { role: "owner" }), null);  // re-affirming owner is fine
+  assert.equal(protectedBlock(root, { status: "active" }), null);
+  assert.equal(protectedBlock(root, {}), null);                 // password-only reset
+  assert.equal(protectedBlock(null, { deleting: true }), null); // missing target
 });
 
 test("lockout trips on the MAX_FAILED-th failure and clears after the window", () => {

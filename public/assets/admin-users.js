@@ -20,13 +20,21 @@
     const me = window.OHPAdmin.user();
     for (const u of users) {
       const tr = el("tr");
-      tr.appendChild(el("td", u.name));
+      const nameTd = el("td", u.name);
+      if (u.protected) {
+        const badge = el("span", "Protected");
+        badge.style.cssText = "margin-left:.4rem;font-size:.72em;font-weight:600;color:#0a7d28;border:1px solid #0a7d28;border-radius:999px;padding:.05rem .45rem;vertical-align:middle;";
+        badge.title = "Protected owner — can't be deleted, disabled, or demoted.";
+        nameTd.appendChild(badge);
+      }
+      tr.appendChild(nameTd);
       tr.appendChild(el("td", u.email));
 
       const roleTd = el("td");
       const roleSel = document.createElement("select");
       for (const r of ROLES) { const o = el("option", r[0].toUpperCase() + r.slice(1), null); o.value = r; if (u.role === r) o.selected = true; roleSel.appendChild(o); }
       roleSel.addEventListener("change", () => update(u.id, { role: roleSel.value }));
+      if (u.protected) { roleSel.disabled = true; roleSel.title = "Protected owner — role is locked."; }
       roleTd.appendChild(roleSel);
       tr.appendChild(roleTd);
 
@@ -34,17 +42,21 @@
       tr.appendChild(el("td", (u.last_login_at || "—").slice(0, 16).replace("T", " ")));
 
       const actions = el("td");
-      const toggle = el("button", u.status === "active" ? "Disable" : "Enable", "button ghost admin-mini");
-      toggle.addEventListener("click", () => update(u.id, { status: u.status === "active" ? "disabled" : "active" }));
       const reset = el("button", "Reset password", "button ghost admin-mini");
       reset.addEventListener("click", () => {
         const pw = prompt("New password for " + u.email + " (at least 12 characters):");
         if (pw) update(u.id, { password: pw });
       });
-      const del = el("button", "Delete", "button ghost admin-mini contact-erase");
-      del.addEventListener("click", () => { if (confirm("Delete " + u.email + "? This removes their account and signs them out.")) remove(u.id); });
-      actions.append(toggle, reset);
-      if (!me || me.email !== u.email) actions.append(del); // can't delete yourself
+      if (u.protected) {
+        actions.append(reset); // protected owner: only password reset (no disable/delete)
+      } else {
+        const toggle = el("button", u.status === "active" ? "Disable" : "Enable", "button ghost admin-mini");
+        toggle.addEventListener("click", () => update(u.id, { status: u.status === "active" ? "disabled" : "active" }));
+        const del = el("button", "Delete", "button ghost admin-mini contact-erase");
+        del.addEventListener("click", () => { if (confirm("Delete " + u.email + "? This removes their account and signs them out.")) remove(u.id); });
+        actions.append(toggle, reset);
+        if (!me || me.email !== u.email) actions.append(del); // can't delete yourself
+      }
       tr.appendChild(actions);
 
       tbody.appendChild(tr);

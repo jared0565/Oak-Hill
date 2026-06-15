@@ -57,11 +57,11 @@ export async function countOwners(db) {
   const r = await db.prepare("SELECT COUNT(*) AS n FROM users WHERE role='owner' AND status='active'").first();
   return r ? r.n : 0;
 }
-export async function createUser(db, { name, email, role, password }) {
+export async function createUser(db, { name, email, role, password, protected: isProtected = false }) {
   const { hash, salt, iterations } = await hashPassword(password);
   const r = await db.prepare(
-    "INSERT INTO users (email, name, role, password_hash, password_salt, password_iterations) VALUES (?, ?, ?, ?, ?, ?)"
-  ).bind(email, name, role, hash, salt, iterations).run();
+    "INSERT INTO users (email, name, role, password_hash, password_salt, password_iterations, protected) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  ).bind(email, name, role, hash, salt, iterations, isProtected ? 1 : 0).run();
   return r.meta.last_row_id;
 }
 export async function updateUser(db, id, fields) {
@@ -84,7 +84,7 @@ export async function deleteUser(db, id) {
 }
 export async function listUsers(db) {
   const { results } = await db.prepare(
-    "SELECT id, name, email, role, status, last_login_at, created_at FROM users ORDER BY created_at"
+    "SELECT id, name, email, role, status, protected, last_login_at, created_at FROM users ORDER BY created_at"
   ).all();
   return results;
 }

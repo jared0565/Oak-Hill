@@ -27,7 +27,7 @@ export async function onRequestPost(ctx) {
   const pv = validatePassword(pw);
   if (!pv.ok) return Response.json({ error: pv.error }, { status: 400 });
 
-  const id = await createUser(ctx.env.DB, { name, email, role: "owner", password: pw });
+  const id = await createUser(ctx.env.DB, { name, email, role: "owner", password: pw, protected: true });
   await recordAudit(ctx.env.DB, { actor_user_id: id, actor_email: email, action: "auth.bootstrap", ...c, detail: "first owner" });
   const { token } = await createSession(ctx.env.DB, id, Date.now());
   return Response.json({ token, user: { name, email, role: "owner", permissions: permissionsFor("owner") } });

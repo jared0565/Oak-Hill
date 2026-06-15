@@ -15,6 +15,18 @@ export const PERMISSIONS = {
 export function permissionsFor(role) { return PERMISSIONS[role] ? PERMISSIONS[role].slice() : []; }
 export function can(role, perm) { return !!PERMISSIONS[role] && PERMISSIONS[role].includes(perm); }
 
+// A protected account (the break-glass root owner) is locked against removal: it
+// can't be deleted, disabled, or demoted from owner — regardless of how many other
+// owners exist. Password reset stays allowed so the owner can rotate their own
+// credentials. Returns a human-readable reason if the action is blocked, else null.
+export function protectedBlock(target, action = {}) {
+  if (!target || !target.protected) return null;
+  if (action.deleting) return "This is the protected owner account and can't be deleted.";
+  if (action.role !== undefined && action.role !== "owner") return "This is the protected owner account and can't be demoted.";
+  if (action.status === "disabled") return "This is the protected owner account and can't be disabled.";
+  return null;
+}
+
 export const SESSION_HOURS = 12;
 export const MAX_FAILED = 5;
 export const LOCK_MINUTES = 15;
