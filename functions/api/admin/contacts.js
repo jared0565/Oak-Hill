@@ -1,5 +1,6 @@
 // /api/admin/contacts — CRM list/detail/patch/tags/erase/CSV (auth via _middleware.js).
 import { validateTag, csvCell } from "../_lib/contacts-core.mjs";
+import { requirePermission, auditFromCtx } from "../_lib/auth-db.mjs";
 
 async function listContacts(ctx, url) {
   const q = (url.searchParams.get("q") || "").trim();
@@ -22,6 +23,7 @@ async function listContacts(ctx, url) {
 }
 
 export async function onRequestGet(ctx) {
+  const deny = requirePermission(ctx, "contacts"); if (deny) return deny;
   const url = new URL(ctx.request.url);
   const id = Number(url.searchParams.get("id"));
 
@@ -40,6 +42,8 @@ export async function onRequestGet(ctx) {
   }
 
   if (url.searchParams.get("format") === "csv") {
+    const denyExport = requirePermission(ctx, "contacts.export"); if (denyExport) return denyExport;
+    await auditFromCtx(ctx, { action: "contact.export", detail: "CSV export" });
     const rows = await listContacts(ctx, url);
     const lines = ["id,name,email,phone,marketing_opt_in,last_seen,tags"];
     for (const c of rows) lines.push([c.id, c.name, c.email, c.phone, c.marketing_opt_in, c.last_seen, (c.tags || []).join("|")].map(csvCell).join(","));
@@ -50,6 +54,7 @@ export async function onRequestGet(ctx) {
 }
 
 export async function onRequestPut(ctx) {
+  const deny = requirePermission(ctx, "contacts"); if (deny) return deny;
   const b = await ctx.request.json().catch(() => ({}));
   const id = Number(b.id);
   if (!Number.isInteger(id) || id <= 0) return Response.json({ error: "Missing id." }, { status: 400 });
@@ -63,10 +68,13 @@ export async function onRequestPut(ctx) {
   binds.push(id);
   const r = await ctx.env.DB.prepare(`UPDATE contacts SET ${sets.join(", ")} WHERE id = ?`).bind(...binds).run();
   if (r.meta.changes !== 1) return Response.json({ error: "Not found." }, { status: 404 });
+  if (b.notes !== undefined) await auditFromCtx(ctx, { action: "contact.note", target_type: "contact", target_id: id });
+  if (b.marketing_opt_in !== undefined) await auditFromCtx(ctx, { action: "contact.optin", target_type: "contact", target_id: id, detail: b.marketing_opt_in ? "opted in" : "opted out" });
   return Response.json({ ok: true });
 }
 
 export async function onRequestPost(ctx) {
+  const deny = requirePermission(ctx, "contacts"); if (deny) return deny;
   const b = await ctx.request.json().catch(() => ({}));
   const id = Number(b.id);
   const action = String(b.action || "");
@@ -79,10 +87,12 @@ export async function onRequestPost(ctx) {
   } else {
     await ctx.env.DB.prepare("DELETE FROM contact_tags WHERE contact_id = ? AND tag = ?").bind(id, v.value).run();
   }
+  await auditFromCtx(ctx, { action: action === "tag_add" ? "contact.tag_add" : "contact.tag_remove", target_type: "contact", target_id: id, detail: v.value });
   return Response.json({ ok: true });
 }
 
 export async function onRequestDelete(ctx) {
+  const deny = requirePermission(ctx, "contacts.erase"); if (deny) return deny;
   const id = Number(new URL(ctx.request.url).searchParams.get("id"));
   if (!Number.isInteger(id) || id <= 0) return Response.json({ error: "Missing id." }, { status: 400 });
   const row = await ctx.env.DB.prepare("SELECT email FROM contacts WHERE id = ?").bind(id).first();
@@ -94,5 +104,6 @@ export async function onRequestDelete(ctx) {
     ctx.env.DB.prepare("DELETE FROM contact_tags WHERE contact_id = ?").bind(id),
     ctx.env.DB.prepare("DELETE FROM contacts WHERE id = ?").bind(id),
   ]);
+  await auditFromCtx(ctx, { action: "contact.erase", target_type: "contact", target_id: id });
   return Response.json({ ok: true });
 }

@@ -1,4 +1,5 @@
 // /api/admin/bookings — list and act on bookings (auth enforced by _middleware.js).
+import { requirePermission, auditFromCtx } from "../_lib/auth-db.mjs";
 
 // Compensating undo for a slot we locked but then couldn't confirm. Guarded on
 // 'booked' so it only ever releases a slot this request itself just claimed.
@@ -10,6 +11,7 @@ function releaseSlot(ctx, slotId) {
 }
 
 export async function onRequestGet(ctx) {
+  const deny = requirePermission(ctx, "bookings"); if (deny) return deny;
   const { results } = await ctx.env.DB.prepare(
     `SELECT b.id, b.ref, b.name, b.phone, b.email, b.children, b.child_age, b.notes, b.status, b.created_at,
             s.date, s.start_time, s.end_time, s.label
@@ -21,6 +23,7 @@ export async function onRequestGet(ctx) {
 
 // POST { id, action: "confirm" | "cancel" }
 export async function onRequestPost(ctx) {
+  const deny = requirePermission(ctx, "bookings"); if (deny) return deny;
   const b = await ctx.request.json().catch(() => ({}));
   const id = Number(b.id);
   const action = String(b.action || "");
@@ -77,6 +80,7 @@ export async function onRequestPost(ctx) {
       .prepare("UPDATE bookings SET status = 'cancelled' WHERE slot_id = ? AND id <> ? AND status = 'pending'")
       .bind(booking.slot_id, id)
       .run();
+    await auditFromCtx(ctx, { action: "booking.confirm", target_type: "booking", target_id: id, detail: "marked paid" });
     return Response.json({ ok: true });
   }
 
@@ -93,5 +97,6 @@ export async function onRequestPost(ctx) {
     // A pending hold never locked the slot, so just cancel the booking.
     await ctx.env.DB.prepare("UPDATE bookings SET status = 'cancelled' WHERE id = ? AND status = 'pending'").bind(id).run();
   }
+  await auditFromCtx(ctx, { action: "booking.cancel", target_type: "booking", target_id: id });
   return Response.json({ ok: true });
 }
