@@ -30,9 +30,11 @@ export function protectedBlock(target, action = {}) {
 export const SESSION_HOURS = 12;
 export const MAX_FAILED = 5;
 export const LOCK_MINUTES = 15;
-// Starting point; Task 15 measures a real login and tunes this under the Pages CPU budget.
+// Cloudflare Workers' WebCrypto hard-caps PBKDF2 at 100000 iterations per deriveBits call
+// (>100000 throws NotSupportedError); 100000 is the runtime maximum. Node enforces no such
+// cap, so unit tests pass at any value — the limit only bites on the deployed Worker.
 // Stored per-user (password_iterations), so changing it only affects new/reset passwords.
-export const PBKDF2_ITERATIONS = 150000;
+export const PBKDF2_ITERATIONS = 100000;
 
 const enc = new TextEncoder();
 function toB64(bytes) { let s = ""; const a = new Uint8Array(bytes); for (let i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }

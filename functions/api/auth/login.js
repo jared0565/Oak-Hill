@@ -1,13 +1,13 @@
 // /api/auth/login — email+password → Bearer session token. Public; bot-checked; no enumeration.
 import { findUserByEmail, recordLoginResult, createSession, recordAudit, reqContext } from "../_lib/auth-db.mjs";
-import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot } from "../_lib/auth-core.mjs";
+import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot, PBKDF2_ITERATIONS } from "../_lib/auth-core.mjs";
 import { turnstileEnabled, verifyTurnstile } from "../_lib/turnstile.mjs";
 import { normalizeEmail } from "../_lib/contacts-core.mjs";
 
 const GENERIC = "Email or password is incorrect, or the account is locked.";
 // A validly-shaped (all-zero-bytes) PBKDF2 record so unknown-email logins still spend
 // hashing time → no user enumeration via timing. The verify always returns false.
-const DUMMY = { hash: "A".repeat(43) + "=", salt: "A".repeat(22) + "==", iterations: 150000 };
+const DUMMY = { hash: "A".repeat(43) + "=", salt: "A".repeat(22) + "==", iterations: PBKDF2_ITERATIONS };
 
 export async function onRequestPost(ctx) {
   const body = await ctx.request.json().catch(() => ({}));

@@ -7,8 +7,15 @@ import {
   newSessionToken, hashToken,
   looksLikeBot, isLocked, nextFailedState,
   MAX_FAILED, LOCK_MINUTES,
-  protectedBlock,
+  protectedBlock, PBKDF2_ITERATIONS,
 } from "../functions/api/_lib/auth-core.mjs";
+
+test("PBKDF2_ITERATIONS stays within the Cloudflare Workers cap", () => {
+  // Workers' WebCrypto throws NotSupportedError for PBKDF2 >100000. Node has no cap, so this
+  // guard — not the hash round-trip — is what keeps us from shipping a value the runtime rejects.
+  assert.ok(PBKDF2_ITERATIONS <= 100000, "PBKDF2 >100000 is rejected by the Workers runtime");
+  assert.ok(PBKDF2_ITERATIONS >= 100000, "don't weaken below the runtime maximum");
+});
 
 test("can(): owner everything, staff only bookings+messages, manager not tracking/users/audit", () => {
   assert.equal(can("owner", "users"), true);
