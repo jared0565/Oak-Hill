@@ -167,7 +167,11 @@
       // No decision yet: still inject 'necessary' snippets immediately (no consent required);
       // analytics/advertising stay gated until the visitor chooses.
       injectConsented({ analytics: false, advertising: false });
-      showBanner(false);
+      // Transactional pages (e.g. the email-link unsubscribe page) opt out of the auto banner via
+      // <html data-no-consent-banner>: they load no trackers, so a banner would only obscure the
+      // page's primary action. Consent Mode stays denied and the footer "Cookie settings" link
+      // still opens the banner on demand — nothing is tracked without an explicit choice.
+      if (!document.documentElement.hasAttribute("data-no-consent-banner")) showBanner(false);
     }
   }
 
