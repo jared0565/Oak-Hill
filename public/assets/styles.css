@@ -1678,13 +1678,15 @@ body.share-open { overflow: hidden; }
 .tag-chip { background: rgba(120,183,197,0.22); color: #1d4633; border-radius: 999px; padding: 2px 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
 .contact-timeline { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: 0.9rem; }
 .contact-erase { color: #b3403a; border-color: #b3403a; align-self: flex-start; margin-top: 0.5rem; }
-.footer-signup { border-bottom: 1px solid rgba(255,255,255,0.18); padding: 0 0 1.25rem; margin: 0 0 1.5rem; }
+.footer-signup { border-bottom: 1px solid rgba(255,255,255,0.18); padding: 0 0 1.5rem; margin: 0 0 1.75rem; text-align: center; }
+.footer-signup-inner { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(1rem, 4vw, 3rem); }
+.footer-signup-text { max-width: 30rem; }
 .footer-signup strong { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; }
-.footer-signup p { margin: 0.35rem 0 0.75rem; color: rgba(255,255,255,0.82); font-size: 0.9rem; }
-.footer-signup a { text-decoration: underline; }
-.footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 480px; }
+.footer-signup p { margin: 0.35rem 0 0; color: rgba(255,255,255,0.82); font-size: 0.9rem; }
+.footer-signup a { text-decoration: underline; margin-left: auto; margin-right: auto; }
+.footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; max-width: 480px; }
 .footer-signup-form input[type="email"] { flex: 1 1 220px; min-height: 46px; padding: 0.6rem 0.8rem; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius); background: rgba(255,255,255,0.95); color: var(--ink); }
-.footer-signup-status { min-height: 1.2em; }
+.footer-signup-status { min-height: 1.2em; text-align: center; }
 .admin-whoami { font-size: 0.85rem; color: var(--ink-soft, #5b6b62); margin: 0 0 1rem; }
 .users-add { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1rem; }
 .users-add input, .users-add select { padding: 0.45rem; border: 1px solid var(--line); border-radius: var(--radius); }

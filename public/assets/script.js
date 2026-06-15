@@ -283,12 +283,15 @@
   function el(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
 
   var wrap = el("div", null, "footer-signup");
-  wrap.appendChild(el("strong", "Cafe news & party offers"));
+  var inner = el("div", null, "footer-signup-inner");
+  var textCol = el("div", null, "footer-signup-text");
+  textCol.appendChild(el("strong", "Cafe news & party offers"));
   var lead = el("p");
   lead.appendChild(document.createTextNode("Get occasional emails about the cafe and party offers. Unsubscribe anytime. "));
   var priv = el("a", "See our privacy policy"); priv.href = "privacy.html";
   lead.appendChild(priv);
-  wrap.appendChild(lead);
+  textCol.appendChild(lead);
+  inner.appendChild(textCol);
 
   var form = document.createElement("form"); form.className = "footer-signup-form";
   var hp = document.createElement("input"); hp.type = "text"; hp.name = "company"; hp.tabIndex = -1; hp.autocomplete = "off";
@@ -297,7 +300,8 @@
   var btn = el("button", "Sign me up", "button"); btn.type = "submit";
   var status = el("p", null, "footer-signup-status");
   form.append(hp, email, btn);
-  wrap.append(form, status);
+  inner.appendChild(form);
+  wrap.append(inner, status);
   footer.insertBefore(wrap, footer.firstChild);
 
   form.addEventListener("submit", function (e) {
