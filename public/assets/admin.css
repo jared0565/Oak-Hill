@@ -231,6 +231,129 @@ body.admin-shell [data-admin-app] h3 {
 .admin-quick { display: flex; flex-direction: column; gap: 0.5rem; }
 .admin-quick a { width: 100%; justify-content: flex-start; }
 
+/* ---- top-bar avatar ---- */
+.admin-avatar {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--admin-active);
+  color: var(--park-dark);
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1;
+  user-select: none;
+}
+.admin-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---- Account panel: cards ---- */
+.account-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(38, 50, 56, 0.06);
+  padding: 1.2rem 1.3rem;
+  max-width: 560px;
+  margin: 0 0 1.25rem;
+}
+.account-card > h3 { margin: 0 0 0.9rem; font-size: 1.1rem; color: var(--park-dark); }
+.account-card h4 { margin: 0 0 0.6rem; font-size: 0.95rem; }
+.account-field { display: flex; flex-direction: column; gap: 0.3rem; margin: 0 0 0.8rem; }
+.account-field > span { font-size: 0.85rem; font-weight: 650; color: var(--muted); }
+.account-field input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+.account-field input:focus-visible { outline: 2px solid var(--park); outline-offset: 1px; }
+.account-card .form-status { margin: 0.4rem 0 0; }
+.account-email { margin: 0 0 0.3rem; font-weight: 650; }
+
+/* Profile avatar block */
+.account-avatar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.account-avatar {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--admin-active);
+  color: var(--park-dark);
+  font-weight: 800;
+  line-height: 1;
+  user-select: none;
+}
+.account-avatar-img { object-fit: cover; }
+.account-avatar-lg { width: 84px; height: 84px; font-size: 1.7rem; }
+.account-avatar-controls { display: flex; flex-direction: column; gap: 0.45rem; align-items: flex-start; }
+.account-file-label { position: relative; overflow: hidden; cursor: pointer; }
+.account-file-input {
+  position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+}
+.account-subblock { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid var(--line); }
+.account-subblock:first-of-type { padding-top: 0; margin-top: 0; border-top: 0; }
+.account-2fa-on { margin: 0 0 0.7rem; font-weight: 650; color: var(--park-dark); }
+.account-2fa-disable { margin-top: 0.6rem; }
+.account-2fa-setup { margin-top: 0.6rem; }
+
+/* QR for 2FA setup */
+.account-qr {
+  display: inline-block;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin: 0.4rem 0 0.8rem;
+}
+.account-qr canvas { display: block; width: 200px; height: 200px; image-rendering: pixelated; }
+
+/* Manual-entry secret */
+.account-secret { margin: 0 0 0.8rem; }
+.account-secret-label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 0.25rem; }
+.account-secret-code {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  word-break: break-all;
+  padding: 0.35rem 0.55rem;
+  background: var(--admin-surface);
+  border-radius: var(--radius);
+}
+
+/* Backup codes */
+.account-backup-codes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0.6rem 0 0.9rem;
+  padding: 0.8rem;
+  background: var(--admin-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.account-backup-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+.account-backup-actions { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+.account-copy-status { font-size: 0.85rem; color: var(--muted); }
+
+/* ---- login 2FA field ---- */
+[data-login-2fa]:not([hidden]) { display: block; }
+[data-login-2fa] .form-hint { margin: 0.3rem 0 0; font-size: 0.82rem; color: var(--muted); }
+
 /* ---- mobile: off-canvas drawer ---- */
 @media (max-width: 880px) {
   .admin-shell-grid { grid-template-columns: 1fr; }
@@ -260,6 +383,8 @@ body.admin-shell [data-admin-app] h3 {
   }
   body.admin-drawer-open .admin-drawer-backdrop { opacity: 1; pointer-events: auto; }
   .admin-overview-cols { grid-template-columns: 1fr; }
+  .account-card { max-width: none; }
+  .account-backup-codes { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

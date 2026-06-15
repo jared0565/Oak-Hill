@@ -6,6 +6,8 @@
   const loginWrap = document.querySelector("[data-admin-login]");
   const loginForm = document.querySelector("[data-admin-login-form]");
   const loginStatus = document.querySelector("[data-admin-login-status]");
+  const login2fa = document.querySelector("[data-login-2fa]");
+  const login2faInput = login2fa && login2fa.querySelector("input[name='totpCode']");
   const app = document.querySelector("[data-admin-app]");
   const whoami = document.querySelector("[data-admin-whoami]");
   const bookingsEl = document.querySelector("[data-admin-bookings]");
@@ -30,6 +32,7 @@
     { id: "tracking",     perm: "tracking",     title: "Tracking code", load: () => window.OHPTracking && window.OHPTracking.render() },
     { id: "users",        perm: "users",        title: "Users",         load: () => window.OHPUsers && window.OHPUsers.render() },
     { id: "audit",        perm: "audit",        title: "Activity",      load: () => window.OHPAudit && window.OHPAudit.render() },
+    { id: "account",      perm: null,           title: "Account",       load: () => window.OHPAccount && window.OHPAccount.render() },
   ];
   const SECTION_BY_ID = Object.fromEntries(SECTIONS.map((s) => [s.id, s]));
   const loaded = new Set();
@@ -98,6 +101,9 @@
   function showLogin() {
     app.hidden = true; setupWrap.hidden = true; loginWrap.hidden = false;
     document.body.classList.remove("admin-shell", "admin-drawer-open");
+    // Start the 2FA step hidden and cleared each time the login view is shown fresh.
+    if (login2fa) login2fa.hidden = true;
+    if (login2faInput) login2faInput.value = "";
     mountTurnstile(document.querySelector("[data-login-turnstile]"));
   }
   function showApp() {
@@ -109,7 +115,43 @@
     routeTo(location.hash);
   }
   function applyPermissions() {
-    if (whoami) whoami.textContent = currentUser ? currentUser.name + " (" + currentUser.role + ")" : "";
+    paintIdentity();
+  }
+
+  // Initials for the avatar circle: first letters of up to two words, "?" fallback.
+  function userInitials(name) {
+    const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return "?";
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  // Paint the top-bar identity: an avatar (image or initials circle) + name/role text.
+  function paintIdentity() {
+    if (!whoami) return;
+    const right = whoami.parentNode;
+    if (right) {
+      let av = right.querySelector("[data-admin-avatar]");
+      if (!av) {
+        av = document.createElement("span");
+        av.setAttribute("data-admin-avatar", "");
+        right.insertBefore(av, whoami);
+      }
+      av.className = "admin-avatar";
+      av.replaceChildren();
+      if (currentUser && currentUser.avatar) {
+        const img = document.createElement("img");
+        img.className = "admin-avatar-img";
+        img.src = currentUser.avatar;
+        img.alt = "";
+        av.appendChild(img);
+      } else {
+        av.classList.add("admin-avatar-initials");
+        av.setAttribute("aria-hidden", "true");
+        av.textContent = currentUser ? userInitials(currentUser.name) : "";
+      }
+    }
+    whoami.textContent = currentUser ? currentUser.name + " (" + currentUser.role + ")" : "";
   }
 
   function perms() { return (currentUser && currentUser.permissions) || []; }
@@ -179,11 +221,32 @@
     e.preventDefault();
     loginStatus.textContent = "Checking…";
     const fd = new FormData(loginForm);
+    const totpCode = (fd.get("totpCode") || "").toString().trim();
     const body = { email: fd.get("email"), password: fd.get("password"), turnstileToken };
+    if (totpCode) body.totpCode = totpCode;
     const res = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const d = await res.json().catch(() => ({}));
-    if (res.ok) { sessionStorage.setItem(KEY, d.token); currentUser = d.user; loginStatus.textContent = ""; showApp(); }
-    else { loginStatus.textContent = d.error || "Sign-in failed."; resetTurnstile(); }
+    if (res.ok) {
+      sessionStorage.setItem(KEY, d.token); currentUser = d.user; loginStatus.textContent = "";
+      if (login2fa) login2fa.hidden = true;
+      if (login2faInput) login2faInput.value = "";
+      showApp();
+    } else if (d && d.twofa) {
+      // Password was correct; reveal the authenticator code field and resubmit.
+      // The whole form re-POSTs, and the server re-checks Turnstile on every request.
+      // Turnstile tokens are single-use, so when a site key is configured we must reset
+      // the widget to obtain a fresh token before the user resubmits with their code.
+      if (login2fa) login2fa.hidden = false;
+      if (login2faInput) login2faInput.focus();
+      if (siteKey) {
+        resetTurnstile(); // clears the spent token; the widget re-solves and refills it
+        loginStatus.textContent = d.error || "Enter your authenticator code, then complete the human check again.";
+      } else {
+        loginStatus.textContent = d.error || "Enter your authenticator code.";
+      }
+    } else {
+      loginStatus.textContent = d.error || "Sign-in failed."; resetTurnstile();
+    }
   });
 
   // ---- logout (both the sidebar and top-bar buttons share this) ----
@@ -328,8 +391,12 @@
     enquiriesEl.replaceChildren(table);
   }
 
+  // Update the shell's current user and repaint the top-bar identity/avatar.
+  // Used by the Account module after a profile/avatar or 2FA change.
+  function setUser(u) { currentUser = u; paintIdentity(); }
+
   // Expose the authed fetch + current user so the Owner-only modules can reuse them.
-  window.OHPAdmin = { api, user: () => currentUser, refresh };
+  window.OHPAdmin = { api, user: () => currentUser, refresh, setUser };
 
   // ---- init ----
   (async function init() {
