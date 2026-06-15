@@ -7,6 +7,7 @@ node_modules/
 .playwright-mcp/
 .DS_Store
 Thumbs.db
+graphify-out/
 HANDOVER.md
 pre-0006-backup.sql
 pre-0008-backup.sql
