@@ -1,5 +1,5 @@
 // /api/auth/login — email+password → Bearer session token. Public; bot-checked; no enumeration.
-import { findUserByEmail, recordLoginResult, createSession, recordAudit, reqContext, consumeBackupCode } from "../_lib/auth-db.mjs";
+import { findUserByEmail, recordLoginResult, createSession, recordAudit, reqContext, consumeBackupCode, purgeExpiredData } from "../_lib/auth-db.mjs";
 import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot, PBKDF2_ITERATIONS, hashToken } from "../_lib/auth-core.mjs";
 import { verifyTotp } from "../_lib/totp-core.mjs";
 import { turnstileEnabled, verifyTurnstile } from "../_lib/turnstile.mjs";
@@ -79,8 +79,9 @@ export async function onRequestPost(ctx) {
   // 5. Success.
   await recordLoginResult(ctx.env.DB, user, true, now);
   const { token } = await createSession(ctx.env.DB, user.id, now);
-  // Best-effort housekeeping: drop expired sessions so the table can't grow unbounded.
-  ctx.waitUntil(ctx.env.DB.prepare("DELETE FROM sessions WHERE expires_at <= ?").bind(new Date(now).toISOString()).run());
+  // Best-effort housekeeping: drop expired sessions AND enforce retention on the audit log
+  // and anonymous analytics, so none of those tables grow unbounded (GDPR storage-limitation).
+  ctx.waitUntil(purgeExpiredData(ctx.env.DB, now));
   await recordAudit(ctx.env.DB, { actor_user_id: user.id, actor_email: user.email, action: "auth.login", ...c });
   return Response.json({ token, user: { name: user.name, email: user.email, role: user.role, permissions: permissionsFor(user.role), avatar: user.avatar || null, totp_enabled: !!user.totp_enabled } });
 }

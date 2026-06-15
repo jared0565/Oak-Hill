@@ -119,6 +119,25 @@ export function touchSession(db, tokenHash, nowIso) {
 export function deleteSession(db, tokenHash) { return db.prepare("DELETE FROM sessions WHERE token_sha256 = ?").bind(tokenHash).run(); }
 export function deleteUserSessions(db, userId) { return db.prepare("DELETE FROM sessions WHERE user_id = ?").bind(userId).run(); }
 
+// --- retention / GC --------------------------------------------------------------------
+// Storage-limitation (UK GDPR Art.5(1)(e)): the audit log keeps IP/country/UA and the
+// analytics table keeps anonymous events — neither should live forever. We don't run a
+// cron, so purge opportunistically on login (staff-only, infrequent → off the public hot
+// path), mirroring the expired-session sweep. The retention windows are trusted integer
+// constants, so they're inlined into the SQL via SQLite's own date math (datetime('now',
+// '-N months')) — that yields the exact 'YYYY-MM-DD HH:MM:SS' format these columns are
+// stored in (datetime('now')), so there's no JS/SQLite string-format mismatch at the cut.
+export const AUDIT_RETENTION_MONTHS = 12;
+export const ANALYTICS_RETENTION_MONTHS = 12;
+export function purgeExpiredData(db, nowMs) {
+  return db.batch([
+    // sessions.expires_at is an ISO string (toISOString), so compare against the same format.
+    db.prepare("DELETE FROM sessions WHERE expires_at <= ?").bind(new Date(nowMs).toISOString()),
+    db.prepare(`DELETE FROM audit_log WHERE created_at < datetime('now', '-${AUDIT_RETENTION_MONTHS} months')`),
+    db.prepare(`DELETE FROM analytics_events WHERE ts < datetime('now', '-${ANALYTICS_RETENTION_MONTHS} months')`),
+  ]);
+}
+
 // --- login bookkeeping -----------------------------------------------------------------
 export async function recordLoginResult(db, user, ok, nowMs, lockState) {
   if (ok) {
