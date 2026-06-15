@@ -1663,3 +1663,10 @@ body.share-open { overflow: hidden; }
 .footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 480px; }
 .footer-signup-form input[type="email"] { flex: 1 1 220px; min-height: 46px; padding: 0.6rem 0.8rem; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius); background: rgba(255,255,255,0.95); color: var(--ink); }
 .footer-signup-status { min-height: 1.2em; }
+.admin-whoami { font-size: 0.85rem; color: var(--ink-soft, #5b6b62); margin: 0 0 1rem; }
+.users-add { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1rem; }
+.users-add input, .users-add select { padding: 0.45rem; border: 1px solid var(--line); border-radius: var(--radius); }
+.admin-table select { padding: 0.3rem; border: 1px solid var(--line); border-radius: var(--radius); }
+.audit-bots { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; white-space: nowrap; }
+.audit-bot { opacity: 0.6; }
+.audit-bot td:nth-child(3) { font-style: italic; }
