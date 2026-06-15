@@ -1,7 +1,7 @@
 // POST /api/admin/account/2fa-disable — turn 2FA off after re-verifying the password.
 // Clears the secret and deletes the user's backup codes.
-import { getFullUser, disableTotp, auditFromCtx } from "../../_lib/auth-db.mjs";
-import { verifyPassword, hashToken } from "../../_lib/auth-core.mjs";
+import { getFullUser, disableTotp, recordLoginResult, clearFailedAttempts, auditFromCtx } from "../../_lib/auth-db.mjs";
+import { verifyPassword, hashToken, isLocked, nextFailedState } from "../../_lib/auth-core.mjs";
 
 export async function onRequestPost(ctx) {
   try {
@@ -11,8 +11,21 @@ export async function onRequestPost(ctx) {
     const u = await getFullUser(ctx.env.DB, ctx.data.user.id);
     if (!u) return Response.json({ error: "Not found." }, { status: 404 });
 
+    const now = Date.now();
+    // Defense-in-depth: don't let a stolen session brute-force the password to strip 2FA off the
+    // account. Share the login lockout (5 strikes / 15 min) on this re-auth.
+    if (isLocked(u, now)) {
+      await auditFromCtx(ctx, { action: "account.reauth_locked", target_type: "user", target_id: u.id, detail: "2fa disable" });
+      return Response.json({ error: "Too many incorrect attempts. Try again later." }, { status: 429 });
+    }
+
     const ok = await verifyPassword(currentPassword, { hash: u.password_hash, salt: u.password_salt, iterations: u.password_iterations });
-    if (!ok) return Response.json({ error: "Your current password is incorrect." }, { status: 400 });
+    if (!ok) {
+      await recordLoginResult(ctx.env.DB, u, false, now, nextFailedState(u, now));
+      await auditFromCtx(ctx, { action: "account.reauth_failed", target_type: "user", target_id: u.id, detail: "2fa disable" });
+      return Response.json({ error: "Your current password is incorrect." }, { status: 400 });
+    }
+    await clearFailedAttempts(ctx.env.DB, u.id);
 
     await disableTotp(ctx.env.DB, u.id);
 

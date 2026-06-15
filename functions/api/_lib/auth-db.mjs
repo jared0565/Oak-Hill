@@ -148,6 +148,12 @@ export async function recordLoginResult(db, user, ok, nowMs, lockState) {
       .bind(lockState.failed_attempts, lockState.locked_until, user.id).run();
   }
 }
+// Clear the brute-force counter after a successful re-auth (password change / 2FA disable),
+// WITHOUT touching last_login_at — these are sudo-style confirmations, not sign-ins. Sharing
+// the lockout means failed re-auth attempts feed the same 5-strike/15-min trip as login.
+export function clearFailedAttempts(db, userId) {
+  return db.prepare("UPDATE users SET failed_attempts=0, locked_until=NULL WHERE id=?").bind(userId).run();
+}
 
 // --- account & security (self-service) -------------------------------------------------
 // Full row incl. avatar + TOTP fields — endpoints fetch this for the acting user, since the
