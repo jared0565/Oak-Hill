@@ -5,7 +5,7 @@
 const ALL = [
   "availability", "bookings", "messages", "reports",
   "contacts", "contacts.export", "contacts.erase",
-  "tracking", "users", "audit",
+  "tracking", "users", "audit", "newsletter",
 ];
 export const PERMISSIONS = {
   owner: ALL.slice(),

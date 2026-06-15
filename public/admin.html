@@ -91,6 +91,10 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 <span>Tracking</span>
               </a>
+              <a href="#newsletter" data-nav="newsletter" data-perm="newsletter">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z"/><polyline points="22 6 12 13 2 6"/></svg>
+                <span>Newsletter</span>
+              </a>
               <a href="#users" data-nav="users" data-perm="users">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
                 <span>Users</span>
@@ -166,6 +170,12 @@
               <div data-tracking><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
+            <section class="admin-panel" data-panel="newsletter" id="panel-newsletter" data-perm="newsletter" tabindex="-1" hidden>
+              <h2>Newsletter</h2>
+              <p class="section-lede">Write a message and send it to everyone who opted in to cafe news. Every email includes a one-click unsubscribe and the cafe's details. Send a test to yourself first.</p>
+              <div data-newsletter><p class="booking-note">Loading&hellip;</p></div>
+            </section>
+
             <section class="admin-panel" data-panel="users" id="panel-users" data-perm="users" tabindex="-1" hidden>
               <h2>Users</h2>
               <p class="section-lede">Staff accounts and roles. Owners can add people, change roles, reset passwords, disable or remove accounts.</p>
@@ -192,6 +202,7 @@
   <script src="assets/admin-reports.js" defer></script>
   <script src="assets/admin-contacts.js" defer></script>
   <script src="assets/admin-users.js" defer></script>
+  <script src="assets/admin-newsletter.js" defer></script>
   <script src="assets/admin-audit.js" defer></script>
   <script src="assets/admin-overview.js" defer></script>
   <script src="assets/qrcode.js" defer></script>

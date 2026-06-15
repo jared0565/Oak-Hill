@@ -31,6 +31,7 @@
     { id: "contacts",     perm: "contacts",     title: "Contacts",      load: () => window.OHPContacts && window.OHPContacts.render() },
     { id: "reports",      perm: "reports",      title: "Reports",       load: () => window.OHPReports && window.OHPReports.render() },
     { id: "tracking",     perm: "tracking",     title: "Tracking code", load: () => window.OHPTracking && window.OHPTracking.render() },
+    { id: "newsletter",   perm: "newsletter",   title: "Newsletter",    load: () => window.OHPNewsletter && window.OHPNewsletter.render() },
     { id: "users",        perm: "users",        title: "Users",         load: () => window.OHPUsers && window.OHPUsers.render() },
     { id: "audit",        perm: "audit",        title: "Activity",      load: () => window.OHPAudit && window.OHPAudit.render() },
     { id: "account",      perm: null,           title: "Account",       load: () => window.OHPAccount && window.OHPAccount.render() },

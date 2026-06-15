@@ -30,6 +30,9 @@ test("can(): owner everything, staff only bookings+messages, manager not trackin
   assert.equal(can("manager", "tracking"), false);
   assert.equal(can("manager", "users"), false);
   assert.equal(can("manager", "audit"), false);
+  assert.equal(can("owner", "newsletter"), true);
+  assert.equal(can("manager", "newsletter"), false); // mass marketing email is owner-only
+  assert.equal(can("staff", "newsletter"), false);
   assert.equal(can("nobody", "bookings"), false);
 });
 
