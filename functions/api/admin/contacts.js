@@ -12,7 +12,7 @@ function contactExportCsv(contact, bookings, enquiries) {
   rows.push([]);
   rows.push(["[Contact details]"]);
   rows.push(["field", "value"]);
-  for (const k of ["name", "email", "phone", "marketing_opt_in", "first_seen", "last_seen", "notes"]) rows.push([k, contact[k]]);
+  for (const k of ["name", "email", "phone", "marketing_opt_in", "marketing_opt_in_at", "marketing_opt_out_at", "first_seen", "last_seen", "notes"]) rows.push([k, contact[k]]);
   rows.push(["tags", (contact.tags || []).join("|")]);
   rows.push([]);
   rows.push(["[Bookings]"]);
@@ -57,7 +57,7 @@ export async function onRequestGet(ctx) {
     const wantCsv = url.searchParams.get("format") === "csv";
     if (wantCsv) { const denyExport = requirePermission(ctx, "contacts.export"); if (denyExport) return denyExport; }
 
-    const contact = await ctx.env.DB.prepare("SELECT id, name, email, phone, marketing_opt_in, first_seen, last_seen, notes FROM contacts WHERE id = ?").bind(id).first();
+    const contact = await ctx.env.DB.prepare("SELECT id, name, email, phone, marketing_opt_in, marketing_opt_in_at, marketing_opt_out_at, first_seen, last_seen, notes FROM contacts WHERE id = ?").bind(id).first();
     if (!contact) return Response.json({ error: "Not found." }, { status: 404 });
     const { results: tags } = await ctx.env.DB.prepare("SELECT tag FROM contact_tags WHERE contact_id = ? ORDER BY tag").bind(id).all();
     const { results: bookings } = await ctx.env.DB.prepare(
@@ -98,7 +98,8 @@ export async function onRequestPut(ctx) {
   if (b.notes !== undefined) { sets.push("notes = ?"); binds.push((b.notes == null ? "" : String(b.notes)).slice(0, 2000) || null); }
   if (b.marketing_opt_in !== undefined) {
     sets.push("marketing_opt_in = ?"); binds.push(b.marketing_opt_in ? 1 : 0);
-    if (b.marketing_opt_in) sets.push("marketing_opt_in_at = COALESCE(marketing_opt_in_at, datetime('now'))");
+    if (b.marketing_opt_in) sets.push("marketing_opt_in_at = COALESCE(marketing_opt_in_at, datetime('now'))", "marketing_opt_out_at = NULL");
+    else sets.push("marketing_opt_out_at = datetime('now')"); // manual opt-out mirrors self-service
   }
   if (!sets.length) return Response.json({ error: "Nothing to update." }, { status: 400 });
   binds.push(id);

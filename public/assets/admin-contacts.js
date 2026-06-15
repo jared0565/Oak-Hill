@@ -68,6 +68,7 @@
     opt.addEventListener("change", () => patch(id, { marketing_opt_in: opt.checked ? 1 : 0 }));
     optWrap.append(opt, document.createTextNode(" Marketing opt-in (consent on file)"));
     panel.appendChild(optWrap);
+    if (contact.marketing_opt_out_at) panel.appendChild(el("p", "Unsubscribed on " + String(contact.marketing_opt_out_at).slice(0, 10), "booking-note"));
 
     const notes = Object.assign(document.createElement("textarea"), { rows: 3, value: contact.notes || "" });
     const saveNotes = el("button", "Save notes", "button ghost admin-mini"); saveNotes.type = "button";

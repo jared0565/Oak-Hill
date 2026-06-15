@@ -13,7 +13,9 @@ export async function onRequestPost(ctx) {
     const cid = await upsertContact(ctx.env.DB, { email: v.value.email, name: v.value.name });
     if (cid) {
       await ctx.env.DB.batch([
-        ctx.env.DB.prepare("UPDATE contacts SET marketing_opt_in = 1, marketing_opt_in_at = datetime('now') WHERE id = ?").bind(cid),
+        // Opt in, clear any prior opt-out (a re-signup is a clean re-subscribe), and mint a stable
+        // unsubscribe token if the contact doesn't already have one (COALESCE keeps old links valid).
+        ctx.env.DB.prepare("UPDATE contacts SET marketing_opt_in = 1, marketing_opt_in_at = datetime('now'), marketing_opt_out_at = NULL, unsub_token = COALESCE(unsub_token, lower(hex(randomblob(16)))) WHERE id = ?").bind(cid),
         ctx.env.DB.prepare("INSERT OR IGNORE INTO contact_tags (contact_id, tag) VALUES (?, 'newsletter')").bind(cid),
       ]);
     }
