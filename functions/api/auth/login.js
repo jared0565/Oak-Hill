@@ -57,8 +57,11 @@ export async function onRequestPost(ctx) {
   if (user.totp_enabled) {
     const code = typeof body.totpCode === "string" ? body.totpCode.trim() : "";
     if (!code) {
-      // Missing code is not a failed attempt — the password was right; just prompt for the code.
-      return Response.json({ twofa: true, error: "Enter your authenticator code." }, { status: 401 });
+      // Password was correct — this is a continue-to-second-step, not a failure. Return 200 so
+      // the browser doesn't log a spurious 401 on the normal 2FA path. No token is issued; the
+      // body's `twofa` flag tells the client to prompt for the code. (Not a failed attempt, so
+      // the lockout counter is untouched.)
+      return Response.json({ twofa: true, error: "Enter your authenticator code." }, { status: 200 });
     }
     // verifyTotp's 6-digit guard rejects backup codes, so falling through to consume one is
     // safe. Backup codes are uppercase base32 → normalize before the case-sensitive hash.

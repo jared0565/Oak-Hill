@@ -226,16 +226,12 @@
     if (totpCode) body.totpCode = totpCode;
     const res = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const d = await res.json().catch(() => ({}));
-    if (res.ok) {
-      sessionStorage.setItem(KEY, d.token); currentUser = d.user; loginStatus.textContent = "";
-      if (login2fa) login2fa.hidden = true;
-      if (login2faInput) login2faInput.value = "";
-      showApp();
-    } else if (d && d.twofa) {
-      // Password was correct; reveal the authenticator code field and resubmit.
-      // The whole form re-POSTs, and the server re-checks Turnstile on every request.
-      // Turnstile tokens are single-use, so when a site key is configured we must reset
-      // the widget to obtain a fresh token before the user resubmits with their code.
+    if (d && d.twofa) {
+      // Password was correct; reveal the authenticator code field and resubmit. This covers both
+      // the first prompt (HTTP 200, no token yet) and a rejected code retry (HTTP 401), so it is
+      // checked before res.ok. The whole form re-POSTs, and the server re-checks Turnstile on
+      // every request. Turnstile tokens are single-use, so when a site key is configured we must
+      // reset the widget to obtain a fresh token before the user resubmits with their code.
       if (login2fa) login2fa.hidden = false;
       if (login2faInput) login2faInput.focus();
       if (siteKey) {
@@ -244,6 +240,11 @@
       } else {
         loginStatus.textContent = d.error || "Enter your authenticator code.";
       }
+    } else if (res.ok) {
+      sessionStorage.setItem(KEY, d.token); currentUser = d.user; loginStatus.textContent = "";
+      if (login2fa) login2fa.hidden = true;
+      if (login2faInput) login2faInput.value = "";
+      showApp();
     } else {
       loginStatus.textContent = d.error || "Sign-in failed."; resetTurnstile();
     }
