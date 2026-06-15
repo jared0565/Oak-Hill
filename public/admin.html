@@ -12,52 +12,81 @@
 <body>
   <main id="main" class="section">
     <div class="section-inner admin">
-      <span class="kicker">Owner only</span>
+      <span class="kicker">Staff only</span>
       <h1>Booking admin</h1>
 
-      <div data-admin-login>
-        <p class="section-lede">Enter the admin password to manage party slots and bookings.</p>
+      <div data-admin-setup hidden>
+        <p class="section-lede">First-time setup: create the owner account. Enter the setup token (the <code>ADMIN_TOKEN</code> from Cloudflare), then choose your sign-in details.</p>
+        <form data-admin-setup-form class="form-panel admin-login">
+          <label>Setup token <input type="password" name="adminToken" autocomplete="off" required></label>
+          <label>Your name <input type="text" name="name" autocomplete="name" required></label>
+          <label>Email <input type="email" name="email" autocomplete="username" required></label>
+          <label>Password (at least 12 characters) <input type="password" name="password" autocomplete="new-password" minlength="12" required></label>
+          <div data-setup-turnstile></div>
+          <button class="button" type="submit">Create owner account</button>
+          <p class="form-status" data-admin-setup-status aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div data-admin-login hidden>
+        <p class="section-lede">Sign in to manage bookings.</p>
         <form data-admin-login-form class="form-panel admin-login">
-          <label>Admin password <input type="password" name="token" autocomplete="current-password" required></label>
+          <label>Email <input type="email" name="email" autocomplete="username" required></label>
+          <label>Password <input type="password" name="password" autocomplete="current-password" required></label>
+          <div data-login-turnstile></div>
           <button class="button" type="submit">Sign in</button>
           <p class="form-status" data-admin-login-status aria-live="polite"></p>
         </form>
       </div>
 
       <div data-admin-app hidden>
-        <section class="admin-block">
+        <p class="admin-whoami" data-admin-whoami></p>
+
+        <section class="admin-block" data-perm="availability">
           <h2>Availability</h2>
           <p class="section-lede">Manage party slots, events and closures. A closure stops that day's slots being bookable on the website.</p>
           <div data-availability><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
-        <section class="admin-block">
+        <section class="admin-block" data-perm="reports">
           <h2>Reports</h2>
           <p class="section-lede">Visits and traffic are counted anonymously with no cookies. Booking and enquiry numbers come from your live data.</p>
           <div data-reports><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
-        <section class="admin-block">
+        <section class="admin-block" data-perm="bookings">
           <h2>Bookings</h2>
           <div class="admin-table-wrap" data-admin-bookings><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
-        <section class="admin-block">
+        <section class="admin-block" data-perm="messages">
           <h2>Messages</h2>
           <p class="section-lede">Contact and party enquiries submitted through the website.</p>
           <div class="admin-table-wrap" data-admin-enquiries><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
-        <section class="admin-block">
+        <section class="admin-block" data-perm="contacts">
           <h2>Contacts</h2>
           <p class="section-lede">One record per person, from bookings and enquiries. Search, tag, add notes, export, or erase someone's details on request.</p>
           <div data-contacts><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
-        <section class="admin-block">
+        <section class="admin-block" data-perm="tracking">
           <h2>Tracking code</h2>
           <p class="section-lede">Paste tracking snippets (Google tag, Meta Pixel, etc.) to run on the public site. <strong>Necessary</strong> runs immediately; <strong>Analytics</strong>/<strong>Advertising</strong> run only after the visitor consents. Only known ad/analytics providers are allowed by the site's security policy; tags using <code>document.write</code> may not work when added this way.</p>
           <div data-tracking><p class="booking-note">Loading&hellip;</p></div>
+        </section>
+
+        <section class="admin-block" data-perm="users">
+          <h2>Users</h2>
+          <p class="section-lede">Staff accounts and roles. Owners can add people, change roles, reset passwords, disable or remove accounts.</p>
+          <div data-users><p class="booking-note">Loading&hellip;</p></div>
+        </section>
+
+        <section class="admin-block" data-perm="audit">
+          <h2>Activity</h2>
+          <p class="section-lede">Sign-ins and changes, newest first — who did what, when, and from where. Bot attempts are hidden unless you tick the box.</p>
+          <div data-audit><p class="booking-note">Loading&hellip;</p></div>
         </section>
 
         <p><button class="button ghost" type="button" data-admin-logout>Sign out</button></p>
@@ -68,6 +97,8 @@
   <script src="assets/admin-tracking.js" defer></script>
   <script src="assets/admin-reports.js" defer></script>
   <script src="assets/admin-contacts.js" defer></script>
+  <script src="assets/admin-users.js" defer></script>
+  <script src="assets/admin-audit.js" defer></script>
   <script src="assets/admin.js" defer></script>
 </body>
 </html>
