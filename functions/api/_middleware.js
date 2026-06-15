@@ -1,7 +1,9 @@
-// Root Pages-Functions middleware: attaches baseline security headers to every dynamic
-// (/api/*) response. Static assets are covered by public/_headers, which does NOT apply to
-// Function responses — this closes that gap. Runs outermost, so it also decorates the 401s
-// returned by functions/api/admin/_middleware.js and any error responses.
+// API middleware: attaches baseline security headers to every /api/* (Pages Functions) response.
+// Scoped to functions/api/ on purpose — a root functions/_middleware.js would also intercept
+// every STATIC asset, routing it through the Worker and overriding public/_headers. Static assets
+// get their headers from public/_headers; this covers only the dynamic API responses it doesn't.
+// Runs as the parent of functions/api/admin/_middleware.js, so it also decorates that 401 and any
+// error responses.
 export async function onRequest(ctx) {
   const res = await ctx.next();
   const h = new Headers(res.headers);
