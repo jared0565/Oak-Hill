@@ -27,8 +27,20 @@ export async function onRequestPost(ctx) {
   const pv = validatePassword(pw);
   if (!pv.ok) return Response.json({ error: pv.error }, { status: 400 });
 
-  const id = await createUser(ctx.env.DB, { name, email, role: "owner", password: pw, protected: true });
-  await recordAudit(ctx.env.DB, { actor_user_id: id, actor_email: email, action: "auth.bootstrap", ...c, detail: "first owner" });
-  const { token } = await createSession(ctx.env.DB, id, Date.now());
-  return Response.json({ token, user: { name, email, role: "owner", permissions: permissionsFor("owner") } });
+  // --- TEMP DIAGNOSTIC (remove after): surface the real failing step + full error on-screen ---
+  let step = "createUser";
+  let createdId = null;
+  try {
+    createdId = await createUser(ctx.env.DB, { name, email, role: "owner", password: pw, protected: true });
+    step = "recordAudit";
+    await recordAudit(ctx.env.DB, { actor_user_id: createdId, actor_email: email, action: "auth.bootstrap", ...c, detail: "first owner" });
+    step = "createSession";
+    const { token } = await createSession(ctx.env.DB, createdId, Date.now());
+    return Response.json({ token, user: { name, email, role: "owner", permissions: permissionsFor("owner") } });
+  } catch (err) {
+    // Self-clean: if the owner row was created before a later step threw, remove it so
+    // needs_bootstrap stays true (don't strand the user on "Setup is already complete").
+    if (createdId != null) { try { await ctx.env.DB.prepare("DELETE FROM users WHERE id=?").bind(createdId).run(); } catch (_) {} }
+    return Response.json({ error: `DIAG[${step}] ${err?.name}: ${err?.message}${err?.cause ? " | cause: " + err.cause : ""}` }, { status: 500 });
+  }
 }
