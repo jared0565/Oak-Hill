@@ -8,6 +8,7 @@
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/admin.css">
 </head>
 <body>
   <main id="main" class="section">
@@ -40,56 +41,128 @@
       </div>
 
       <div data-admin-app hidden>
-        <p class="admin-whoami" data-admin-whoami></p>
+        <div class="admin-shell-grid">
+          <button type="button" class="admin-drawer-backdrop" data-admin-drawer-backdrop tabindex="-1" aria-hidden="true"></button>
 
-        <section class="admin-block" data-perm="availability">
-          <h2>Availability</h2>
-          <p class="section-lede">Manage party slots, events and closures. A closure stops that day's slots being bookable on the website.</p>
-          <div data-availability><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+          <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar>
+            <div class="admin-brand">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <span>Oak Hill · Admin</span>
+            </div>
 
-        <section class="admin-block" data-perm="reports">
-          <h2>Reports</h2>
-          <p class="section-lede">Visits and traffic are counted anonymously with no cookies. Booking and enquiry numbers come from your live data.</p>
-          <div data-reports><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+            <nav class="admin-nav" data-admin-nav aria-label="Sections">
+              <a href="#overview" data-nav="overview">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                <span>Overview</span>
+              </a>
+              <a href="#bookings" data-nav="bookings" data-perm="bookings">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Bookings</span>
+              </a>
+              <a href="#messages" data-nav="messages" data-perm="messages">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
+                <span>Messages</span>
+              </a>
+              <a href="#availability" data-nav="availability" data-perm="availability">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                <span>Availability</span>
+              </a>
+              <a href="#contacts" data-nav="contacts" data-perm="contacts">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Contacts</span>
+              </a>
+              <a href="#reports" data-nav="reports" data-perm="reports">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span>Reports</span>
+              </a>
+              <a href="#tracking" data-nav="tracking" data-perm="tracking">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <span>Tracking</span>
+              </a>
+              <a href="#users" data-nav="users" data-perm="users">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                <span>Users</span>
+              </a>
+              <a href="#audit" data-nav="audit" data-perm="audit">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Activity</span>
+              </a>
+            </nav>
 
-        <section class="admin-block" data-perm="bookings">
-          <h2>Bookings</h2>
-          <div class="admin-table-wrap" data-admin-bookings><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+            <hr class="admin-sidebar-divider">
+            <div class="admin-signout">
+              <button class="button ghost" type="button" data-admin-logout>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>Sign out</span>
+              </button>
+            </div>
+          </aside>
 
-        <section class="admin-block" data-perm="messages">
-          <h2>Messages</h2>
-          <p class="section-lede">Contact and party enquiries submitted through the website.</p>
-          <div class="admin-table-wrap" data-admin-enquiries><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+          <header class="admin-topbar">
+            <button type="button" class="admin-hamburger" data-admin-hamburger aria-label="Toggle navigation" aria-expanded="false" aria-controls="admin-sidebar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            <h1 class="admin-section-title" data-admin-title>Overview</h1>
+            <div class="admin-topbar-right">
+              <p class="admin-whoami" data-admin-whoami></p>
+              <button class="button ghost admin-topbar-signout" type="button" data-admin-logout>Sign out</button>
+            </div>
+          </header>
 
-        <section class="admin-block" data-perm="contacts">
-          <h2>Contacts</h2>
-          <p class="section-lede">One record per person, from bookings and enquiries. Search, tag, add notes, export, or erase someone's details on request.</p>
-          <div data-contacts><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+          <main class="admin-content" data-admin-content>
+            <section class="admin-panel" data-panel="overview" id="panel-overview" tabindex="-1" hidden>
+              <h2>Overview</h2>
+              <div data-overview><p class="booking-note">Loading&hellip;</p></div>
+            </section>
 
-        <section class="admin-block" data-perm="tracking">
-          <h2>Tracking code</h2>
-          <p class="section-lede">Paste tracking snippets (Google tag, Meta Pixel, etc.) to run on the public site. <strong>Necessary</strong> runs immediately; <strong>Analytics</strong>/<strong>Advertising</strong> run only after the visitor consents. Only known ad/analytics providers are allowed by the site's security policy; tags using <code>document.write</code> may not work when added this way.</p>
-          <div data-tracking><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+            <section class="admin-panel" data-panel="bookings" id="panel-bookings" data-perm="bookings" tabindex="-1" hidden>
+              <h2>Bookings</h2>
+              <div class="admin-table-wrap" data-admin-bookings><p class="booking-note">Loading&hellip;</p></div>
+            </section>
 
-        <section class="admin-block" data-perm="users">
-          <h2>Users</h2>
-          <p class="section-lede">Staff accounts and roles. Owners can add people, change roles, reset passwords, disable or remove accounts.</p>
-          <div data-users><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+            <section class="admin-panel" data-panel="messages" id="panel-messages" data-perm="messages" tabindex="-1" hidden>
+              <h2>Messages</h2>
+              <p class="section-lede">Contact and party enquiries submitted through the website.</p>
+              <div class="admin-table-wrap" data-admin-enquiries><p class="booking-note">Loading&hellip;</p></div>
+            </section>
 
-        <section class="admin-block" data-perm="audit">
-          <h2>Activity</h2>
-          <p class="section-lede">Sign-ins and changes, newest first — who did what, when, and from where. Bot attempts are hidden unless you tick the box.</p>
-          <div data-audit><p class="booking-note">Loading&hellip;</p></div>
-        </section>
+            <section class="admin-panel" data-panel="availability" id="panel-availability" data-perm="availability" tabindex="-1" hidden>
+              <h2>Availability</h2>
+              <p class="section-lede">Manage party slots, events and closures. A closure stops that day's slots being bookable on the website.</p>
+              <div data-availability><p class="booking-note">Loading&hellip;</p></div>
+            </section>
 
-        <p><button class="button ghost" type="button" data-admin-logout>Sign out</button></p>
+            <section class="admin-panel" data-panel="contacts" id="panel-contacts" data-perm="contacts" tabindex="-1" hidden>
+              <h2>Contacts</h2>
+              <p class="section-lede">One record per person, from bookings and enquiries. Search, tag, add notes, export, or erase someone's details on request.</p>
+              <div data-contacts><p class="booking-note">Loading&hellip;</p></div>
+            </section>
+
+            <section class="admin-panel" data-panel="reports" id="panel-reports" data-perm="reports" tabindex="-1" hidden>
+              <h2>Reports</h2>
+              <p class="section-lede">Visits and traffic are counted anonymously with no cookies. Booking and enquiry numbers come from your live data.</p>
+              <div data-reports><p class="booking-note">Loading&hellip;</p></div>
+            </section>
+
+            <section class="admin-panel" data-panel="tracking" id="panel-tracking" data-perm="tracking" tabindex="-1" hidden>
+              <h2>Tracking code</h2>
+              <p class="section-lede">Paste tracking snippets (Google tag, Meta Pixel, etc.) to run on the public site. <strong>Necessary</strong> runs immediately; <strong>Analytics</strong>/<strong>Advertising</strong> run only after the visitor consents. Only known ad/analytics providers are allowed by the site's security policy; tags using <code>document.write</code> may not work when added this way.</p>
+              <div data-tracking><p class="booking-note">Loading&hellip;</p></div>
+            </section>
+
+            <section class="admin-panel" data-panel="users" id="panel-users" data-perm="users" tabindex="-1" hidden>
+              <h2>Users</h2>
+              <p class="section-lede">Staff accounts and roles. Owners can add people, change roles, reset passwords, disable or remove accounts.</p>
+              <div data-users><p class="booking-note">Loading&hellip;</p></div>
+            </section>
+
+            <section class="admin-panel" data-panel="audit" id="panel-audit" data-perm="audit" tabindex="-1" hidden>
+              <h2>Activity</h2>
+              <p class="section-lede">Sign-ins and changes, newest first — who did what, when, and from where. Bot attempts are hidden unless you tick the box.</p>
+              <div data-audit><p class="booking-note">Loading&hellip;</p></div>
+            </section>
+          </main>
+        </div>
       </div>
     </div>
   </main>
@@ -99,6 +172,7 @@
   <script src="assets/admin-contacts.js" defer></script>
   <script src="assets/admin-users.js" defer></script>
   <script src="assets/admin-audit.js" defer></script>
+  <script src="assets/admin-overview.js" defer></script>
   <script src="assets/admin.js" defer></script>
 </body>
 </html>

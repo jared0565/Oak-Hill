@@ -1,0 +1,267 @@
+/* admin.css — dashboard shell for the booking admin.
+   Loaded in ADDITION to styles.css; reuses the :root brand tokens, .button, .admin-table,
+   and form styles. Everything here is scoped under body.admin-shell so the setup/login
+   views stay on the centred public surface and only the signed-in app goes full-bleed. */
+
+:root {
+  --admin-sidebar-w: 240px;
+  --admin-topbar-h: 60px;
+  --admin-surface: #f6f4ee;          /* soft neutral sidebar surface */
+  --admin-active: rgba(47, 107, 79, 0.12);
+}
+
+/* ---- full-bleed shell (only while the signed-in app is showing) ---- */
+body.admin-shell { background: #fff; }
+body.admin-shell #main.section { padding: 0; }
+body.admin-shell .section-inner.admin {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+/* The page H1 / kicker belong to the centred setup/login flow, not the app shell. */
+body.admin-shell #main > .section-inner.admin > .kicker,
+body.admin-shell #main > .section-inner.admin > h1 { display: none; }
+
+/* Inter + tighter type throughout the admin app (drop the public Georgia serif). */
+body.admin-shell [data-admin-app] h1,
+body.admin-shell [data-admin-app] h2,
+body.admin-shell [data-admin-app] h3 {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ---- layout grid: sidebar + (topbar over content) ---- */
+.admin-shell-grid {
+  display: grid;
+  grid-template-columns: var(--admin-sidebar-w) 1fr;
+  min-height: 100vh;
+}
+
+/* ---- sidebar ---- */
+.admin-sidebar {
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 0.75rem;
+  background: var(--admin-surface);
+  border-right: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem 0.9rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--park-dark);
+}
+.admin-brand svg { flex: none; }
+.admin-nav { display: flex; flex-direction: column; gap: 2px; }
+/* Author display rules beat the UA [hidden] rule, so re-assert it for filtered items. */
+.admin-nav a[hidden] { display: none; }
+.admin-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.93rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+.admin-nav a svg { flex: none; color: var(--muted); }
+.admin-nav a:hover { background: rgba(38, 50, 56, 0.06); }
+.admin-nav a[aria-current="page"] {
+  background: var(--admin-active);
+  color: var(--park-dark);
+  font-weight: 800;
+}
+.admin-nav a[aria-current="page"] svg { color: var(--park); }
+.admin-nav a:focus-visible,
+.admin-topbar button:focus-visible,
+.admin-quick a:focus-visible,
+.admin-recent a:focus-visible {
+  outline: 2px solid var(--park);
+  outline-offset: 2px;
+}
+.admin-sidebar-divider {
+  margin: 0.6rem 0.4rem;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+.admin-sidebar .admin-signout { margin-top: auto; }
+.admin-sidebar .admin-signout button {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 0.65rem;
+}
+
+/* ---- top bar ---- */
+.admin-topbar {
+  grid-column: 2;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--admin-topbar-h);
+  padding: 0 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.admin-topbar .admin-section-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.admin-topbar .admin-topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.admin-topbar .admin-whoami { margin: 0; color: var(--muted); font-size: 0.88rem; }
+.admin-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.admin-topbar .admin-topbar-signout { padding: 0.45rem 0.8rem; min-height: 0; font-size: 0.85rem; }
+
+/* ---- content area ---- */
+.admin-content {
+  grid-column: 2;
+  padding: 1.5rem 1.75rem 4rem;
+  max-width: 1180px;
+}
+.admin-panel { outline: none; }
+.admin-panel[hidden] { display: none; }
+
+/* Drawer backdrop: out of flow and hidden by default so it is never a desktop grid item;
+   the mobile media query reveals it. */
+.admin-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  border: 0;
+  background: rgba(38, 50, 56, 0.4);
+}
+.admin-panel > h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.45rem;
+}
+.admin-panel > .section-lede { margin-top: 0; }
+
+/* ---- Overview: KPI cards ---- */
+.admin-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 0.5rem 0 1.75rem;
+}
+.admin-kpi {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(38, 50, 56, 0.06);
+  padding: 1.1rem 1.2rem;
+}
+.admin-kpi .admin-kpi-value {
+  display: block;
+  font-size: 2.1rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--park-dark);
+}
+.admin-kpi .admin-kpi-label {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+/* ---- Overview: recent bookings + quick actions ---- */
+.admin-overview-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+.admin-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+}
+.admin-card > h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+.admin-recent { display: flex; flex-direction: column; gap: 0.2rem; }
+.admin-recent a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.5rem 0.4rem;
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.admin-recent a:last-child { border-bottom: 0; }
+.admin-recent a:hover { background: rgba(38, 50, 56, 0.05); }
+.admin-recent .admin-recent-ref { font-weight: 800; color: var(--park-dark); font-size: 0.85rem; }
+.admin-recent .admin-recent-name { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-recent .admin-recent-meta { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+.admin-quick { display: flex; flex-direction: column; gap: 0.5rem; }
+.admin-quick a { width: 100%; justify-content: flex-start; }
+
+/* ---- mobile: off-canvas drawer ---- */
+@media (max-width: 880px) {
+  .admin-shell-grid { grid-template-columns: 1fr; }
+  .admin-hamburger { display: inline-flex; }
+  .admin-topbar { grid-column: 1; }
+  .admin-content { grid-column: 1; padding: 1.25rem 1rem 4rem; }
+  .admin-topbar .admin-whoami { display: none; }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    width: min(82vw, var(--admin-sidebar-w));
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+    box-shadow: var(--shadow);
+  }
+  body.admin-drawer-open .admin-sidebar { transform: translateX(0); }
+  .admin-drawer-backdrop {
+    display: block;
+    z-index: 35;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+  body.admin-drawer-open .admin-drawer-backdrop { opacity: 1; pointer-events: auto; }
+  .admin-overview-cols { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar, .admin-drawer-backdrop { transition: none; }
+}

@@ -10,7 +10,40 @@
   const whoami = document.querySelector("[data-admin-whoami]");
   const bookingsEl = document.querySelector("[data-admin-bookings]");
   const enquiriesEl = document.querySelector("[data-admin-enquiries]");
-  const logoutBtn = document.querySelector("[data-admin-logout]");
+  const logoutBtns = document.querySelectorAll("[data-admin-logout]");
+  const nav = document.querySelector("[data-admin-nav]");
+  const titleEl = document.querySelector("[data-admin-title]");
+  const hamburger = document.querySelector("[data-admin-hamburger]");
+  const drawerBackdrop = document.querySelector("[data-admin-drawer-backdrop]");
+
+  // Section registry: panel id (= hash), its permission (null = always available),
+  // human label for the top-bar title, and the lazy loader run on first visit.
+  // The loader is resolved at call time so the per-section modules (loaded by their own
+  // <script defer>) are guaranteed present.
+  const SECTIONS = [
+    { id: "overview",     perm: null,           title: "Overview",      load: () => window.OHPOverview && window.OHPOverview.render() },
+    { id: "bookings",     perm: "bookings",     title: "Bookings",      load: () => loadBookings() },
+    { id: "messages",     perm: "messages",     title: "Messages",      load: () => loadEnquiries() },
+    { id: "availability", perm: "availability", title: "Availability",  load: () => window.OHPAvailability && window.OHPAvailability.render() },
+    { id: "contacts",     perm: "contacts",     title: "Contacts",      load: () => window.OHPContacts && window.OHPContacts.render() },
+    { id: "reports",      perm: "reports",      title: "Reports",       load: () => window.OHPReports && window.OHPReports.render() },
+    { id: "tracking",     perm: "tracking",     title: "Tracking code", load: () => window.OHPTracking && window.OHPTracking.render() },
+    { id: "users",        perm: "users",        title: "Users",         load: () => window.OHPUsers && window.OHPUsers.render() },
+    { id: "audit",        perm: "audit",        title: "Activity",      load: () => window.OHPAudit && window.OHPAudit.render() },
+  ];
+  const SECTION_BY_ID = Object.fromEntries(SECTIONS.map((s) => [s.id, s]));
+  const loaded = new Set();
+  let activeId = null;
+
+  // Pure routing helper (unit-testable): given the set of permissions and a requested
+  // section id, return the id to actually show. Overview (perm null) is always allowed;
+  // an unknown or forbidden id falls back to "overview".
+  function resolveRoute(perms, requestedId, sections) {
+    const list = sections || SECTIONS;
+    const target = list.find((s) => s.id === requestedId);
+    if (target && (target.perm === null || (perms || []).includes(target.perm))) return target.id;
+    return "overview";
+  }
 
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -59,21 +92,74 @@
   // ---- view switching ----
   function showSetup() {
     app.hidden = true; loginWrap.hidden = true; setupWrap.hidden = false;
+    document.body.classList.remove("admin-shell", "admin-drawer-open");
     mountTurnstile(document.querySelector("[data-setup-turnstile]"));
   }
   function showLogin() {
     app.hidden = true; setupWrap.hidden = true; loginWrap.hidden = false;
+    document.body.classList.remove("admin-shell", "admin-drawer-open");
     mountTurnstile(document.querySelector("[data-login-turnstile]"));
   }
   function showApp() {
     setupWrap.hidden = true; loginWrap.hidden = true; app.hidden = false;
+    document.body.classList.add("admin-shell");
     applyPermissions();
-    refresh();
+    buildNav();
+    // Route to the current hash (or default/guard to #overview), which lazy-loads it.
+    routeTo(location.hash);
   }
   function applyPermissions() {
-    const perms = (currentUser && currentUser.permissions) || [];
-    document.querySelectorAll("[data-perm]").forEach((sec) => { sec.hidden = !perms.includes(sec.getAttribute("data-perm")); });
-    whoami.textContent = currentUser ? "Signed in as " + currentUser.name + " (" + currentUser.role + ")" : "";
+    if (whoami) whoami.textContent = currentUser ? currentUser.name + " (" + currentUser.role + ")" : "";
+  }
+
+  function perms() { return (currentUser && currentUser.permissions) || []; }
+
+  // Show only the nav items the user is permitted to see (Overview always shown).
+  function buildNav() {
+    if (!nav) return;
+    const p = perms();
+    nav.querySelectorAll("[data-nav]").forEach((a) => {
+      const need = a.getAttribute("data-perm");
+      a.hidden = !!need && !p.includes(need);
+    });
+  }
+
+  // ---- drawer (mobile) ----
+  function setDrawer(open) {
+    document.body.classList.toggle("admin-drawer-open", open);
+    if (hamburger) hamburger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  function closeDrawer() { setDrawer(false); }
+
+  // ---- hash router ----
+  function routeTo(hash) {
+    const requested = String(hash || "").replace(/^#/, "");
+    const id = resolveRoute(perms(), requested, SECTIONS);
+    // Keep the URL honest if we redirected (e.g. forbidden/unknown -> overview).
+    if (("#" + id) !== location.hash) { location.hash = id; return; } // hashchange re-enters
+
+    activeId = id;
+    // Show exactly one panel; the router owns panel visibility.
+    document.querySelectorAll("[data-panel]").forEach((panel) => {
+      panel.hidden = panel.getAttribute("data-panel") !== id;
+    });
+    // Active nav state.
+    if (nav) {
+      nav.querySelectorAll("[data-nav]").forEach((a) => {
+        if (a.getAttribute("data-nav") === id) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+      });
+    }
+    // Top-bar title.
+    const section = SECTION_BY_ID[id];
+    if (titleEl && section) titleEl.textContent = section.title;
+    // Lazy-load on first visit.
+    if (section && !loaded.has(id)) { loaded.add(id); Promise.resolve(section.load()).catch(() => {}); }
+    // Mobile: a chosen section closes the drawer.
+    closeDrawer();
+    // Move focus to the panel heading for keyboard users.
+    const panel = document.getElementById("panel-" + id);
+    if (panel) { try { panel.focus({ preventScroll: false }); } catch (_) { panel.focus(); } }
   }
 
   // ---- setup (first owner) ----
@@ -100,24 +186,36 @@
     else { loginStatus.textContent = d.error || "Sign-in failed."; resetTurnstile(); }
   });
 
-  // ---- logout ----
-  logoutBtn.addEventListener("click", async () => {
+  // ---- logout (both the sidebar and top-bar buttons share this) ----
+  async function doLogout() {
     await fetch("/api/auth/logout", { method: "POST", headers: authHeaders() }).catch(() => {});
-    sessionStorage.removeItem(KEY); currentUser = null; showLogin();
-  });
+    sessionStorage.removeItem(KEY); currentUser = null;
+    loaded.clear(); activeId = null;
+    document.body.classList.remove("admin-shell", "admin-drawer-open");
+    showLogin();
+  }
+  logoutBtns.forEach((b) => b.addEventListener("click", doLogout));
 
-  // ---- data loads (permission-gated by refresh) ----
-  async function refresh() {
-    const perms = (currentUser && currentUser.permissions) || [];
-    const has = (p) => perms.includes(p);
-    if (has("bookings")) await loadBookings(); else if (bookingsEl) bookingsEl.replaceChildren();
-    if (has("messages")) await loadEnquiries(); else if (enquiriesEl) enquiriesEl.replaceChildren();
-    if (has("availability") && window.OHPAvailability) window.OHPAvailability.render();
-    if (has("tracking") && window.OHPTracking) window.OHPTracking.render();
-    if (has("reports") && window.OHPReports) window.OHPReports.render();
-    if (has("contacts") && window.OHPContacts) window.OHPContacts.render();
-    if (has("users") && window.OHPUsers) window.OHPUsers.render();
-    if (has("audit") && window.OHPAudit) window.OHPAudit.render();
+  // ---- nav / router / drawer wiring ----
+  if (nav) {
+    nav.addEventListener("click", (e) => {
+      const a = e.target.closest("[data-nav]");
+      if (!a) return;
+      // Let the hash change drive routing; just close the drawer on selection.
+      closeDrawer();
+    });
+  }
+  window.addEventListener("hashchange", () => { if (!app.hidden) routeTo(location.hash); });
+  if (hamburger) {
+    hamburger.addEventListener("click", () => setDrawer(!document.body.classList.contains("admin-drawer-open")));
+  }
+  if (drawerBackdrop) drawerBackdrop.addEventListener("click", closeDrawer);
+
+  // Re-run the active section's loader (used after booking/enquiry actions repaint).
+  // Bypasses the `loaded` set so it always refetches the visible data.
+  function refresh() {
+    const section = activeId && SECTION_BY_ID[activeId];
+    if (section) return Promise.resolve(section.load()).catch(() => {});
   }
 
   async function loadBookings() {
