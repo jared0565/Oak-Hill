@@ -1,7 +1,9 @@
 // /api/admin/reports?days=N — aggregate analytics + conversions (auth via _middleware.js).
 import { sanitizeDays } from "../_lib/analytics-core.mjs";
+import { requirePermission } from "../_lib/auth-db.mjs";
 
 export async function onRequestGet(ctx) {
+  const deny = requirePermission(ctx, "reports"); if (deny) return deny;
   const days = sanitizeDays(new URL(ctx.request.url).searchParams.get("days"));
   const cutoff = "-" + days + " days";
   const db = ctx.env.DB;

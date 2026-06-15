@@ -1,7 +1,9 @@
 // /api/admin/slots — owner slot management (auth enforced by _middleware.js).
 import { expandRecurrence, validateSlotEdit } from "../_lib/availability-core.mjs";
+import { requirePermission, auditFromCtx } from "../_lib/auth-db.mjs";
 
 export async function onRequestGet(ctx) {
+  const deny = requirePermission(ctx, "availability"); if (deny) return deny;
   // `holds` = number of pending enquiries on a slot (soft holds awaiting a deposit).
   // The slot is still available to book until one of those holds is confirmed (paid).
   const { results } = await ctx.env.DB.prepare(
@@ -16,6 +18,7 @@ export async function onRequestGet(ctx) {
 }
 
 export async function onRequestPost(ctx) {
+  const deny = requirePermission(ctx, "availability"); if (deny) return deny;
   const b = await ctx.request.json().catch(() => ({}));
 
   // Bulk/recurring add.
@@ -41,6 +44,7 @@ export async function onRequestPost(ctx) {
             .bind(r.date, r.start_time, r.end_time, r.label))
       );
     }
+    await auditFromCtx(ctx, { action: "slot.create", detail: "bulk add " + toInsert.length + " slots" });
     return Response.json({ ok: true, added: toInsert.length, skipped: rows.length - toInsert.length });
   }
 
@@ -61,10 +65,12 @@ export async function onRequestPost(ctx) {
     .prepare("INSERT INTO slots (date, start_time, end_time, label, status) VALUES (?, ?, ?, ?, 'available')")
     .bind(date, start, end, label)
     .run();
+  await auditFromCtx(ctx, { action: "slot.create", target_type: "slot", target_id: r.meta.last_row_id, detail: date + " " + start });
   return Response.json({ ok: true, id: r.meta.last_row_id });
 }
 
 export async function onRequestPut(ctx) {
+  const deny = requirePermission(ctx, "availability"); if (deny) return deny;
   const b = await ctx.request.json().catch(() => ({}));
   const v = validateSlotEdit(b);
   if (!v.ok) return Response.json({ error: v.error }, { status: 400 });
@@ -86,10 +92,12 @@ export async function onRequestPut(ctx) {
   binds.push(upd.id);
   const r = await ctx.env.DB.prepare(`UPDATE slots SET ${sets.join(", ")} WHERE id = ?`).bind(...binds).run();
   if (r.meta.changes !== 1) return Response.json({ error: "Could not update the slot." }, { status: 409 });
+  await auditFromCtx(ctx, { action: "slot.update", target_type: "slot", target_id: upd.id });
   return Response.json({ ok: true });
 }
 
 export async function onRequestDelete(ctx) {
+  const deny = requirePermission(ctx, "availability"); if (deny) return deny;
   const id = Number(new URL(ctx.request.url).searchParams.get("id"));
   if (!Number.isInteger(id) || id <= 0) {
     return Response.json({ error: "Missing slot id." }, { status: 400 });
@@ -115,5 +123,6 @@ export async function onRequestDelete(ctx) {
   if (slotDel.meta.changes !== 1) {
     return Response.json({ error: "That slot just got a confirmed booking, so it was not deleted." }, { status: 409 });
   }
+  await auditFromCtx(ctx, { action: "slot.delete", target_type: "slot", target_id: id });
   return Response.json({ ok: true });
 }
