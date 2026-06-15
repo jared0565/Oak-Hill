@@ -2,7 +2,11 @@
 // Pure helpers for the tracking-code manager. No Workers globals — unit-testable with `node --test`.
 
 const PLACEMENTS = new Set(["head", "body_start", "body_end"]);
-const CATEGORIES = new Set(["necessary", "analytics", "advertising"]);
+// Owner-pasted snippets may only be consent-gated categories. "necessary" (runs before consent)
+// is deliberately NOT selectable here: under PECR only strictly-essential code may run without
+// consent, and every such script on this site is first-party (in the repo), never pasted. This
+// stops a tracker (GA/Pixel/etc.) being mislabelled "necessary" to bypass the consent gate.
+const CATEGORIES = new Set(["analytics", "advertising"]);
 const SCOPE_RE = /^\/[a-z0-9-]*\.html$/;
 
 // Mirrors the _headers CSP allowlist; used only for an advisory at-save warning.

@@ -79,8 +79,15 @@ export async function updateUser(db, id, fields) {
   return r.meta.changes;
 }
 export async function deleteUser(db, id) {
-  const r = await db.prepare("DELETE FROM users WHERE id=?").bind(id).run();
-  return r.meta.changes;
+  // Self-contained erasure: remove the user's satellite rows (sessions, backup codes) in the
+  // same atomic batch as the user row, so deletion can't leave orphaned personal/security data
+  // behind (D1 has no FK cascade). The avatar lives on the users row, so it goes with it.
+  const res = await db.batch([
+    db.prepare("DELETE FROM backup_codes WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM sessions WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM users WHERE id=?").bind(id),
+  ]);
+  return res[res.length - 1].meta.changes;
 }
 export async function listUsers(db) {
   const { results } = await db.prepare(
@@ -151,10 +158,12 @@ export async function disableTotp(db, id) {
 }
 
 export async function replaceBackupCodes(db, id, hashes) {
-  await db.prepare("DELETE FROM backup_codes WHERE user_id=?").bind(id).run();
-  for (const h of hashes) {
-    await db.prepare("INSERT INTO backup_codes (user_id, code_sha256) VALUES (?, ?)").bind(id, h).run();
-  }
+  // Atomic: clear old codes and write the new set in one D1 batch (transactional). A non-atomic
+  // delete-then-loop could fail mid-way and leave the user with fewer codes than they were shown.
+  await db.batch([
+    db.prepare("DELETE FROM backup_codes WHERE user_id=?").bind(id),
+    ...hashes.map((h) => db.prepare("INSERT INTO backup_codes (user_id, code_sha256) VALUES (?, ?)").bind(id, h)),
+  ]);
 }
 
 // Atomic single-use consume: only an unused, matching code flips → changes>0 exactly once.

@@ -1076,6 +1076,27 @@ textarea {
   box-shadow: 0 14px 30px rgba(38, 50, 56, 0.1);
 }
 
+/* Click-to-load placeholder shown in place of the Google Maps embed until the visitor opts in. */
+.map-embed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+}
+.map-embed-inner {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  max-width: 34ch;
+}
+.map-embed-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .mobile-actions {
   display: none;
 }

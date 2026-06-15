@@ -9,7 +9,8 @@
     ["/contact.html", "Contact"],
   ];
   const PLACE = [["head", "Head"], ["body_start", "Body (start)"], ["body_end", "Body (end)"]];
-  const CATS = [["necessary", "Necessary (runs immediately)"], ["analytics", "Analytics (after consent)"], ["advertising", "Advertising (after consent)"]];
+  // "necessary" is intentionally not offered — pasted trackers must be consent-gated (see snippet-core.mjs).
+  const CATS = [["analytics", "Analytics (after consent)"], ["advertising", "Advertising (after consent)"]];
 
   const token = () => sessionStorage.getItem(KEY) || "";
   const api = (path, opts = {}) => fetch(path, { ...opts, headers: { Authorization: "Bearer " + token(), "Content-Type": "application/json", ...(opts.headers || {}) } });

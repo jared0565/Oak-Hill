@@ -1,0 +1,13 @@
+{
+  "name": "oak-hill-park-cafe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Oak Hill Park Cafe — Cloudflare Pages site + booking/admin platform (no build step).",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

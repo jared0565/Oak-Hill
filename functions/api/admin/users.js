@@ -73,8 +73,7 @@ export async function onRequestDelete(ctx) {
   if (target.role === "owner" && (await countOwners(ctx.env.DB)) <= 1) {
     return Response.json({ error: "This is the last active owner — promote another owner first." }, { status: 409 });
   }
-  await deleteUser(ctx.env.DB, id);
-  await deleteUserSessions(ctx.env.DB, id);
+  await deleteUser(ctx.env.DB, id); // also removes the user's sessions + backup codes atomically
   await auditFromCtx(ctx, { action: "user.delete", target_type: "user", target_id: id, detail: target.role + " " + target.email });
   return Response.json({ ok: true });
 }

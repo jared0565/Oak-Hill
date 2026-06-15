@@ -12,6 +12,22 @@
     });
   }
 
+  // Privacy-friendly map: the Google Maps embed is a third party that can set cookies, so under
+  // PECR it must not load until the visitor asks. Show a placeholder; swap in the iframe on click.
+  document.querySelectorAll("[data-map-load]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wrap = btn.closest("[data-map-embed]");
+      if (!wrap) return;
+      const iframe = document.createElement("iframe");
+      iframe.className = "map-frame";
+      iframe.title = wrap.getAttribute("data-map-title") || "Map";
+      iframe.loading = "lazy";
+      iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
+      iframe.src = wrap.getAttribute("data-map-src");
+      wrap.replaceWith(iframe);
+    });
+  });
+
   document.querySelectorAll("[data-tabs]").forEach((tabRoot) => {
     const tabs = Array.from(tabRoot.querySelectorAll("[role='tab']"));
     const panels = Array.from(tabRoot.querySelectorAll("[role='tabpanel']"));
