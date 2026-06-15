@@ -8,6 +8,7 @@
   const loginStatus = document.querySelector("[data-admin-login-status]");
   const login2fa = document.querySelector("[data-login-2fa]");
   const login2faInput = login2fa && login2fa.querySelector("input[name='totpCode']");
+  const enrollWrap = document.querySelector("[data-admin-enroll]");
   const app = document.querySelector("[data-admin-app]");
   const whoami = document.querySelector("[data-admin-whoami]");
   const bookingsEl = document.querySelector("[data-admin-bookings]");
@@ -94,20 +95,33 @@
 
   // ---- view switching ----
   function showSetup() {
-    app.hidden = true; loginWrap.hidden = true; setupWrap.hidden = false;
+    app.hidden = true; loginWrap.hidden = true; enrollWrap.hidden = true; setupWrap.hidden = false;
     document.body.classList.remove("admin-shell", "admin-drawer-open");
     mountTurnstile(document.querySelector("[data-setup-turnstile]"));
   }
   function showLogin() {
-    app.hidden = true; setupWrap.hidden = true; loginWrap.hidden = false;
+    app.hidden = true; setupWrap.hidden = true; enrollWrap.hidden = true; loginWrap.hidden = false;
     document.body.classList.remove("admin-shell", "admin-drawer-open");
     // Start the 2FA step hidden and cleared each time the login view is shown fresh.
     if (login2fa) login2fa.hidden = true;
     if (login2faInput) login2faInput.value = "";
     mountTurnstile(document.querySelector("[data-login-turnstile]"));
   }
+  // Mandatory-2FA gate: a privileged user with no TOTP is parked here (the API blocks everything
+  // but enrolment) until they finish setup, after which onEnrollComplete refreshes identity → app.
+  function showEnroll() {
+    app.hidden = true; setupWrap.hidden = true; loginWrap.hidden = true; enrollWrap.hidden = false;
+    document.body.classList.remove("admin-shell", "admin-drawer-open");
+    const host = enrollWrap.querySelector("[data-enroll-2fa]");
+    if (window.OHPAccount && window.OHPAccount.renderEnroll) window.OHPAccount.renderEnroll(host, onEnrollComplete);
+  }
+  async function onEnrollComplete() {
+    // 2FA is on now → re-fetch identity so mustEnroll2fa clears, then enter the dashboard.
+    try { const me = await api("/api/auth/me"); if (me.ok) currentUser = (await me.json()).user; } catch (_) {}
+    showApp();
+  }
   function showApp() {
-    setupWrap.hidden = true; loginWrap.hidden = true; app.hidden = false;
+    setupWrap.hidden = true; loginWrap.hidden = true; enrollWrap.hidden = true; app.hidden = false;
     document.body.classList.add("admin-shell");
     applyPermissions();
     buildNav();
@@ -212,7 +226,7 @@
     const body = { adminToken: fd.get("adminToken"), name: fd.get("name"), email: fd.get("email"), password: fd.get("password"), turnstileToken };
     const res = await fetch("/api/auth/bootstrap", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const d = await res.json().catch(() => ({}));
-    if (res.ok) { sessionStorage.setItem(KEY, d.token); currentUser = d.user; setupStatus.textContent = ""; showApp(); }
+    if (res.ok) { sessionStorage.setItem(KEY, d.token); currentUser = d.user; setupStatus.textContent = ""; d.mustEnroll2fa ? showEnroll() : showApp(); }
     else { setupStatus.textContent = d.error || "Setup failed."; resetTurnstile(); }
   });
 
@@ -244,7 +258,7 @@
       sessionStorage.setItem(KEY, d.token); currentUser = d.user; loginStatus.textContent = "";
       if (login2fa) login2fa.hidden = true;
       if (login2faInput) login2faInput.value = "";
-      showApp();
+      if (d.mustEnroll2fa) showEnroll(); else showApp();
     } else {
       loginStatus.textContent = d.error || "Sign-in failed."; resetTurnstile();
     }
@@ -397,13 +411,15 @@
   function setUser(u) { currentUser = u; paintIdentity(); }
 
   // Expose the authed fetch + current user so the Owner-only modules can reuse them.
-  window.OHPAdmin = { api, user: () => currentUser, refresh, setUser };
+  // requireEnroll lets the Account module hand control back to the forced-2FA gate (e.g. after a
+  // privileged user disables 2FA and must immediately re-enrol).
+  window.OHPAdmin = { api, user: () => currentUser, refresh, setUser, requireEnroll: showEnroll };
 
   // ---- init ----
   (async function init() {
     if (token()) {
       const me = await api("/api/auth/me");
-      if (me.ok) { currentUser = (await me.json()).user; return showApp(); }
+      if (me.ok) { const data = await me.json(); currentUser = data.user; return data.mustEnroll2fa ? showEnroll() : showApp(); }
       sessionStorage.removeItem(KEY);
     }
     const st = await fetch("/api/auth/status").then((r) => r.json()).catch(() => ({}));

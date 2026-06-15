@@ -1,6 +1,6 @@
 // /api/auth/bootstrap — one-time first-owner creation. Guarded by ADMIN_TOKEN + empty users (+ Turnstile).
 import { createUser, createSession, recordAudit, reqContext } from "../_lib/auth-db.mjs";
-import { validatePassword, permissionsFor } from "../_lib/auth-core.mjs";
+import { validatePassword, permissionsFor, mustEnroll2fa } from "../_lib/auth-core.mjs";
 import { turnstileEnabled, verifyTurnstile } from "../_lib/turnstile.mjs";
 import { normalizeEmail, clean } from "../_lib/contacts-core.mjs";
 
@@ -30,5 +30,6 @@ export async function onRequestPost(ctx) {
   const id = await createUser(ctx.env.DB, { name, email, role: "owner", password: pw, protected: true });
   await recordAudit(ctx.env.DB, { actor_user_id: id, actor_email: email, action: "auth.bootstrap", ...c, detail: "first owner" });
   const { token } = await createSession(ctx.env.DB, id, Date.now());
-  return Response.json({ token, user: { name, email, role: "owner", permissions: permissionsFor("owner"), avatar: null, totp_enabled: false } });
+  // The first owner has no 2FA yet → force enrolment straight after setup (owner is a required role).
+  return Response.json({ token, mustEnroll2fa: mustEnroll2fa({ role: "owner", totp_enabled: false }), user: { name, email, role: "owner", permissions: permissionsFor("owner"), avatar: null, totp_enabled: false } });
 }

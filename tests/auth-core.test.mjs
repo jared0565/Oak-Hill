@@ -8,6 +8,7 @@ import {
   looksLikeBot, isLocked, nextFailedState,
   MAX_FAILED, LOCK_MINUTES,
   protectedBlock, PBKDF2_ITERATIONS,
+  requires2fa, mustEnroll2fa,
 } from "../functions/api/_lib/auth-core.mjs";
 
 test("PBKDF2_ITERATIONS stays within the Cloudflare Workers cap", () => {
@@ -90,6 +91,24 @@ test("protectedBlock guards the break-glass owner; password reset stays allowed"
   assert.equal(protectedBlock(root, { status: "active" }), null);
   assert.equal(protectedBlock(root, {}), null);                 // password-only reset
   assert.equal(protectedBlock(null, { deleting: true }), null); // missing target
+});
+
+test("requires2fa: only owner/manager are required roles", () => {
+  assert.equal(requires2fa("owner"), true);
+  assert.equal(requires2fa("manager"), true);
+  assert.equal(requires2fa("staff"), false);
+  assert.equal(requires2fa("nobody"), false);
+});
+
+test("mustEnroll2fa: privileged role without TOTP only", () => {
+  assert.equal(mustEnroll2fa({ role: "owner", totp_enabled: 0 }), true);
+  assert.equal(mustEnroll2fa({ role: "manager", totp_enabled: 0 }), true);
+  // Once enabled, no longer forced.
+  assert.equal(mustEnroll2fa({ role: "owner", totp_enabled: 1 }), false);
+  assert.equal(mustEnroll2fa({ role: "manager", totp_enabled: 1 }), false);
+  // Staff stay opt-in; missing user is safe.
+  assert.equal(mustEnroll2fa({ role: "staff", totp_enabled: 0 }), false);
+  assert.equal(mustEnroll2fa(null), false);
 });
 
 test("lockout trips on the MAX_FAILED-th failure and clears after the window", () => {

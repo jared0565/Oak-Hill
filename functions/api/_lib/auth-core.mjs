@@ -15,6 +15,13 @@ export const PERMISSIONS = {
 export function permissionsFor(role) { return PERMISSIONS[role] ? PERMISSIONS[role].slice() : []; }
 export function can(role, perm) { return !!PERMISSIONS[role] && PERMISSIONS[role].includes(perm); }
 
+// Mandatory 2FA. Owners/managers hold site-wide script injection (tracking) and account control
+// (users), so their accounts must carry a second factor. mustEnroll2fa() is true when such a user
+// hasn't enabled TOTP yet — the API middleware blocks everything but the enrollment endpoints for
+// them, and the dashboard forces setup before it loads. Staff (bookings/messages only) stay opt-in.
+export function requires2fa(role) { return role === "owner" || role === "manager"; }
+export function mustEnroll2fa(user) { return !!user && requires2fa(user.role) && !user.totp_enabled; }
+
 // A protected account (the break-glass root owner) is locked against removal: it
 // can't be deleted, disabled, or demoted from owner — regardless of how many other
 // owners exist. Password reset stays allowed so the owner can rotate their own

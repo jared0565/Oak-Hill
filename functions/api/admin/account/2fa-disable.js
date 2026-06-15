@@ -1,7 +1,7 @@
 // POST /api/admin/account/2fa-disable — turn 2FA off after re-verifying the password.
 // Clears the secret and deletes the user's backup codes.
 import { getFullUser, disableTotp, recordLoginResult, clearFailedAttempts, auditFromCtx } from "../../_lib/auth-db.mjs";
-import { verifyPassword, hashToken, isLocked, nextFailedState } from "../../_lib/auth-core.mjs";
+import { verifyPassword, hashToken, isLocked, nextFailedState, mustEnroll2fa } from "../../_lib/auth-core.mjs";
 
 export async function onRequestPost(ctx) {
   try {
@@ -40,7 +40,10 @@ export async function onRequestPost(ctx) {
 
     await auditFromCtx(ctx, { action: "account.2fa_disabled", target_type: "user", target_id: u.id });
 
-    return Response.json({ ok: true });
+    // For owners/managers, 2FA is mandatory — disabling it (e.g. to rotate authenticators) drops
+    // them into the must-enrol state. Tell the client so it can force immediate re-enrolment
+    // rather than leaving the session able to reach only the enrolment endpoints.
+    return Response.json({ ok: true, mustEnroll2fa: mustEnroll2fa({ role: u.role, totp_enabled: 0 }) });
   } catch (_) {
     return Response.json({ error: "Could not turn off two-factor authentication." }, { status: 500 });
   }

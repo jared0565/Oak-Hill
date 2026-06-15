@@ -1,6 +1,6 @@
 // /api/auth/login — email+password → Bearer session token. Public; bot-checked; no enumeration.
 import { findUserByEmail, recordLoginResult, createSession, recordAudit, reqContext, consumeBackupCode, purgeExpiredData } from "../_lib/auth-db.mjs";
-import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot, PBKDF2_ITERATIONS, hashToken } from "../_lib/auth-core.mjs";
+import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot, PBKDF2_ITERATIONS, hashToken, mustEnroll2fa } from "../_lib/auth-core.mjs";
 import { verifyTotp } from "../_lib/totp-core.mjs";
 import { turnstileEnabled, verifyTurnstile } from "../_lib/turnstile.mjs";
 import { normalizeEmail } from "../_lib/contacts-core.mjs";
@@ -83,5 +83,7 @@ export async function onRequestPost(ctx) {
   // and anonymous analytics, so none of those tables grow unbounded (GDPR storage-limitation).
   ctx.waitUntil(purgeExpiredData(ctx.env.DB, now));
   await recordAudit(ctx.env.DB, { actor_user_id: user.id, actor_email: user.email, action: "auth.login", ...c });
-  return Response.json({ token, user: { name: user.name, email: user.email, role: user.role, permissions: permissionsFor(user.role), avatar: user.avatar || null, totp_enabled: !!user.totp_enabled } });
+  // mustEnroll2fa: privileged role without TOTP — the token is issued so they can enrol, but the
+  // /api/admin middleware blocks everything else until they do, and the dashboard forces setup.
+  return Response.json({ token, mustEnroll2fa: mustEnroll2fa(user), user: { name: user.name, email: user.email, role: user.role, permissions: permissionsFor(user.role), avatar: user.avatar || null, totp_enabled: !!user.totp_enabled } });
 }

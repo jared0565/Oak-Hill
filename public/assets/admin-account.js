@@ -176,6 +176,10 @@
     host.replaceChildren();
     if (enabled) {
       host.appendChild(el("p", "Two-factor is on. You'll be asked for a code from your authenticator when you sign in.", "account-2fa-on"));
+      const role = (window.OHPAdmin.user() || {}).role;
+      if (role === "owner" || role === "manager") {
+        host.appendChild(el("p", "Your role requires two-factor authentication. You can disable it to switch authenticator apps, but you'll be asked to set it up again straight away.", "booking-note"));
+      }
       const disableBtn = el("button", "Disable two-factor", "button ghost admin-mini");
       disableBtn.type = "button";
       const status = el("p", "", "form-status");
@@ -192,6 +196,10 @@
         const d = await r.json().catch(() => ({}));
         if (!r.ok) { status.textContent = d.error || "Could not disable two-factor."; return; }
         syncTotp(false);
+        // Owners/managers must keep 2FA: disabling (e.g. to swap authenticators) drops them into
+        // the must-enrol state, so hand back to the shell's forced-enrolment gate instead of
+        // painting the normal "off" state (which the API would then block them out of).
+        if (d.mustEnroll2fa && window.OHPAdmin.requireEnroll) { window.OHPAdmin.requireEnroll(); return; }
         paint2fa(host, false);
       });
       host.append(disableBtn, pwWrap, status);
@@ -216,8 +224,9 @@
     });
   }
 
-  // Render the QR + secret + code entry for an in-progress setup.
-  function renderSetup(host, secret, otpauth) {
+  // Render the QR + secret + code entry for an in-progress setup. onDone (optional) runs after the
+  // user acknowledges their backup codes — used by the forced-enrolment gate to enter the app.
+  function renderSetup(host, secret, otpauth, onDone) {
     const wrap = el("div", null, "account-2fa-setup");
     wrap.appendChild(el("p", "Scan this with your authenticator app, then enter the 6-digit code it shows.", "booking-note"));
 
@@ -246,14 +255,15 @@
       const d = await r.json().catch(() => ({}));
       if (!r.ok) { status.textContent = d.error || "That code wasn't right — try again."; return; }
       syncTotp(true);
-      renderBackupCodes(host, d.backupCodes || []);
+      renderBackupCodes(host, d.backupCodes || [], onDone);
     });
 
     host.appendChild(wrap);
   }
 
-  // Show backup codes once, with copy + acknowledge to move to the enabled state.
-  function renderBackupCodes(host, codes) {
+  // Show backup codes once, with copy + acknowledge. onDone (optional) overrides the default
+  // "show the enabled state" — the forced-enrolment gate passes a callback that enters the app.
+  function renderBackupCodes(host, codes, onDone) {
     host.replaceChildren();
     host.appendChild(el("p", "Two-factor is on. Save these backup codes somewhere safe — each works once if you lose your authenticator. They won't be shown again.", "account-2fa-on"));
     const block = el("div", null, "account-backup-codes");
@@ -270,7 +280,7 @@
     });
     const doneBtn = el("button", "I've saved these", "button admin-mini");
     doneBtn.type = "button";
-    doneBtn.addEventListener("click", () => paint2fa(host, true));
+    doneBtn.addEventListener("click", () => (typeof onDone === "function" ? onDone() : paint2fa(host, true)));
     const actions = el("div", null, "account-backup-actions");
     actions.append(copyBtn, copyStatus, doneBtn);
     host.appendChild(actions);
@@ -316,5 +326,18 @@
     root.replaceChildren(profileCard(acct), emailCard(acct), securityCard(acct));
   }
 
-  window.OHPAccount = { render };
+  // Forced-enrolment flow for the mandatory-2FA gate: kick straight into setup (skip the "Enable"
+  // button), and on completion run onComplete instead of showing the in-account "enabled" state.
+  // Used by admin.js's showEnroll() into the standalone [data-enroll-2fa] host (NOT the account
+  // panel), so it only touches the two endpoints the API still allows pre-enrolment.
+  async function renderEnroll(host, onComplete) {
+    host.replaceChildren(el("p", "Preparing…", "booking-note"));
+    const r = await api("/api/admin/account/2fa-setup", { method: "POST" });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) { host.replaceChildren(el("p", d.error || "Could not start two-factor setup. Reload and try again.", "form-status")); return; }
+    host.replaceChildren();
+    renderSetup(host, d.secret, d.otpauth, onComplete);
+  }
+
+  window.OHPAccount = { render, renderEnroll };
 })();
