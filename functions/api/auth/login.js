@@ -1,6 +1,7 @@
 // /api/auth/login — email+password → Bearer session token. Public; bot-checked; no enumeration.
-import { findUserByEmail, recordLoginResult, createSession, recordAudit, reqContext } from "../_lib/auth-db.mjs";
-import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot, PBKDF2_ITERATIONS } from "../_lib/auth-core.mjs";
+import { findUserByEmail, recordLoginResult, createSession, recordAudit, reqContext, consumeBackupCode } from "../_lib/auth-db.mjs";
+import { verifyPassword, permissionsFor, isLocked, nextFailedState, looksLikeBot, PBKDF2_ITERATIONS, hashToken } from "../_lib/auth-core.mjs";
+import { verifyTotp } from "../_lib/totp-core.mjs";
 import { turnstileEnabled, verifyTurnstile } from "../_lib/turnstile.mjs";
 import { normalizeEmail } from "../_lib/contacts-core.mjs";
 
@@ -52,11 +53,31 @@ export async function onRequestPost(ctx) {
     return Response.json({ error: GENERIC }, { status: 401 });
   }
 
+  // 4b. Second factor (only when enabled). Password is already correct here.
+  if (user.totp_enabled) {
+    const code = typeof body.totpCode === "string" ? body.totpCode.trim() : "";
+    if (!code) {
+      // Missing code is not a failed attempt — the password was right; just prompt for the code.
+      return Response.json({ twofa: true, error: "Enter your authenticator code." }, { status: 401 });
+    }
+    // verifyTotp's 6-digit guard rejects backup codes, so falling through to consume one is
+    // safe. Backup codes are uppercase base32 → normalize before the case-sensitive hash.
+    const totpOk = await verifyTotp(user.totp_secret, code) || await consumeBackupCode(ctx.env.DB, user.id, await hashToken(code.toUpperCase()));
+    if (!totpOk) {
+      // Wrong code → share the brute-force lockout so 2FA can't be hammered.
+      const lock = nextFailedState(user, now);
+      await recordLoginResult(ctx.env.DB, user, false, now, lock);
+      await recordAudit(ctx.env.DB, { actor_user_id: user.id, actor_email: user.email, action: "auth.login_failed", ...c, is_bot: bot.is_bot ? 1 : 0, bot_reason: bot.reason, detail: "bad 2fa code" });
+      if (lock.locked) await recordAudit(ctx.env.DB, { actor_user_id: user.id, actor_email: user.email, action: "auth.locked", ...c, detail: "locked 15m after 5 fails" });
+      return Response.json({ twofa: true, error: GENERIC }, { status: 401 });
+    }
+  }
+
   // 5. Success.
   await recordLoginResult(ctx.env.DB, user, true, now);
   const { token } = await createSession(ctx.env.DB, user.id, now);
   // Best-effort housekeeping: drop expired sessions so the table can't grow unbounded.
   ctx.waitUntil(ctx.env.DB.prepare("DELETE FROM sessions WHERE expires_at <= ?").bind(new Date(now).toISOString()).run());
   await recordAudit(ctx.env.DB, { actor_user_id: user.id, actor_email: user.email, action: "auth.login", ...c });
-  return Response.json({ token, user: { name: user.name, email: user.email, role: user.role, permissions: permissionsFor(user.role) } });
+  return Response.json({ token, user: { name: user.name, email: user.email, role: user.role, permissions: permissionsFor(user.role), avatar: user.avatar || null, totp_enabled: !!user.totp_enabled } });
 }

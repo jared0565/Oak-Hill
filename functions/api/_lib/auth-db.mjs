@@ -99,7 +99,7 @@ export async function createSession(db, userId, nowMs) {
 }
 export async function resolveSession(db, tokenHash, nowIso) {
   const row = await db.prepare(
-    `SELECT s.expires_at, u.id, u.name, u.email, u.role, u.status
+    `SELECT s.expires_at, u.id, u.name, u.email, u.role, u.status, u.avatar, u.totp_enabled
      FROM sessions s JOIN users u ON u.id = s.user_id
      WHERE s.token_sha256 = ?`
   ).bind(tokenHash).first();
@@ -121,4 +121,52 @@ export async function recordLoginResult(db, user, ok, nowMs, lockState) {
     await db.prepare("UPDATE users SET failed_attempts=?, locked_until=? WHERE id=?")
       .bind(lockState.failed_attempts, lockState.locked_until, user.id).run();
   }
+}
+
+// --- account & security (self-service) -------------------------------------------------
+// Full row incl. avatar + TOTP fields — endpoints fetch this for the acting user, since the
+// middleware only attaches {id,name,email,role}.
+export function getFullUser(db, id) { return db.prepare("SELECT * FROM users WHERE id = ?").bind(id).first(); }
+
+export async function updateProfile(db, id, { name, avatar }) {
+  const sets = [], binds = [];
+  if (name !== undefined) { sets.push("name=?"); binds.push(name); }
+  if (avatar !== undefined) { sets.push("avatar=?"); binds.push(avatar); } // null clears it
+  if (!sets.length) return 0;
+  binds.push(id);
+  const r = await db.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id=?`).bind(...binds).run();
+  return r.meta.changes;
+}
+
+export function setTotpSecret(db, id, secret) {
+  // Stage the secret during setup; enabled stays 0 until a code is verified.
+  return db.prepare("UPDATE users SET totp_secret=?, totp_enabled=0 WHERE id=?").bind(secret, id).run();
+}
+export function enableTotp(db, id) {
+  return db.prepare("UPDATE users SET totp_enabled=1 WHERE id=?").bind(id).run();
+}
+export async function disableTotp(db, id) {
+  await db.prepare("UPDATE users SET totp_secret=NULL, totp_enabled=0 WHERE id=?").bind(id).run();
+  await db.prepare("DELETE FROM backup_codes WHERE user_id=?").bind(id).run();
+}
+
+export async function replaceBackupCodes(db, id, hashes) {
+  await db.prepare("DELETE FROM backup_codes WHERE user_id=?").bind(id).run();
+  for (const h of hashes) {
+    await db.prepare("INSERT INTO backup_codes (user_id, code_sha256) VALUES (?, ?)").bind(id, h).run();
+  }
+}
+
+// Atomic single-use consume: only an unused, matching code flips → changes>0 exactly once.
+export async function consumeBackupCode(db, id, codeHash) {
+  const r = await db.prepare(
+    "UPDATE backup_codes SET used_at=datetime('now') WHERE user_id=? AND code_sha256=? AND used_at IS NULL"
+  ).bind(id, codeHash).run();
+  return r.meta.changes > 0;
+}
+
+export async function changeOwnPassword(db, id, newPw) {
+  const { hash, salt, iterations } = await hashPassword(newPw);
+  await db.prepare("UPDATE users SET password_hash=?, password_salt=?, password_iterations=? WHERE id=?")
+    .bind(hash, salt, iterations, id).run();
 }
