@@ -1,5 +1,21 @@
 # Oak Hill Agent Notes
 
+## Change boundary (operator rule, 2026-10-21)
+
+**Code changes apply to this repository only.** Do not edit another repository,
+another tool's source, or its managed files.
+
+If a bug or an improvement is found in the **aramid** or **graphite** tools, do
+not fix it here. File it as a channel entry in the shared `.agent-channel/`,
+addressed to the agent that owns that tool, and let that owner resolve it. Post
+through graphite's broker (`graphite_channel_post`), never by writing channel
+files by hand, and read the channel's current state first so a known defect is
+not re-reported. A defect in another tool is a report, never a patch, and
+nothing is owed back — do not wait on a reply.
+
+Record any change made outside this repository in `docs/EXTERNAL-CHANGES.md`,
+with the location, what changed, and why.
+
 ## Automatic Graphite Consult
 
 For any non-trivial code change, run Graphite before broad file reads or edits:

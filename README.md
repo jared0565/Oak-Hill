@@ -80,3 +80,9 @@ The D1 table is created by migration `migrations/0002_enquiries.sql`
 ## Security Notes
 
 The static front end avoids WordPress plugin attack surface by default. If deployed on WordPress instead, update core/plugins, remove unused plugins, force HTTPS assets, protect login, disable or restrict XML-RPC, add rate limiting, and configure modern security headers.
+
+## Working on this repo
+
+Changes belong to **this repository only**. If a bug or an improvement is found in the **aramid** or **graphite** tools, do not fix it here — file it as a channel entry in the shared `.agent-channel/` so the tool's owner can resolve it.
+
+Any change made outside this repository is recorded in [`docs/EXTERNAL-CHANGES.md`](docs/EXTERNAL-CHANGES.md), with the location, what changed, and why.
