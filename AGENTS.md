@@ -1,11 +1,11 @@
-# Oak Hill Agent Notes
+# BytesFX Café & Bookings — Agent Notes
 
 ## Change boundary (operator rule, 2026-10-21)
 
 **Code changes you make must apply to this repository only.** Do not edit
 another repository, another tool's source, or its managed files.
 
-This binds **you**, the agent working on Oak Hill. It does **not** restrict
+This binds **you**, the agent working on this repository. It does **not** restrict
 aramid or graphite: they are expected to write into this repo (hooks, agent
 hooks, MCP server, `GRAPHITE.md`, managed instruction blocks, `.mcp.json`,
 `.vscode/tasks.json`, `.githooks/`), and that is them doing their job here. The

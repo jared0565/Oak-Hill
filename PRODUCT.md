@@ -40,7 +40,7 @@ name the age band, state the price. Never corporate, never cutesy, never
 hypey.
 
 The demonstration is stated plainly and without apology. A visitor should
-never have to wonder whether a café in Barnet really exists.
+never have to wonder whether the café on screen really exists.
 
 ## Anti-references
 

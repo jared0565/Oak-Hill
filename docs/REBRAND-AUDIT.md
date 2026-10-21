@@ -147,12 +147,46 @@ number that connects.
 
 ## 5. Old-brand references that remain, and why
 
+A final sweep was run over every tracked file — the shipped site, the functions,
+the tools, the tests, the workflows, the documentation and the deliverables.
+The references that remain fall into five groups.
+
+### 5.1 Infrastructure — deliberately retained
+
 | Reference | Where | Why it stays |
 |---|---|---|
-| `oak-hill-park-cafe`, `oak-hill-bookings`, the D1 id | `wrangler.jsonc`, the deploy workflow | Live cloud resource identifiers. Changing them would break the deployment and the database. |
-| "Oak Hill", "Barnet", the phone number, the address | `docs/superpowers/**`, `deliverables/**` | Historical design documents and the upgrade proposal, which describe the café as it was. |
-| "Oak Hill" | `docs/EXTERNAL-CHANGES.md` | A record of what earlier sessions did, written when the site was the old café's. |
-| `staff@example.test` | `tests/totp-core.test.mjs` | A test fixture using a reserved domain. |
-| `oak-hill-bookings` | `wrangler.jsonc`, `.github/workflows/deploy.yml` | The live D1 database name. Renaming it would break the migration step. |
-| "Oak Hill" and the old café's details | `tools/brand/REBRAND-BRIEF.md` | The instruction document that describes what had to be removed. It is a record of the change, not part of the site. |
-| "Oak Hill", the old phone number, and the old domain | `tools/check-pages.mjs` | The audit script's own pattern list, so it can detect them. |
+| `oak-hill-park-cafe` (Pages project), `oak-hill-bookings` (D1), the D1 id | `wrangler.jsonc`, `.github/workflows/deploy.yml`, `README.md`, `HANDOVER.md` | Live cloud resource identifiers. Renaming the project or the database would orphan the deployment and the data, and the deploy workflow's migration step names the database. |
+| `oak.bytesfx.com` | `HANDOVER.md` | Recorded there to say the **live site is untouched** and still serves the old café. The site's own canonical URLs do not use it. |
+
+### 5.2 The demonstration's own records — they necessarily name what was removed
+
+| Reference | Where | Why it stays |
+|---|---|---|
+| The old name, the hygiene claim, "Malibu's", the old identifiers, the removed filenames | `docs/REBRAND-AUDIT.md`, `docs/REBRAND-HANDOVER.md`, `docs/BRAND-ASSETS.md` | These documents *are* the record of the change. Stripping the old names out of them would make the audit useless. |
+| The old name, the old phone number, the old domain | `tools/check-pages.mjs` | The audit script's own pattern list, so it can detect them. |
+| The old name, the old café's details, the old domain | `tools/brand/REBRAND-BRIEF.md` | The instruction document the page rewrites followed. |
+| "Oak Hill" | `docs/EXTERNAL-CHANGES.md` | A log of what earlier sessions did, written when the site was the old café's. Historical entries are left as written. |
+
+### 5.3 Historical design documents — left as written
+
+`docs/superpowers/**` and `deliverables/**` are the June 2026 plans, specs,
+upgrade proposal, proposal PDFs and social pitch. They describe the café as it
+was, and they are deliverables for the old café's owner. Rewriting them would
+falsify the record and destroy their purpose. They are **not** published by
+this site: `public/proposal.html` and its PDFs were removed from `public/`
+precisely so the old brand is not served.
+
+### 5.4 Deliberate statements of absence — in the shipped site
+
+| Reference | Where | Why it stays |
+|---|---|---|
+| "no food hygiene rating" | `public/contact.html` | The page listing what the demonstration does **not** contain. |
+| "no premises, no address, no telephone…" | `public/terms.html` | The same, in the terms. |
+
+### 5.5 Outside the code — for the operator to decide
+
+| Reference | Where | Note |
+|---|---|---|
+| `F:\Projects\Websites\Oak Hill` | The working directory's own name | The folder on disk is named for the old café. Renaming it is an operator decision: the path appears in `.dev.vars`-style local tooling and in the deploy configuration's project binding, and the Cloudflare project itself is separately named. |
+| `github.com/jared0565/Oak-Hill.git` | The git remote | The repository name and the owner's handle. Not this agent's to change. |
+| `www.oakhillparkcafe.co.uk` | `.claude/settings.local.json` (untracked) | A machine-local `WebFetch` permission for the old café's real domain. Left alone: removing a permission the operator granted is their call. The domain appears nowhere in the published site. |

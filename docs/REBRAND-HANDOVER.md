@@ -270,7 +270,9 @@ the original `admin.html`**, not introduced by the rebrand:
 3. **The Pages project and the D1 database still carry the old names.**
    `oak-hill-park-cafe` and `oak-hill-bookings` name live cloud resources.
    Renaming them would orphan the deployment and the database, so they were
-   left alone deliberately.
+   left alone deliberately. The **working directory** is likewise still called
+   `F:\Projects\Websites\Oak Hill`, and the git remote is
+   `github.com/jared0565/Oak-Hill.git` — both are the operator's to rename.
 4. **The legal pages need a real review.** They describe what this
    demonstration does. They are not legal advice, they have not been reviewed
    by a solicitor, and no compliance audit has been carried out. Each page
