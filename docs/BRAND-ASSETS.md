@@ -17,6 +17,13 @@ this repository — `tools/brand/logo.svg` is the source. It is not generated.
 over it using Puppeteer. The wording is therefore editable text, not pixels
 baked in by an image model.
 
+**The machine-readable asset list** is `tools/brand/photos.json` — the single
+source of truth for the photographs' prompts and purposes. The table below is
+the human-readable version of it. `tools/build-image-manifest.mjs` reads that
+file together with the real images on disk and writes
+`public/assets/images/generated/_manifest.json`, so the manifest cannot drift
+from what is actually shipped; it fails loudly if the two disagree.
+
 ---
 
 ## Regenerating

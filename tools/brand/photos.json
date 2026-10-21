@@ -1,0 +1,126 @@
+{
+  "_comment": "The single source of truth for the demonstration's photographs. tools/build-image-manifest.mjs reads this plus the real files on disk and writes public/assets/images/generated/_manifest.json, so the manifest can never drift from what is actually shipped. docs/BRAND-ASSETS.md is the human-readable version of this file.",
+  "model": "@cf/black-forest-labs/flux-1-schnell",
+  "provider": "Cloudflare Workers AI",
+  "sharedSuffixes": {
+    "base": "Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding",
+    "photo": "amateur editorial photograph taken on a camera, natural available light, real materials and real textures, shallow depth of field, gentle photographic grain, natural colours, no people, no children, no faces, no text, no lettering, no logos, no brands, no watermark"
+  },
+  "photos": [
+    {
+      "file": "cafe-interior-hero.jpg",
+      "purpose": "Homepage hero; parties page",
+      "suffix": "base",
+      "prompt": "A bright welcoming family cafe interior, wooden tables and chairs, banquette seating with cushions, soft daylight through large sash windows, potted plants, sage green walls and cream panelling"
+    },
+    {
+      "file": "cafe-window-table.jpg",
+      "purpose": "Homepage; contact page",
+      "suffix": "base",
+      "prompt": "A cafe window table set for brunch, small cup of coffee, a plate of scrambled eggs and toast, cutlery and linen napkin, morning light through the window, blurred plant"
+    },
+    {
+      "file": "cafe-courtyard.jpg",
+      "purpose": "Contact page",
+      "suffix": "photo",
+      "extra": "no building, no awning, no parasol, no umbrella, no shopfront, no window, no wall sign, no plaque, no board, no banner",
+      "prompt": "A wooden cafe table and two chairs in a small walled garden, low old brick wall covered in ivy, a clipped hedge, gravel underfoot, terracotta pots with shrubs, dappled afternoon sunlight through tree leaves"
+    },
+    {
+      "file": "soft-play-room.jpg",
+      "purpose": "Soft play page; homepage",
+      "suffix": "photo",
+      "prompt": "An indoor soft play room in a family cafe, empty of people, a low padded climbing frame with a short slide, a ball pit, foam floor mats, simple wooden toys on a low shelf, painted plaster walls, recessed ceiling lights"
+    },
+    {
+      "file": "soft-play-corner.jpg",
+      "purpose": "Soft play page",
+      "suffix": "photo",
+      "prompt": "Close-up of a small play corner in a cafe, a low wooden table with a wipe-clean play mat, a woven basket of plain wooden toys, a stack of picture books with blank covers, a small soft cushion, a ceramic mug of pencils, window light from the left"
+    },
+    {
+      "file": "party-setup.jpg",
+      "purpose": "Parties page; homepage",
+      "suffix": "base",
+      "prompt": "A children's party table set up in a cafe, empty of people, pastel bunting, plain paper table cover, plates, cups and paper napkins, small gift bags on a side table"
+    },
+    {
+      "file": "party-cake.jpg",
+      "purpose": "Parties gallery",
+      "suffix": "base",
+      "prompt": "A round birthday cake on a cafe table, plain buttercream, a few unlit candles, a wooden cake stand, scattered confetti, soft daylight, no people"
+    },
+    {
+      "file": "party-table-detail.jpg",
+      "purpose": "Parties gallery",
+      "suffix": "base",
+      "prompt": "Close up of a party table top, paper plates, cups, simple paper hats and plain napkins, small bowls of snacks, pastel bunting above, no people"
+    },
+    {
+      "file": "menu-breakfast.jpg",
+      "purpose": "Menu — full English breakfast",
+      "suffix": "base",
+      "prompt": "A full English breakfast on a ceramic plate, fried eggs, bacon, sausage, baked beans, grilled tomato, mushrooms, toast, overhead three quarter angle, cafe table"
+    },
+    {
+      "file": "menu-toastie.jpg",
+      "purpose": "Menu — roasted vegetable toastie",
+      "suffix": "base",
+      "prompt": "A roasted vegetable toasted sandwich on a wooden board, visible courgette, red pepper and melted cheddar between toasted sourdough, side salad, cafe table"
+    },
+    {
+      "file": "menu-sandwich.jpg",
+      "purpose": "Menu — club sandwich",
+      "suffix": "base",
+      "prompt": "A club sandwich on a white plate, three layers of toasted bread with chicken, lettuce and tomato, a few crisps on the side, natural light"
+    },
+    {
+      "file": "menu-kids-meal.jpg",
+      "purpose": "Menu — children's meal",
+      "suffix": "base",
+      "prompt": "A children's meal, small portion of pasta spirals with tomato sauce, a small sausage, a few vegetable sticks, a small glass of juice, on a white plate"
+    },
+    {
+      "file": "menu-cake-carrot.jpg",
+      "purpose": "Menu — carrot cake",
+      "suffix": "base",
+      "prompt": "A slice of carrot cake on a white plate, cream cheese frosting, a walnut on top, cafe table, soft daylight"
+    },
+    {
+      "file": "menu-chocolate-cake.jpg",
+      "purpose": "Menu — chocolate fudge cake",
+      "suffix": "base",
+      "prompt": "A slice of chocolate fudge cake on a white plate, glossy ganache, a single strawberry on top, cafe table, soft daylight"
+    },
+    {
+      "file": "menu-hot-chocolate.jpg",
+      "purpose": "Menu — hot chocolate",
+      "suffix": "photo",
+      "prompt": "A tall glass mug of hot chocolate, dark chocolate liquid, topped with a generous swirl of whipped cream and a single curl of dark chocolate, on a small saucer beside a teaspoon, cafe table"
+    },
+    {
+      "file": "menu-coffee.jpg",
+      "purpose": "Menu — flat white",
+      "suffix": "base",
+      "prompt": "A flat white coffee in a ceramic cup on a saucer, latte art, cafe table, soft daylight, shallow depth of field"
+    },
+    {
+      "file": "menu-cold-drinks.jpg",
+      "purpose": "Menu — iced latte",
+      "suffix": "base",
+      "prompt": "A tall glass of iced latte with milk and a simple straw next to a glass of fresh orange juice, cafe table, condensation, soft daylight"
+    },
+    {
+      "file": "menu-soup.jpg",
+      "purpose": "Menu — tomato soup",
+      "suffix": "base",
+      "prompt": "A bowl of tomato soup with a swirl of cream and a slice of sourdough toast beside it, cafe table, warm daylight"
+    },
+    {
+      "file": "menu-pancakes.jpg",
+      "purpose": "Menu — pancakes",
+      "suffix": "base",
+      "prompt": "A stack of fluffy pancakes with maple syrup and berries on a ceramic plate, small jug of syrup, cafe table, morning light"
+    }
+  ]
+}
