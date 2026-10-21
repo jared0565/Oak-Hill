@@ -25,7 +25,7 @@ During active multi-file development, keep the graph current with:
 graphite watch . --impact
 ```
 
-Graphite is installed centrally at `F:\Projects\_tools\graphite`, runs locally by default, and should not use LLM or network calls unless explicitly configured.
+Graphite runs locally by default and should not use LLM or network calls unless explicitly configured. It is installed as a Python package (currently graphite 1.3.0), so `graphite <command>` on PATH and `python -m graphite <command>` both work. Prefer `python -P -m graphite` in any command you generate: `-P` keeps the working directory off `sys.path[0]`, so a stray `graphite.py` or `graphite/` in the repo root cannot shadow the installed package. The source repository lives at `F:\Projects\graphite`; that is the checkout, not the runtime install path.
 
 For TypeScript, Graphite uses the local TypeScript compiler resolver automatically when available. If a project has a broken TypeScript setup, fall back with `graphite --typescript-resolver disabled build .`.
 
