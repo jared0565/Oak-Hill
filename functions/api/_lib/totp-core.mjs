@@ -4,7 +4,7 @@
 import { hashToken } from "./auth-core.mjs";
 
 const B32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"; // RFC 4648, no padding
-const ISSUER = "Oak Hill Admin";
+const ISSUER = "BytesFX Admin";
 
 // --- base32 (RFC 4648, no padding) -----------------------------------------------------
 export function base32Encode(bytes) {

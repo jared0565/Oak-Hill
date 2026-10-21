@@ -34,7 +34,7 @@ function textToHtmlParagraphs(text) {
 // Render the branded HTML + plain-text versions of one newsletter. The footer (sender identity +
 // unsubscribe) is always present — required for marketing email (PECR / RFC 8058).
 export function renderNewsletter({ bodyText, unsubUrl, cafeName, cafeAddress }) {
-  const name = cafeName || "Oak Hill Park Cafe";
+  const name = cafeName || "BytesFX Café & Bookings";
   const addr = cafeAddress || "";
   const html =
     '<div style="max-width:600px;margin:0 auto;padding:24px;font-family:Helvetica,Arial,sans-serif;color:#1f2a24;line-height:1.5">' +

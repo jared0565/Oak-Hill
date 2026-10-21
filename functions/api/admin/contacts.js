@@ -7,7 +7,7 @@ import { requirePermission, auditFromCtx } from "../_lib/auth-db.mjs";
 // and =+-@ formula-injection), so it opens safely in a spreadsheet.
 function contactExportCsv(contact, bookings, enquiries) {
   const rows = [];
-  rows.push(["Oak Hill Park Cafe — personal data export"]);
+  rows.push(["BytesFX Café & Bookings — personal data export"]);
   rows.push(["Contact ID", contact.id]);
   rows.push([]);
   rows.push(["[Contact details]"]);

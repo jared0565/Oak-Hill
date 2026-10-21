@@ -1,0 +1,116 @@
+[
+  {
+    "name": "cafe-interior-hero",
+    "file": "cafe-interior-hero.jpg",
+    "aspect": "3/2",
+    "prompt": "A bright welcoming family cafe interior, wooden tables and chairs, banquette seating with cushions, soft daylight through large sash windows, potted plants, sage green walls and cream panelling. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "cafe-window-table",
+    "file": "cafe-window-table.jpg",
+    "aspect": "3/2",
+    "prompt": "A cafe window table set for brunch, small cup of coffee, a plate of scrambled eggs and toast, cutlery and linen napkin, morning light through the window, blurred plant. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "cafe-exterior",
+    "file": "cafe-exterior.jpg",
+    "aspect": "3/2",
+    "prompt": "The exterior of a small neighbourhood cafe with a plain painted frontage, large window, chalkboard-free blank awning in muted green, brick pavement, planters, empty street, quiet residential setting. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "soft-play-room",
+    "file": "soft-play-room.jpg",
+    "aspect": "4/3",
+    "prompt": "An indoor soft play room in a family cafe, empty of people, low climbing frame with soft padding, small ball pit, low slide, foam mats, pastel equipment, soft ceiling lights, clean and tidy. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "soft-play-corner",
+    "file": "soft-play-corner.jpg",
+    "aspect": "4/3",
+    "prompt": "A small soft play corner inside a cafe, empty, low foam block pit, a wooden toy shelf with simple wooden toys, a couple of small chairs, warm daylight, no people. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "party-setup",
+    "file": "party-setup.jpg",
+    "aspect": "3/2",
+    "prompt": "A children's party table set up in a cafe, empty of people, pastel bunting, plain paper table cover, plates, cups and paper napkins, small gift bags on a side table. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "party-cake",
+    "file": "party-cake.jpg",
+    "aspect": "1/1",
+    "prompt": "A round birthday cake on a cafe table, plain buttercream, a few unlit candles, a wooden cake stand, scattered confetti, soft daylight, no people. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "party-table-detail",
+    "file": "party-table-detail.jpg",
+    "aspect": "1/1",
+    "prompt": "Close up of a party table top, paper plates, cups, simple paper hats and plain napkins, small bowls of snacks, pastel bunting above, no people. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-breakfast",
+    "file": "menu-breakfast.jpg",
+    "aspect": "4/3",
+    "prompt": "A full English breakfast on a ceramic plate, fried eggs, bacon, sausage, baked beans, grilled tomato, mushrooms, toast, overhead three quarter angle, cafe table. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-toastie",
+    "file": "menu-toastie.jpg",
+    "aspect": "4/3",
+    "prompt": "A roasted vegetable toasted sandwich on a wooden board, visible courgette, red pepper and melted cheddar between toasted sourdough, side salad, cafe table. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-sandwich",
+    "file": "menu-sandwich.jpg",
+    "aspect": "4/3",
+    "prompt": "A club sandwich on a white plate, three layers of toasted bread with chicken, lettuce and tomato, a few crisps on the side, natural light. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-kids-meal",
+    "file": "menu-kids-meal.jpg",
+    "aspect": "4/3",
+    "prompt": "A children's meal, small portion of pasta spirals with tomato sauce, a small sausage, a few vegetable sticks, a small glass of juice, on a white plate. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-cake-carrot",
+    "file": "menu-cake-carrot.jpg",
+    "aspect": "1/1",
+    "prompt": "A slice of carrot cake on a white plate, cream cheese frosting, a walnut on top, cafe table, soft daylight. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-chocolate-cake",
+    "file": "menu-chocolate-cake.jpg",
+    "aspect": "1/1",
+    "prompt": "A slice of chocolate fudge cake on a white plate, glossy ganache, a single strawberry on top, cafe table, soft daylight. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-hot-chocolate",
+    "file": "menu-hot-chocolate.jpg",
+    "aspect": "1/1",
+    "prompt": "A mug of hot chocolate topped with whipped cream, a chocolate curl and a dusting of cocoa, on a cafe table, soft daylight. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-coffee",
+    "file": "menu-coffee.jpg",
+    "aspect": "1/1",
+    "prompt": "A flat white coffee in a ceramic cup on a saucer, latte art, cafe table, soft daylight, shallow depth of field. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-cold-drinks",
+    "file": "menu-cold-drinks.jpg",
+    "aspect": "1/1",
+    "prompt": "A tall glass of iced latte with milk and a simple straw next to a glass of fresh orange juice, cafe table, condensation, soft daylight. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-soup",
+    "file": "menu-soup.jpg",
+    "aspect": "4/3",
+    "prompt": "A bowl of tomato soup with a swirl of cream and a slice of sourdough toast beside it, cafe table, warm daylight. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  },
+  {
+    "name": "menu-pancakes",
+    "file": "menu-pancakes.jpg",
+    "aspect": "4/3",
+    "prompt": "A stack of fluffy pancakes with maple syrup and berries on a ceramic plate, small jug of syrup, cafe table, morning light. Professional editorial food and interior photography, natural window light, realistic portions, clean simple composition, warm cream and sage green palette, muted natural colours, no people, no children, no faces, no text, no lettering, no logos, no watermarks, no signage text, no identifiable real-world location, no famous branding"
+  }
+]

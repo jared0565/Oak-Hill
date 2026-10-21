@@ -1,5 +1,5 @@
 (function () {
-  const KEY = "ohpc-admin-token";
+  const KEY = "bfx-admin-token";
   const root = document.querySelector("[data-tracking]");
   if (!root) return;
 
@@ -109,5 +109,5 @@
     editingId = null; render();
   }
 
-  window.OHPTracking = { render };
+  window.BFXTracking = { render };
 })();

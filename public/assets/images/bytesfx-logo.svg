@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="BytesFX Cafe and Bookings">
+  <title>BytesFX Cafe and Bookings</title>
+  <rect width="64" height="64" rx="14" fill="#1d4633"/>
+  <g fill="none" stroke="#f4b942" stroke-width="3.2" stroke-linecap="round">
+    <path d="M26 11.5c-2.6 2.4-2.6 5 0 7.4"/>
+    <path d="M38 11.5c-2.6 2.4-2.6 5 0 7.4"/>
+  </g>
+  <g transform="rotate(-28 32 39)">
+    <ellipse cx="32" cy="39" rx="12.5" ry="15.5" fill="#fff7ea"/>
+    <path d="M32 23.5c-5.4 6-5.4 25 0 31" fill="none" stroke="#1d4633" stroke-width="2.6" stroke-linecap="round"/>
+  </g>
+</svg>

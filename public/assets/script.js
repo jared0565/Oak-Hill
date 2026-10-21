@@ -12,21 +12,9 @@
     });
   }
 
-  // Privacy-friendly map: the Google Maps embed is a third party that can set cookies, so under
-  // PECR it must not load until the visitor asks. Show a placeholder; swap in the iframe on click.
-  document.querySelectorAll("[data-map-load]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const wrap = btn.closest("[data-map-embed]");
-      if (!wrap) return;
-      const iframe = document.createElement("iframe");
-      iframe.className = "map-frame";
-      iframe.title = wrap.getAttribute("data-map-title") || "Map";
-      iframe.loading = "lazy";
-      iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
-      iframe.src = wrap.getAttribute("data-map-src");
-      wrap.replaceWith(iframe);
-    });
-  });
+  // The click-to-load map embed was removed with the café's real address: the
+  // demonstration café has no location, so there is nothing to map and no
+  // third-party embed to consent-gate.
 
   document.querySelectorAll("[data-tabs]").forEach((tabRoot) => {
     const tabs = Array.from(tabRoot.querySelectorAll("[role='tab']"));
@@ -56,10 +44,10 @@
     const update = () => {
       const count = Math.max(10, Math.min(25, Number(guests.value || 10)));
       const weekend = day.value === "weekend";
-      const base = weekend ? 180 : 170;
+      const base = weekend ? 175 : 165;
       const extra = weekend ? 8 : 7;
       const total = base + Math.max(0, count - 10) * extra;
-      output.innerHTML = "<span>Estimated party total</span><strong>&pound;" + total + "</strong><small>Includes " + count + " children. A &pound;100 non-refundable deposit secures the booking.</small>";
+      output.innerHTML = "<span>Sample party total</span><strong>&pound;" + total + "</strong><small>Includes " + count + " children. An illustrative figure for the demonstration — no deposit is taken and no date is held.</small>";
     };
 
     day.addEventListener("change", update);
@@ -87,14 +75,16 @@
         });
         const out = await res.json().catch(() => ({}));
         if (res.ok && out.ok) {
-          if (status) status.textContent =
-            "Thanks — we've got your message and will reply. For anything urgent call 0208 361 1013.";
+          if (status) {
+            status.textContent = out.message ||
+              "The demo enquiry form works. Nothing was sent and nothing was stored.";
+          }
           form.reset();
         } else if (status) {
-          status.textContent = out.error || "Sorry, something went wrong. Please call 0208 361 1013.";
+          status.textContent = out.error || "Sorry, something went wrong. Please try again in a moment.";
         }
       } catch {
-        if (status) status.textContent = "Sorry, something went wrong. Please call 0208 361 1013.";
+        if (status) status.textContent = "Sorry, something went wrong. Please try again in a moment.";
       } finally {
         if (submitBtn) submitBtn.disabled = false;
       }
@@ -104,7 +94,7 @@
 
 /* ---- Share menu + QR code ---- */
 (function () {
-  var SHARE_TITLE = "Oak Hill Park Cafe";
+  var SHARE_TITLE = "BytesFX Café & Bookings";
   var modal = null, lastFocus = null;
 
   function shareUrl() {
@@ -122,7 +112,7 @@
       '<div class="share-dialog" role="dialog" aria-modal="true" aria-labelledby="share-h">' +
         '<button class="share-x" type="button" data-share-close aria-label="Close">×</button>' +
         '<div class="share-view" data-view="options">' +
-          '<h2 id="share-h">Share Oak Hill Park Cafe</h2>' +
+          '<h2 id="share-h">Share BytesFX Café &amp; Bookings</h2>' +
           '<p class="share-url" data-share-url></p>' +
           '<div class="share-actions">' +
             '<button class="share-opt" type="button" data-act="native" hidden>Share…</button>' +
@@ -270,14 +260,17 @@
       else { fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }); }
     } catch (e) { /* analytics must never break the page */ }
   }
-  window.OHPTrack = send;
-  window.OHPTrack("page_view");
+  window.BFXTrack = send;
+  window.BFXTrack("page_view");
 })();
 
 // ---- Footer newsletter signup (explicit marketing opt-in → CRM) ----
 (function () {
   var footer = document.querySelector(".site-footer");
   if (!footer) return;
+  // Pages that manage email preferences should not also offer to sign up for
+  // them: <html data-no-signup> opts out of the injected footer form.
+  if (document.documentElement.hasAttribute("data-no-signup")) return;
   var loadedAt = Date.now();
 
   function el(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
@@ -285,19 +278,23 @@
   var wrap = el("div", null, "footer-signup");
   var inner = el("div", null, "footer-signup-inner");
   var textCol = el("div", null, "footer-signup-text");
-  textCol.appendChild(el("strong", "Cafe news & party offers"));
+  textCol.appendChild(el("strong", "Demo newsletter signup"));
   var lead = el("p");
-  lead.appendChild(document.createTextNode("Get occasional emails about the cafe and party offers. Unsubscribe anytime. "));
-  var priv = el("a", "See our privacy policy"); priv.href = "privacy.html";
+  lead.appendChild(document.createTextNode("Sign up to see how the newsletter flow behaves. "));
+  var demo = el("span", "Demo signup — no email will be sent.");
+  lead.appendChild(demo);
+  lead.appendChild(document.createTextNode(" Nothing is stored and no address is kept. See the "));
+  var priv = el("a", "privacy notice"); priv.href = "privacy.html";
   lead.appendChild(priv);
+  lead.appendChild(document.createTextNode("."));
   textCol.appendChild(lead);
   inner.appendChild(textCol);
 
   var form = document.createElement("form"); form.className = "footer-signup-form";
   var hp = document.createElement("input"); hp.type = "text"; hp.name = "company"; hp.tabIndex = -1; hp.autocomplete = "off";
   hp.setAttribute("aria-hidden", "true"); hp.style.cssText = "position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden";
-  var email = document.createElement("input"); email.type = "email"; email.required = true; email.placeholder = "you@example.com"; email.setAttribute("aria-label", "Email address");
-  var btn = el("button", "Sign me up", "button"); btn.type = "submit";
+  var email = document.createElement("input"); email.type = "email"; email.required = true; email.value = "alex@example.com"; email.placeholder = "you@example.com"; email.setAttribute("aria-label", "Email address");
+  var btn = el("button", "Try the signup", "button"); btn.type = "submit";
   var status = el("p", null, "footer-signup-status");
   form.append(hp, email, btn);
   inner.appendChild(form);
@@ -306,15 +303,18 @@
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    btn.disabled = true; status.textContent = "Signing you up…";
+    btn.disabled = true; status.textContent = "Sending…";
     fetch("/api/lead", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.value, company: hp.value, elapsed_ms: Date.now() - loadedAt })
     }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (res) {
         if (res.ok && res.d.ok) {
-          wrap.replaceChildren(el("strong", "Thanks — you’re on the list."), el("p", "We’ll only email you about the cafe and party offers."));
-          if (window.OHPTrack) window.OHPTrack("lead_captured");
+          wrap.replaceChildren(
+            el("strong", "Demo signup complete"),
+            el("p", res.d.message || "Demo signup — no email will be sent. Nothing was stored.")
+          );
+          if (window.BFXTrack) window.BFXTrack("lead_captured");
         } else { btn.disabled = false; status.textContent = (res.d && res.d.error) || "Could not sign you up. Please try again."; }
       })
       .catch(function () { btn.disabled = false; status.textContent = "Network problem. Please try again."; });

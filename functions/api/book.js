@@ -1,13 +1,19 @@
 // POST /api/book — claim a slot atomically and create a pending booking.
 // Body: { slot_id, name, phone, email, children?, child_age?, notes? }
+//
+// In demonstration mode this validates exactly as the live path does, but it
+// writes nothing: no booking row, no contact, no email, no reservation. It
+// returns a synthetic reference and says so.
 import { upsertContact } from "./_lib/contacts-db.mjs";
+import { configGuard, isDemo, demoRef, DEMO_MESSAGES } from "./_lib/demo.mjs";
+import { listDemoSlots } from "./_lib/demo-store.mjs";
 
 function makeRef() {
   const bytes = new Uint8Array(5);
   crypto.getRandomValues(bytes);
   let s = "";
   for (const b of bytes) s += "0123456789ABCDEFGHJKMNPQRSTUVWXYZ"[b % 33];
-  return "OHP-" + s;
+  return "BFX-" + s;
 }
 
 function clean(v, max) {
@@ -38,6 +44,32 @@ export async function onRequestPost(ctx) {
   const childAge = clean(body.child_age, 40) || null;
   const notes = clean(body.notes, 1000) || null;
 
+  const guard = configGuard(ctx.env);
+  if (guard) return guard;
+
+  // ---- demonstration mode -------------------------------------------------
+  // No reservation is created and nothing is stored. The slot is checked against
+  // the isolated demo store so the availability states behave realistically.
+  if (isDemo(ctx.env)) {
+    const { slots } = await listDemoSlots(ctx.env);
+    const slot = slots.find((s) => s.id === slotId);
+    if (!slot) {
+      return Response.json({ error: "That slot is no longer listed. Please choose another." }, { status: 404 });
+    }
+    const today = new Date().toISOString().slice(0, 10);
+    if (slot.date < today) {
+      return Response.json({ error: "That date has passed. Please choose another slot." }, { status: 409 });
+    }
+    return Response.json({
+      ok: true,
+      demo: true,
+      ref: demoRef(),
+      slot,
+      message: DEMO_MESSAGES.booking,
+    });
+  }
+
+  // ---- live mode ----------------------------------------------------------
   // Soft hold: an enquiry creates a 'pending' booking but does NOT lock the slot.
   // The slot only becomes unavailable when the owner confirms payment
   // (see /api/admin/bookings). Until then it stays open so others can still enquire,

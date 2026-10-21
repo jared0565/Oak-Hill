@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Booking admin | Oak Hill Park Cafe</title>
+  <title>Booking admin | BytesFX Café &amp; Bookings</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
@@ -11,10 +11,20 @@
   <link rel="stylesheet" href="assets/admin.css">
 </head>
 <body>
+  <div class="demo-banner" role="note">
+    <div class="demo-banner-inner">
+      <strong>Demonstration site</strong>
+      <p>Demonstration website by BytesFX. This is a fictional café. Menus, prices and availability are illustrative. No real bookings or payments are accepted.</p>
+    </div>
+  </div>
   <main id="main" class="section">
     <div class="section-inner admin">
       <span class="kicker">Staff only</span>
       <h1>Booking admin</h1>
+
+      <div class="demo-note">
+        <p>This console is still fully authenticated — sign-in, two-factor authentication and staff permissions all work as designed. In demonstration mode the public booking form creates no reservation, and the public availability list shows sample availability rather than a real diary.</p>
+      </div>
 
       <div data-admin-setup hidden>
         <p class="section-lede">First-time setup: create the owner account. Enter the setup token (the <code>ADMIN_TOKEN</code> from Cloudflare), then choose your sign-in details.</p>
@@ -58,8 +68,8 @@
 
           <aside class="admin-sidebar" id="admin-sidebar" data-admin-sidebar>
             <div class="admin-brand">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-              <span>Oak Hill · Admin</span>
+              <img src="assets/images/bytesfx-logo.svg" alt="BytesFX Café and Bookings logo" width="52" height="52">
+              <span>BytesFX · Admin</span>
             </div>
 
             <nav class="admin-nav" data-admin-nav aria-label="Sections">
@@ -172,7 +182,7 @@
 
             <section class="admin-panel" data-panel="newsletter" id="panel-newsletter" data-perm="newsletter" tabindex="-1" hidden>
               <h2>Newsletter</h2>
-              <p class="section-lede">Write a message and send it to everyone who opted in to cafe news. Every email includes a one-click unsubscribe and the cafe's details. Send a test to yourself first.</p>
+              <p class="section-lede">Write a message and send it to everyone who opted in to cafe news. In this demonstration, sending is switched off: no marketing consent is recorded, so there is no mailing list and nothing can be sent. The composer still works, so you can see how a real broadcast behaves.</p>
               <div data-newsletter><p class="booking-note">Loading&hellip;</p></div>
             </section>
 

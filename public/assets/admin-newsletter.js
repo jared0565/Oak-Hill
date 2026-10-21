@@ -1,8 +1,8 @@
-// Newsletter — owner-only compose + send. Uses window.OHPAdmin.api; all DOM via createElement.
+// Newsletter — owner-only compose + send. Uses window.BFXAdmin.api; all DOM via createElement.
 (function () {
   const root = document.querySelector("[data-newsletter]");
   if (!root) return;
-  const api = (p, o) => window.OHPAdmin.api(p, o);
+  const api = (p, o) => window.BFXAdmin.api(p, o);
   function el(tag, text, cls) { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
 
   function field(labelText, control) {
@@ -100,5 +100,5 @@
     return n + " subscriber" + (n === 1 ? "" : "s") + " opted in to cafe news will receive this.";
   }
 
-  window.OHPNewsletter = { render };
+  window.BFXNewsletter = { render };
 })();

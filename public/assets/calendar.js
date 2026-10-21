@@ -40,7 +40,7 @@
       slots = (await sRes.json()).slots || [];
       events = (await eRes.json()).events || [];
     } catch {
-      root.replaceChildren(el("p", "Couldn't load the calendar just now — please call 0208 361 1013.", "pubcal-note"));
+      root.replaceChildren(el("p", "Couldn't load the sample calendar just now — please try again in a moment.", "pubcal-note"));
       return;
     }
     render();

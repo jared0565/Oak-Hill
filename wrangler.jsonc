@@ -1,7 +1,19 @@
 {
+  // The Pages project name, the D1 database name and the D1 database id are
+  // INFRASTRUCTURE, not branding. They name the live Cloudflare resources this
+  // site is deployed against, so renaming them would orphan the deployment and
+  // the database. They are deliberately left as they are — see
+  // docs/REBRAND-HANDOVER.md for the full rationale.
   "name": "oak-hill-park-cafe",
   "pages_build_output_dir": "public",
   "compatibility_date": "2024-11-01",
+  "vars": {
+    // Demonstration mode. "true" = this site is a demonstration: submissions
+    // are simulated, no personal detail is stored, and no email is sent.
+    // Changing this to "false" does NOT re-enable live behaviour on its own —
+    // see functions/api/_lib/demo.mjs for the two-setting arming rule.
+    "DEMO_MODE": "true"
+  },
   "d1_databases": [
     {
       "binding": "DB",

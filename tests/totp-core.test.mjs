@@ -59,15 +59,15 @@ test("verifyTotp accepts T and T±1, rejects T±2 and malformed input", async ()
 });
 
 test("otpauthUri carries the secret, issuer, and SHA1/6/30 params", () => {
-  const uri = otpauthUri("staff@oakhill.test", "GEZDGNBVGY3TQOJQ");
+  const uri = otpauthUri("staff@example.test", "GEZDGNBVGY3TQOJQ");
   assert.match(uri, /^otpauth:\/\/totp\//);
   assert.match(uri, /secret=GEZDGNBVGY3TQOJQ/);
-  assert.match(uri, /issuer=Oak%20Hill%20Admin/); // spec-exact: %20, never "+"
+  assert.match(uri, /issuer=BytesFX%20Admin/); // spec-exact: %20, never "+"
   assert.doesNotMatch(uri, /\+/);                  // no "+" space-encoding anywhere
   assert.match(uri, /algorithm=SHA1/);
   assert.match(uri, /digits=6/);
   assert.match(uri, /period=30/);
-  assert.match(uri, /staff%40oakhill\.test/);
+  assert.match(uri, /staff%40example\.test/);
 });
 
 test("backup codes: a generated code's hash verifies; a wrong code doesn't", async () => {

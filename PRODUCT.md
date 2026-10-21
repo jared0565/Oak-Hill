@@ -1,6 +1,8 @@
 # Product
 
-> Draft inferred from the codebase, README, and the owner's audit brief (2026-06-13). Review and correct anything that misses the mark; future design commands read this file.
+> Rewritten 21 October 2026 for the BytesFX Café & Bookings demonstration. The
+> previous version described the real Oak Hill Park Cafe and is kept in
+> `docs/REBRAND-AUDIT.md`.
 
 ## Register
 
@@ -8,30 +10,71 @@ brand
 
 ## Users
 
-Local parents in and around Barnet (EN4), usually on a phone, often mid-park-visit or planning one. Three jobs, in order of value: (1) book a children's birthday party, (2) decide whether to visit today (food, soft play, weather, hours), (3) check the menu before or during a visit. High intent, low patience; phone calls and directions are the dominant actions.
+Two audiences, and they must never be confused.
+
+**A visitor to the demonstration** — someone looking at a BytesFX portfolio
+piece to judge how a café website could work. They are evaluating the craft
+and the thinking, not booking a table. They are on a phone, usually quickly,
+and they will notice if the site pretends to be a real business.
+
+**The owner of a real café** — the person who would eventually run this. They
+are not the audience of this site; the site is the shop window.
 
 ## Product Purpose
 
-Conversion-led marketing site for Oak Hill Park Cafe: a family-run park cafe with soft play, homemade Polish dishes, and kids' party packages. Success = party enquiries, phone calls, and direction taps that turn into visits. The owner wants the site optimized for revenue (ROI/ROAS on local ads) and measurable conversion events.
+A demonstration of a café website with a soft play area and a party booking
+flow, built by BytesFX. Success = the visitor understands, in a few minutes and
+on a phone, what the design and the engineering do; and the booking workflow
+is demonstrably real underneath a boundary that is impossible to cross by
+accident.
+
+The site is a **fictional café**. Menus, prices, availability, facilities and
+hours are illustrative. No real booking, enquiry, reservation, payment or
+email is possible.
 
 ## Brand Personality
 
-Fun and executive at once: the warmth and play of a children's cafe delivered with the confidence and clarity of a well-run business. Family-run since 1996, genuinely local, Polish heritage as the signature memory hook. Voice is direct, parent-to-parent, never corporate and never cutesy.
+Warm, plain and confident — the voice of a good neighbourhood café that does
+not need to sell you anything. Specific over charming: name the ingredient,
+name the age band, state the price. Never corporate, never cutesy, never
+hypey.
+
+The demonstration is stated plainly and without apology. A visitor should
+never have to wonder whether a café in Barnet really exists.
 
 ## Anti-references
 
-- Generic AI-generated landing pages: cream background, Inter, uppercase kicker above every section, identical card grids.
-- Corporate SaaS aesthetics (stat blocks, "conversion funnel" language visible to customers).
-- Clip-art / template kids-party sites with rainbow Comic Sans energy; fun must not mean childish.
+- Generic AI-generated landing pages: cream background, Inter, uppercase kicker
+  above every section, identical card grids.
+- Corporate SaaS aesthetics (stat blocks, "conversion funnel" language visible
+  to customers).
+- Clip-art / template kids-party sites with rainbow Comic Sans energy; fun
+  must not mean childish.
+- Gradient blobs, glassmorphism panels, pill badges used as decoration, and
+  decorative dashboards with invented statistics.
+- Marketing filler: "elevate your journey", "crafted to perfection",
+  "unforgettable experiences", "something for everyone".
 
 ## Design Principles
 
-1. **Show the place, sell the day.** Real photography of the cafe, the play area, the parties carries the brand; copy supports, never substitutes.
-2. **Speak to parents, not about funnels.** Customer-facing copy describes their day, never the site's own conversion strategy.
-3. **Every page earns a call or a booking.** Phone, directions, and party enquiry are one tap away everywhere, and every action is measurable.
-4. **Polish food is the memory hook.** The signature dishes get distinctive, appetizing treatment, not a stat row.
-5. **Fun in the details, executive in the structure.** Playful color, motion, and illustration live inside a disciplined layout with clear prices and answers.
+1. **Say what it is, early and plainly.** The standing demonstration notice is
+   on every page, and a short variant sits next to the thing it describes —
+   the menu, the images, the booking, the enquiry.
+2. **The sample menu is a real menu.** Clear category headings, aligned prices,
+   one line of description per dish, an image only where it helps, and a
+   dietary note that says the labels are illustrative.
+3. **Every form demonstrates, and says so.** The validation, the success state
+   and the failure state are all real. The submission goes nowhere, and the
+   copy says that in plain words rather than implying a service.
+4. **The boundary is the point.** The booking workflow underneath is real code,
+   and the demonstration wrapper is a deliberate, tested, explicit line — not a
+   set of deleted features.
+5. **Say what the real version would need.** Where the demonstration stops, a
+   short, honest note says what a live café would still have to build.
 
 ## Accessibility & Inclusion
 
-WCAG AA. Audience includes tired parents on phones outdoors (glare, one-handed use): large touch targets, high contrast, no reliance on hover. Reduced-motion alternatives for all animation.
+WCAG AA. One `<h1>` per page, headings in order, every control labelled, focus
+always visible, `prefers-reduced-motion` honoured, colour contrast held on
+every surface including the dark bands. Type is sized for reading on a phone
+in daylight, not for filling a screenshot.

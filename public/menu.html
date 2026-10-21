@@ -3,137 +3,523 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Menu | Oak Hill Park Cafe Barnet</title>
-  <meta name="description" content="View Oak Hill Park Cafe's breakfast, lunch, Polish delicacies, kids menu and drinks in mobile-friendly HTML.">
-  <link rel="canonical" href="https://oak.bytesfx.com/menu.html">
+  <title>Menu | BytesFX Café &amp; Bookings</title>
+  <meta name="description" content="A sample menu for the BytesFX Café demo: breakfast, sandwiches, children's meals, cakes, drinks and specials, with illustrative prices.">
+  <link rel="canonical" href="https://bytesfx-cafe.example.com/menu.html">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#1d4633">
-  <meta property="og:site_name" content="Oak Hill Park Cafe">
+  <meta property="og:site_name" content="BytesFX Café &amp; Bookings">
   <meta property="og:locale" content="en_GB">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://oak.bytesfx.com/menu.html">
-  <meta property="og:title" content="Breakfasts and homemade pierogi in Oak Hill Park">
-  <meta property="og:description" content="Full breakfasts, panini, kids meals and homemade Polish dishes — from a kitchen rated 5-star (Very Good) for food hygiene.">
-  <meta property="og:image" content="https://oak.bytesfx.com/assets/og/og-menu.jpg">
+  <meta property="og:url" content="https://bytesfx-cafe.example.com/menu.html">
+  <meta property="og:title" content="Sample menu at the BytesFX Café">
+  <meta property="og:description" content="Breakfast, sandwiches, children's meals, cakes, drinks and specials, with illustrative prices shown as part of the BytesFX demonstration site.">
+  <meta property="og:image" content="https://bytesfx-cafe.example.com/assets/og/og-menu.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Breakfasts and homemade Polish dishes at Oak Hill Park Cafe, Barnet — 5-star Food Hygiene rating">
+  <meta property="og:image:alt" content="Sample breakfasts, sandwiches, cakes and drinks from the BytesFX Café demonstration menu">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="menu-page">
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="demo-banner" role="note">
+    <div class="demo-banner-inner">
+      <strong>Demonstration site</strong>
+      <p>Demonstration website by BytesFX. This is a fictional café. Menus, prices and availability are illustrative. No real bookings or payments are accepted.</p>
+    </div>
+  </div>
   <header class="site-header">
-    <div class="topbar"><div class="topbar-inner"><span>Open 8am-5pm, weather dependent. Soft play 9am-5pm.</span><span><a href="tel:+442083611013">0208 361 1013</a> &nbsp; <a href="https://maps.google.com/?q=Oak%20Hill%20Park%20Cafe%20Parkside%20Gardens%20Barnet%20EN4%208JP">Get directions</a></span></div></div>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <span>A fictional café, shown for demonstration</span>
+        <span><a href="https://web.bytesfx.com/" rel="noopener">Built by BytesFX</a></span>
+      </div>
+    </div>
     <div class="nav-inner">
-      <a class="brand" href="index.html"><img src="assets/images/oak-hill-logo.png" alt=""><span><strong>Oak Hill Park Cafe</strong><span>Barnet family cafe</span></span></a>
+      <a class="brand" href="index.html" aria-label="BytesFX Café and Bookings — home">
+        <img src="assets/images/bytesfx-logo.svg" alt="" width="52" height="52">
+        <span class="brand-text">
+          <strong class="brand-name">BytesFX Café &amp; Bookings</strong>
+          <span class="brand-tag">Demonstration by BytesFX</span>
+        </span>
+      </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"></span></button>
       <nav class="primary-nav" id="primary-nav" data-primary-nav aria-label="Primary navigation">
-        <a href="index.html">Home</a><a href="menu.html" aria-current="page">Menu</a><a href="soft-play.html">Soft Play</a><a href="parties.html">Parties</a><a href="calendar.html">Calendar</a><a href="contact.html">Contact</a>
+        <a href="index.html">Home</a>
+        <a href="menu.html" aria-current="page">Menu</a>
+        <a href="soft-play.html">Soft play</a>
+        <a href="parties.html">Parties</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="contact.html">Contact</a>
       </nav>
-      <div class="nav-actions"><button class="nav-share" type="button" data-share aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg><span>Share</span></button><a class="button" href="parties.html">Book a party</a></div>
+      <div class="nav-actions">
+        <button class="nav-share" type="button" data-share aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg><span>Share</span></button>
+        <a class="button" href="calendar.html">Book a party</a>
+      </div>
     </div>
   </header>
 
   <main id="main">
     <section class="page-hero">
       <div class="section-inner">
-        <span class="eyebrow">Our menu</span>
+        <span class="eyebrow">Sample menu</span>
         <h1>Menu</h1>
-        <p class="section-lede">Breakfast, lunch, homemade Polish dishes, kids meals and drinks. Browse here, or download the PDF menus below.</p>
-        <div class="cluster">
-          <a class="button" href="assets/OHP-cafe-menu-November-2023.pdf">Download cafe PDF</a>
-          <a class="button ghost" href="assets/OHP-kids-menu-2023.pdf">Download kids PDF</a>
-        </div>
+        <p class="section-lede">Breakfast, sandwiches, children's meals, cakes, drinks and specials, written for this demonstration. Use the list below to jump to a part of the menu.</p>
+        <p class="print-only">Demonstration website by BytesFX. This is a fictional café. Every image on this menu is an AI-generated illustration, and every price is a sample price.</p>
+        <div class="demo-note"><p>Sample menu and prices.</p></div>
+        <div class="cluster"><a class="button ghost" href="assets/bytesfx-cafe-sample-menu.pdf" download>Download the sample menu (PDF)</a></div>
       </div>
     </section>
 
     <section class="section">
       <div class="section-inner">
+        <nav class="menu-cat-nav" aria-label="Menu categories">
+          <a href="#breakfast">Breakfast</a>
+          <a href="#lunch">Sandwiches</a>
+          <a href="#children">Children's</a>
+          <a href="#cakes">Cakes</a>
+          <a href="#drinks">Drinks</a>
+          <a href="#specials">Specials</a>
+        </nav>
+
         <div class="notice">
-          <strong>Allergen and dietary note</strong>
-          <p>Please speak to the team before ordering if you have an allergy or intolerance. Vegetarian items are marked where available from the current menu.</p>
+          <strong>Dietary information</strong>
+          <p>Sample dishes only. Ingredients and dietary labels are illustrative, not verified allergen advice.</p>
         </div>
 
-        <div class="menu-tabs" data-tabs>
-          <div class="tabs" role="tablist" aria-label="Menu categories">
-            <button class="tab-button" id="tab-breakfast" role="tab" aria-selected="true" aria-controls="breakfast">Breakfast</button>
-            <button class="tab-button" id="tab-lunch" role="tab" aria-selected="false" aria-controls="lunch">Lunch</button>
-            <button class="tab-button" id="tab-polish" role="tab" aria-selected="false" aria-controls="polish">Polish specials</button>
-            <button class="tab-button" id="tab-kids" role="tab" aria-selected="false" aria-controls="kids">Kids</button>
-            <button class="tab-button" id="tab-drinks" role="tab" aria-selected="false" aria-controls="drinks">Drinks</button>
+        <section class="menu-group" id="breakfast">
+          <div class="menu-group-head">
+            <h2>Breakfast &amp; brunch</h2>
+            <p>Morning plates, from a full breakfast through to pancakes and eggs on toast.</p>
           </div>
+          <div class="menu-grid">
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-breakfast.jpg" alt="A full English breakfast on a ceramic plate, with fried eggs, bacon, sausage, baked beans, grilled tomato, mushrooms and toast" width="1024" height="768" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Full English breakfast</strong>
+                <p class="menu-desc">Two fried eggs, bacon, sausage, baked beans, grilled tomato, mushrooms, hash browns and buttered toast.</p>
+              </div>
+              <span class="price">&pound;10.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Vegetarian breakfast</strong>
+                <p class="menu-desc">Two fried eggs, baked beans, grilled tomato, mushrooms, hash browns and buttered toast, with a vegetarian sausage on the side.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;9.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Shakshuka</strong>
+                <p class="menu-desc">Eggs poached in a spiced tomato and pepper sauce, finished with crumbled feta and served with flatbread.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;9.50</span>
+            </article>
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-pancakes.jpg" alt="A stack of fluffy pancakes with maple syrup, berries and a small jug of syrup" width="1024" height="768" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Pancake stack</strong>
+                <p class="menu-desc">A tall stack of fluffy pancakes drenched in maple syrup, topped with butter and a handful of berries.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;8.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Scrambled eggs on sourdough</strong>
+                <p class="menu-desc">Soft-scrambled eggs with chives on buttered sourdough, with a small bowl of tomatoes alongside.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;7.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Breakfast roll</strong>
+                <p class="menu-desc">Grilled sausage and bacon with cheddar, packed into a warm crusty roll.</p>
+              </div>
+              <span class="price">&pound;8.00</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Toast with preserves</strong>
+                <p class="menu-desc">Two slices of buttered toast with a choice of plum or strawberry preserves.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;5.00</span>
+            </article>
+          </div>
+        </section>
 
-          <section class="menu-panel" id="breakfast" role="tabpanel" aria-labelledby="tab-breakfast">
-            <div class="section-head"><div><span class="kicker">Breakfast</span><h2>Park morning favourites</h2></div></div>
-            <img class="menu-hero" src="assets/images/breakfast.jpg" width="941" height="299" alt="A full English breakfast at Oak Hill Park Cafe — eggs, bacon, sausage, beans and toast" loading="lazy">
-            <div class="menu-grid">
-              <article class="menu-item"><div><strong>The Oak Hill Special</strong><p>2 eggs, 2 bacon rashers, 2 sausages, beans, mushrooms, tomatoes, hash brown and toast.</p></div><span class="price">&pound;10.50</span></article>
-              <article class="menu-item"><div><strong>The Vegetarian <span class="badge">V</span></strong><p>2 eggs, tomatoes, mushrooms, beans, grilled halloumi, hash brown and toast.</p></div><span class="price">&pound;10.50</span></article>
-              <article class="menu-item"><div><strong>The Small One</strong><p>Egg, bacon rasher, sausage, beans, hash brown and toast.</p></div><span class="price">&pound;8.00</span></article>
-              <article class="menu-item"><div><strong>The Polish Grill</strong><p>Grilled Polish sausage, scrambled eggs, fried onions, sourdough toast, tomato and gherkin.</p></div><span class="price">&pound;10.50</span></article>
-              <article class="menu-item"><div><strong>The Salmon Special</strong><p>Smoked salmon, scrambled eggs and avocado on sourdough toast.</p></div><span class="price">&pound;10.50</span></article>
-              <article class="menu-item"><div><strong>Toast with beans or cheese <span class="badge">V</span></strong><p>Two slices of toast with classic breakfast toppings.</p></div><span class="price">from &pound;4.50</span></article>
-            </div>
-          </section>
+        <section class="menu-group" id="lunch">
+          <div class="menu-group-head">
+            <h2>Sandwiches &amp; light lunches</h2>
+            <p>Sample sandwiches and plates, made to order on white, brown or seeded bread.</p>
+          </div>
+          <div class="menu-grid">
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-sandwich.jpg" alt="A club sandwich on a white plate, three layers of toasted bread with chicken, lettuce and tomato, with crisps on the side" width="1024" height="768" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Club sandwich</strong>
+                <p class="menu-desc">Three layers of toasted bread filled with chicken, lettuce and tomato, served with crisps.</p>
+              </div>
+              <span class="price">&pound;8.50</span>
+            </article>
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-toastie.jpg" alt="A roasted vegetable toasted sandwich on a wooden board, with courgette, red pepper and melted cheddar visible between sourdough" width="1024" height="768" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Roasted vegetable toastie</strong>
+                <p class="menu-desc">Courgette, peppers and melted cheddar on toasted sourdough.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;7.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Grilled cheese and tomato</strong>
+                <p class="menu-desc">Mature cheddar and sliced tomato toasted in white bread.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;6.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Jacket potato</strong>
+                <p class="menu-desc">A baked potato with butter, served with a choice of cheese, beans or tuna mayo.</p>
+              </div>
+              <span class="price">&pound;7.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Penne with tomato and basil</strong>
+                <p class="menu-desc">Penne pasta in a slow-cooked tomato sauce with torn basil and grated parmesan.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;8.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Leek and cheese quiche</strong>
+                <p class="menu-desc">A slice of leek and cheese quiche with a small side salad.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;7.00</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Chicken and bacon baguette</strong>
+                <p class="menu-desc">Grilled chicken, streaky bacon, lettuce and tomato in a warm baguette.</p>
+              </div>
+              <span class="price">&pound;8.00</span>
+            </article>
+          </div>
+        </section>
 
-          <section class="menu-panel" id="lunch" role="tabpanel" aria-labelledby="tab-lunch" hidden>
-            <div class="section-head"><div><span class="kicker">Lunch</span><h2>Sandwiches, panini, pasta and plates</h2></div></div>
-            <div class="menu-grid">
-              <article class="menu-item"><div><strong>Sandwiches</strong><p>White or brown bread, toasted for 50p extra. Cheese, egg mayo, tuna mayo, ham, chicken mayo, sausage, bacon and combinations.</p></div><span class="price">from &pound;3.70</span></article>
-              <article class="menu-item"><div><strong>Panini</strong><p>Mozzarella, tomato, avocado, ham and cheddar, tuna melt, halloumi, bacon cheese and avocado, or chicken halloumi.</p></div><span class="price">from &pound;5.00</span></article>
-              <article class="menu-item"><div><strong>Omelettes</strong><p>Served with chips or salad. Cheese, mushroom and cheese, cheese and ham, or cheese ham and mushrooms.</p></div><span class="price">from &pound;6.70</span></article>
-              <article class="menu-item"><div><strong>Pasta Napoli <span class="badge">V</span></strong><p>Plain smooth tomato sauce served with penne pasta.</p></div><span class="price">&pound;7.20</span></article>
-              <article class="menu-item"><div><strong>Bolognese</strong><p>Homemade tomato sauce with minced beef served with penne pasta.</p></div><span class="price">&pound;9.90</span></article>
-              <article class="menu-item"><div><strong>Classic gourmet burger</strong><p>6oz beef patty with cheese and mixed salad in a brioche bun. Add chips for &pound;2.</p></div><span class="price">&pound;6.90</span></article>
-              <article class="menu-item"><div><strong>Jacket potatoes</strong><p>Served with mixed salad. Cheese, beans, mushrooms and cheese, tuna mayo, bolognese or beef goulash.</p></div><span class="price">from &pound;6.90</span></article>
-              <article class="menu-item"><div><strong>Chips and cheesy chips</strong><p>Simple cafe classics for children and grown-ups.</p></div><span class="price">from &pound;3.90</span></article>
-            </div>
-          </section>
+        <section class="menu-group" id="children">
+          <div class="menu-group-head">
+            <h2>Children's meals</h2>
+            <p>Small portions, served with a drink, in the style of a family café.</p>
+          </div>
+          <div class="menu-grid">
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-kids-meal.jpg" alt="A children's plate with pasta spirals and tomato sauce, a small sausage, vegetable sticks and a small glass of juice" width="1024" height="768" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Pasta and sausage plate</strong>
+                <p class="menu-desc">Twirl pasta with tomato sauce, a small sausage, vegetable sticks and a juice.</p>
+              </div>
+              <span class="price">&pound;6.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Fish fingers and chips</strong>
+                <p class="menu-desc">Breadcrumb fish fingers with chips and garden peas.</p>
+              </div>
+              <span class="price">&pound;6.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Chicken nuggets and dip</strong>
+                <p class="menu-desc">Breadcrumb chicken nuggets, chips and a yoghurt dip.</p>
+              </div>
+              <span class="price">&pound;5.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Mini pancakes</strong>
+                <p class="menu-desc">Two small pancakes with slices of banana and a drizzle of syrup.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;4.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Beans on toast</strong>
+                <p class="menu-desc">Sourdough toast topped with baked beans and grated cheese.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;4.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Fruit plate</strong>
+                <p class="menu-desc">Sliced melon, pear and grapes with a small pot of yoghurt.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;4.00</span>
+            </article>
+          </div>
+        </section>
 
-          <section class="menu-panel" id="polish" role="tabpanel" aria-labelledby="tab-polish" hidden>
-            <div class="section-head"><div><span class="kicker">Homemade Polish delicacies</span><h2>The dishes our regulars come back for</h2></div></div>
-            <div class="menu-grid">
-              <article class="menu-item"><div><strong>Pierogi</strong><p>Cottage cheese, potatoes and onions; sauerkraut, mushrooms and onions; or meat.</p></div><span class="price">&pound;8.50 / &pound;15.90</span></article>
-              <article class="menu-item"><div><strong>Potato pancakes</strong><p>With sour cream, mushroom sauce, pork goulash, or smoked salmon and sour cream.</p></div><span class="price">from &pound;8.50</span></article>
-              <article class="menu-item"><div><strong>Polish hot dog</strong><p>Grilled Polish sausage in a toasted baguette with fried onions, mustard or ketchup.</p></div><span class="price">&pound;7.00</span></article>
-              <article class="menu-item"><div><strong>Soups</strong><p>Beetroot, beef and vegetable, sour rye, chicken noodle, or bigos.</p></div><span class="price">from &pound;4.80</span></article>
-              <article class="menu-item"><div><strong>Beef or pork gulasz</strong><p>Served with buckwheat and root salad or pasta and root salad.</p></div><span class="price">&pound;9.90</span></article>
-              <article class="menu-item"><div><strong>Slow roast pork shoulder</strong><p>Served with mashed potato, gravy and root salad.</p></div><span class="price">&pound;13.90</span></article>
-            </div>
-          </section>
+        <section class="menu-group" id="cakes">
+          <div class="menu-group-head">
+            <h2>Cakes &amp; treats</h2>
+            <p>Sample cakes and bakes, served with any drink through the day.</p>
+          </div>
+          <div class="menu-grid">
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-cake-carrot.jpg" alt="A slice of carrot cake on a white plate with cream cheese frosting and a walnut on top" width="1024" height="1024" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Carrot cake</strong>
+                <p class="menu-desc">Spiced carrot sponge with cream cheese frosting and a walnut on top.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;4.50</span>
+            </article>
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-chocolate-cake.jpg" alt="A slice of chocolate fudge cake on a white plate with glossy ganache and a strawberry on top" width="1024" height="1024" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Chocolate fudge cake</strong>
+                <p class="menu-desc">Dark chocolate sponge layered with fudge ganache, finished with a strawberry.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;4.80</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Bakewell tart</strong>
+                <p class="menu-desc">Shortcrust pastry filled with raspberry jam and almond sponge, finished with icing.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;4.20</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Fruit scone</strong>
+                <p class="menu-desc">A warm scone with clotted cream and strawberry jam.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;3.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Chocolate flapjack</strong>
+                <p class="menu-desc">Rolled oats and chocolate baked in a tray, then cut into squares.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;3.20</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Chocolate chip cookie</strong>
+                <p class="menu-desc">A large cookie with milk chocolate chips, warm from the oven.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;3.00</span>
+            </article>
+          </div>
+        </section>
 
-          <section class="menu-panel" id="kids" role="tabpanel" aria-labelledby="tab-kids" hidden>
-            <div class="section-head"><div><span class="kicker">Kids menu</span><h2>Create your own meal</h2></div></div>
-            <div class="menu-grid">
-              <article class="menu-item"><div><strong>Build your meal</strong><p>Choose one main, one side, one veg/salad option and one drink.</p></div><span class="price">&pound;5.80</span></article>
-              <article class="menu-item"><div><strong>Mains</strong><p>Fish fingers, chicken nuggets, beef burger or sausage.</p></div><span class="price">included</span></article>
-              <article class="menu-item"><div><strong>Sides</strong><p>Smiles, chips, mash potatoes or pitta bread.</p></div><span class="price">included</span></article>
-              <article class="menu-item"><div><strong>Veg and drinks</strong><p>Beans, peas, sweetcorn or mixed salad, plus water, juice, squash, ice slush or Fruit Shoot.</p></div><span class="price">included</span></article>
-              <article class="menu-item"><div><strong>Other kids choices</strong><p>Pasta Napoli, pasta Bolognese, or hummus pitta bread salad.</p></div><span class="price">with drink</span></article>
-            </div>
-          </section>
+        <section class="menu-group" id="drinks">
+          <div class="menu-group-head">
+            <h2>Hot &amp; cold drinks</h2>
+            <p>Filter and espresso drinks made to order, plus soft drinks and juice.</p>
+          </div>
+          <div class="menu-grid">
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-coffee.jpg" alt="A flat white coffee in a ceramic cup on a saucer, with latte art on the surface" width="1024" height="1024" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Flat white</strong>
+                <p class="menu-desc">A double espresso with steamed milk and a thin layer of foam.</p>
+              </div>
+              <span class="price">&pound;3.20</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Filter coffee</strong>
+                <p class="menu-desc">A pot of filter coffee, refilled at the table.</p>
+              </div>
+              <span class="price">&pound;2.60</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>English breakfast tea</strong>
+                <p class="menu-desc">A pot of English breakfast tea, or a herbal or fruit infusion.</p>
+              </div>
+              <span class="price">&pound;2.20</span>
+            </article>
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-hot-chocolate.jpg" alt="A mug of hot chocolate topped with whipped cream, a chocolate curl and a dusting of cocoa" width="1024" height="1024" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Hot chocolate</strong>
+                <p class="menu-desc">Drinking chocolate steamed with milk, topped with whipped cream and a chocolate curl.</p>
+              </div>
+              <span class="price">&pound;3.60</span>
+            </article>
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-cold-drinks.jpg" alt="A tall glass of iced latte with a straw beside a glass of fresh orange juice" width="1024" height="1024" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Iced latte</strong>
+                <p class="menu-desc">A double espresso poured over cold milk and ice.</p>
+              </div>
+              <span class="price">&pound;3.80</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Orange juice</strong>
+                <p class="menu-desc">Freshly squeezed orange juice, served chilled.</p>
+              </div>
+              <span class="price">&pound;2.80</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Sparkling water</strong>
+                <p class="menu-desc">Bottled still or sparkling water.</p>
+              </div>
+              <span class="price">&pound;1.80</span>
+            </article>
+          </div>
+        </section>
 
-          <section class="menu-panel" id="drinks" role="tabpanel" aria-labelledby="tab-drinks" hidden>
-            <div class="section-head"><div><span class="kicker">Beverages</span><h2>Coffee, tea, hot chocolate and cold drinks</h2></div></div>
-            <img class="menu-hero menu-hero--square" src="assets/images/hot-chocolate.jpg" width="600" height="600" alt="A hot chocolate topped with whipped cream and a Flake at Oak Hill Park Cafe" loading="lazy">
-            <div class="menu-grid">
-              <article class="menu-item"><div><strong>Coffee</strong><p>Instant, filter, cappuccino, latte, espresso, double espresso, macchiato, decaf, mocha and iced coffee.</p></div><span class="price">from &pound;2.50</span></article>
-              <article class="menu-item"><div><strong>Tea</strong><p>English tea, herbal and fruit teas.</p></div><span class="price">from &pound;2.00</span></article>
-              <article class="menu-item"><div><strong>Hot chocolate</strong><p>Small hot chocolate, hot chocolate, whipped cream, marshmallows and babyccino.</p></div><span class="price">from &pound;1.50</span></article>
-              <article class="menu-item"><div><strong>Cold drinks</strong><p>Still water, sparkling water, cans, juices, Ribena, Fruit Shoots, smoothies and Lucozade.</p></div><span class="price">from &pound;1.60</span></article>
-            </div>
-          </section>
-        </div>
+        <section class="menu-group" id="specials">
+          <div class="menu-group-head">
+            <h2>Specials</h2>
+            <p>A rotating sample specials board, written for this demonstration.</p>
+          </div>
+          <div class="menu-grid">
+            <article class="menu-item menu-item--photo">
+              <div>
+                <img src="assets/images/generated/menu-soup.jpg" alt="A bowl of tomato soup with a swirl of cream, with a slice of sourdough toast beside it" width="1024" height="768" loading="lazy">
+                <span class="demo-caption">AI-generated illustration</span>
+              </div>
+              <div>
+                <strong>Soup of the day</strong>
+                <p class="menu-desc">A bowl of tomato soup with a swirl of cream and a slice of sourdough toast.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;7.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Roast dinner</strong>
+                <p class="menu-desc">Roast beef with roast potatoes, seasonal vegetables and gravy.</p>
+              </div>
+              <span class="price">&pound;12.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Fish and chips</strong>
+                <p class="menu-desc">A beer-battered fillet of fish with chips and mushy peas.</p>
+              </div>
+              <span class="price">&pound;11.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Steak and ale pie</strong>
+                <p class="menu-desc">Slow-cooked beef in ale under a suetcrust lid, served with chips.</p>
+              </div>
+              <span class="price">&pound;12.00</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Lasagne</strong>
+                <p class="menu-desc">Layers of pasta, beef and tomato sauce finished with a béchamel top.</p>
+              </div>
+              <span class="price">&pound;10.50</span>
+            </article>
+            <article class="menu-item">
+              <div>
+                <strong>Cauliflower and lentil curry</strong>
+                <p class="menu-desc">Roasted cauliflower and red lentils in a spiced coconut sauce, with basmati rice.</p>
+                <div class="menu-tags"><span class="badge">Vegetarian</span></div>
+              </div>
+              <span class="price">&pound;9.50</span>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="footer-inner"><div><h2>Oak Hill Park Cafe</h2><p>Family-run cafe, soft play and children's parties in Oak Hill Park, Barnet.</p></div><div><h3>Visit</h3><a href="https://maps.google.com/?q=Oak%20Hill%20Park%20Cafe%20Parkside%20Gardens%20Barnet%20EN4%208JP">Parkside Gardens, Barnet EN4 8JP</a><a href="tel:+442083611013">0208 361 1013</a></div><div><h3>Explore</h3><a href="menu.html">Menu</a><a href="soft-play.html">Soft Play</a><a href="parties.html">Parties</a><a href="calendar.html">Calendar</a></div><div><h3>Social</h3><a href="https://en-gb.facebook.com/OakHillParkCafe/">Facebook</a></div></div><div class="footer-legal"><span>&copy; 2026 Oak Hill Park Cafe</span><nav aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Booking Terms</a><a href="cookies.html">Cookie Policy</a><button type="button" data-cookie-settings>Cookie settings</button></nav></div></footer>
-  <nav class="mobile-actions" aria-label="Quick actions"><a href="tel:+442083611013">Call</a><a href="https://maps.google.com/?q=Oak%20Hill%20Park%20Cafe%20Parkside%20Gardens%20Barnet%20EN4%208JP">Map</a><a href="menu.html">Menu</a><a href="parties.html">Party</a></nav>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <h2>BytesFX Café &amp; Bookings</h2>
+        <p>A fictional family café, soft play area and party booking flow, built by BytesFX as a demonstration.</p>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <a href="menu.html">Menu</a>
+        <a href="soft-play.html">Soft play</a>
+        <a href="parties.html">Parties</a>
+        <a href="calendar.html">Calendar</a>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <a href="privacy.html">Privacy notice</a>
+        <a href="terms.html">Demonstration terms</a>
+        <a href="cookies.html">Cookie notice</a>
+      </div>
+      <div>
+        <h3>BytesFX</h3>
+        <a href="https://web.bytesfx.com/" rel="noopener">BytesFX website</a>
+        <a href="contact.html">Enquiries about this demo</a>
+      </div>
+    </div>
+    <div class="footer-legal"><span>&copy; 2026 BytesFX. A demonstration — the café, its menu, prices and availability are fictional.</span><nav aria-label="Legal"><a href="privacy.html">Privacy notice</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a><button type="button" data-cookie-settings>Cookie settings</button></nav></div>
+  </footer>
+
+  <nav class="mobile-actions" aria-label="Quick actions">
+    <a href="menu.html">Menu</a>
+    <a href="soft-play.html">Soft play</a>
+    <a href="parties.html">Parties</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
   <script src="assets/consent.js" defer></script>
   <script src="assets/script.js" defer></script>
 </body>

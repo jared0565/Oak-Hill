@@ -1,7 +1,7 @@
 (function () {
   const root = document.querySelector("[data-audit]");
   if (!root) return;
-  const api = (p, o) => window.OHPAdmin.api(p, o);
+  const api = (p, o) => window.BFXAdmin.api(p, o);
   function el(tag, text, cls) { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
 
   const ACTION_GROUPS = [["", "All actions"], ["auth.", "Sign-ins"], ["user.", "Users"], ["slot.", "Slots"], ["event.", "Events"], ["booking.", "Bookings"], ["enquiry.", "Messages"], ["contact.", "Contacts"], ["snippet.", "Tracking"]];
@@ -75,5 +75,5 @@
     return bar;
   }
 
-  window.OHPAudit = { render };
+  window.BFXAudit = { render };
 })();

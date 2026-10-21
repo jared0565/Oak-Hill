@@ -23,8 +23,8 @@ test("renderNewsletter: escaped paragraphs + unsubscribe link in html and text",
   const { html, text } = renderNewsletter({
     bodyText: "Line one\nstill one\n\nPara two <b>bold</b>",
     unsubUrl: "https://x/unsub?token=abc",
-    cafeName: "Oak Hill Park Cafe",
-    cafeAddress: "Barnet EN4 8JP",
+    cafeName: "BytesFX Café & Bookings",
+    cafeAddress: "A fictional café — no postal address",
   });
   // blank line → two paragraphs; single newline → <br>
   assert.equal((html.match(/<p /g) || []).length >= 2, true);
@@ -34,9 +34,9 @@ test("renderNewsletter: escaped paragraphs + unsubscribe link in html and text",
   assert.doesNotMatch(html, /<b>bold<\/b>/);
   // unsubscribe + identity present in both renderings
   assert.match(html, /https:\/\/x\/unsub\?token=abc/);
-  assert.match(html, /Barnet EN4 8JP/);
+  assert.match(html, /A fictional café — no postal address/);
   assert.match(text, /Unsubscribe: https:\/\/x\/unsub\?token=abc/);
-  assert.match(text, /Barnet EN4 8JP/);
+  assert.match(text, /A fictional café — no postal address/);
 });
 
 test("buildBatchEmail sets RFC 8058 List-Unsubscribe headers", () => {

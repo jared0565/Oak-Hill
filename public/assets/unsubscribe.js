@@ -19,13 +19,13 @@
   function paint(subscribed, emailMasked) {
     root.replaceChildren();
     if (subscribed) {
-      root.appendChild(el("p", emailMasked ? "You're currently subscribed to Oak Hill Park Cafe emails as " + emailMasked + "." : "You're currently subscribed to Oak Hill Park Cafe emails."));
+      root.appendChild(el("p", emailMasked ? "This address is subscribed to BytesFX Café & Bookings emails as " + emailMasked + "." : "This address is subscribed to BytesFX Café & Bookings emails."));
       const btn = button("Unsubscribe");
       btn.addEventListener("click", () => act(false, btn));
       root.appendChild(btn);
     } else {
-      root.appendChild(el("p", "You're unsubscribed from Oak Hill Park Cafe emails. You won't receive marketing emails from us."));
-      root.appendChild(el("p", "Changed your mind?", "booking-note"));
+      root.appendChild(el("p", "This address is not subscribed to BytesFX Café & Bookings emails."));
+      root.appendChild(el("p", "In this demonstration no marketing consent is recorded, so these buttons change nothing on the server. They show how a real preference page behaves.", "booking-note"));
       const btn = button("Re-subscribe", true);
       btn.addEventListener("click", () => act(true, btn));
       root.appendChild(btn);
@@ -54,14 +54,14 @@
   }
 
   async function init() {
-    if (!token) { message("This link is missing its code. Please use the unsubscribe link from one of our emails, or call us on 0208 361 1013."); return; }
+    if (!token) { message("This link is missing its code. Please use the unsubscribe link from one of our emails."); return; }
     try {
       const res = await fetch("/api/unsubscribe?token=" + encodeURIComponent(token));
       const d = await res.json().catch(() => ({}));
       if (!res.ok) { message(d.error || "This unsubscribe link is invalid or has expired."); return; }
       paint(!!d.subscribed, d.emailMasked);
     } catch (_) {
-      message("We couldn't load your preferences just now. Please try again, or call us on 0208 361 1013.");
+      message("We couldn't load your preferences just now. Please try again in a moment.");
     }
   }
 

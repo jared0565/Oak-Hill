@@ -5,11 +5,12 @@
 import { requirePermission, auditFromCtx } from "../_lib/auth-db.mjs";
 import { validateNewsletter, renderNewsletter, buildBatchEmail, chunk } from "../_lib/newsletter-core.mjs";
 import { maskEmail } from "../_lib/unsubscribe-core.mjs";
+import { isDemo } from "../_lib/demo.mjs";
 
-const CAFE_NAME = "Oak Hill Park Cafe";
-const CAFE_ADDRESS = "Parkside Gardens, Barnet EN4 8JP";
+const CAFE_NAME = "BytesFX Café & Bookings";
+const CAFE_ADDRESS = "A fictional café — no postal address";
 
-const configured = (env) => !!(env && env.RESEND_API_KEY && env.NEWSLETTER_FROM);
+const configured = (env) => !!(env && env.RESEND_API_KEY && env.NEWSLETTER_FROM && !isDemo(env));
 const unsubUrl = (origin, token) => origin + "/unsubscribe.html?token=" + encodeURIComponent(token);
 
 function resendPost(env, path, payload) {
@@ -64,7 +65,7 @@ export async function onRequestPost(ctx) {
 
   // TEST — one real email to the acting owner so they can check formatting + inbox placement.
   if (mode === "test") {
-    if (!configured(ctx.env)) return Response.json({ error: "Email isn't set up yet (needs RESEND_API_KEY + NEWSLETTER_FROM)." }, { status: 400 });
+    if (!configured(ctx.env)) return Response.json({ error: isDemo(ctx.env) ? "Email sending is switched off in this demonstration, so no message can be sent." : "Email isn't set up yet (needs RESEND_API_KEY + NEWSLETTER_FROM)." }, { status: 400 });
     const to = ctx.data.user.email;
     const own = await ctx.env.DB.prepare("SELECT unsub_token FROM contacts WHERE email = ?").bind(to).first();
     const token = (own && own.unsub_token) || "example-test-token";
@@ -81,7 +82,7 @@ export async function onRequestPost(ctx) {
 
   // SEND — broadcast to all opted-in contacts. Mint tokens, batch in 100s, record the campaign.
   if (mode === "send") {
-    if (!configured(ctx.env)) return Response.json({ error: "Email isn't set up yet (needs RESEND_API_KEY + NEWSLETTER_FROM)." }, { status: 400 });
+    if (!configured(ctx.env)) return Response.json({ error: isDemo(ctx.env) ? "Email sending is switched off in this demonstration, so no message can be sent." : "Email isn't set up yet (needs RESEND_API_KEY + NEWSLETTER_FROM)." }, { status: 400 });
     await mintMissingTokens(ctx.env.DB);
     const recipients = await optedInRecipients(ctx.env.DB);
     if (!recipients.length) return Response.json({ error: "No subscribers to send to." }, { status: 400 });

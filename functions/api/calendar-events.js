@@ -1,6 +1,12 @@
 // GET /api/calendar-events?from=YYYY-MM-DD&to=YYYY-MM-DD
 // Public, read-only list of events + closures overlapping [from, to].
 // Excludes `notes` (may be private). Forgiving: bad/absent range -> empty list.
+//
+// In demonstration mode this serves synthetic sample events instead of the
+// owner's calendar, so the demo shows its states without exposing real plans.
+import { isDemo } from "./_lib/demo.mjs";
+import { sampleEvents } from "./_lib/demo-store.mjs";
+
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export async function onRequestGet(ctx) {
@@ -9,6 +15,12 @@ export async function onRequestGet(ctx) {
   const to = url.searchParams.get("to");
   if (!DATE_RE.test(from || "") || !DATE_RE.test(to || "")) {
     return Response.json({ events: [] }, { headers: { "Cache-Control": "no-store" } });
+  }
+  if (isDemo(ctx.env)) {
+    return Response.json(
+      { events: sampleEvents(from, to), demo: true },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   }
   // Cap the window (~14 months) so an absurd range can't force a full-table scan.
   if (to < from || (Date.parse(to) - Date.parse(from)) > 430 * 86400000) {

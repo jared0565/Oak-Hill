@@ -4,7 +4,7 @@
 // when its block is present in the response. DOM is built with createElement — no innerHTML
 // with server data.
 (function () {
-  const api = (p, o) => window.OHPAdmin.api(p, o);
+  const api = (p, o) => window.BFXAdmin.api(p, o);
   const mount = document.querySelector("[data-overview]");
 
   function el(tag, text, cls) {
@@ -108,5 +108,5 @@
     mount.replaceChildren(frag);
   }
 
-  window.OHPOverview = { render };
+  window.BFXOverview = { render };
 })();

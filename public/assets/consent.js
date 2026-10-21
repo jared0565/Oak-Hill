@@ -1,5 +1,5 @@
 (function () {
-  var STORAGE_KEY = "ohpc-consent";
+  var STORAGE_KEY = "bytesfx-consent";
 
   window.dataLayer = window.dataLayer || [];
   function gtag() { window.dataLayer.push(arguments); }
@@ -102,13 +102,13 @@
     banner.hidden = true;
     banner.innerHTML =
       '<div class="consent-text">' +
-      '<strong>Cookies at the cafe</strong>' +
-      '<p>We use optional cookies only to count visits and improve the site. Nothing is set unless you allow it. See the <a href="cookies.html">cookie policy</a>.</p>' +
+      '<strong>Cookies on this demonstration</strong>' +
+      '<p>This site stores one choice of yours in your browser. No analytics or advertising tags run here. See the <a href="cookies.html">cookie notice</a>.</p>' +
       '</div>' +
       '<form class="consent-options" hidden>' +
       '<label><input type="checkbox" checked disabled> Strictly necessary (always on)</label>' +
-      '<label><input type="checkbox" name="analytics"> Analytics: count visits anonymously</label>' +
-      '<label><input type="checkbox" name="advertising"> Advertising: measure if our local ads work</label>' +
+      '<label><input type="checkbox" name="analytics"> Analytics: count visits anonymously (not running in this demonstration)</label>' +
+      '<label><input type="checkbox" name="advertising"> Advertising: measure if our local ads work (not running in this demonstration)</label>' +
       '</form>' +
       '<div class="consent-actions">' +
       '<button type="button" class="button" data-consent-accept>Accept all cookies</button>' +

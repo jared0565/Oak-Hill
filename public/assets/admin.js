@@ -1,5 +1,5 @@
 (function () {
-  const KEY = "ohpc-admin-token";
+  const KEY = "bfx-admin-token";
   const setupWrap = document.querySelector("[data-admin-setup]");
   const setupForm = document.querySelector("[data-admin-setup-form]");
   const setupStatus = document.querySelector("[data-admin-setup-status]");
@@ -24,17 +24,17 @@
   // The loader is resolved at call time so the per-section modules (loaded by their own
   // <script defer>) are guaranteed present.
   const SECTIONS = [
-    { id: "overview",     perm: null,           title: "Overview",      load: () => window.OHPOverview && window.OHPOverview.render() },
+    { id: "overview",     perm: null,           title: "Overview",      load: () => window.BFXOverview && window.BFXOverview.render() },
     { id: "bookings",     perm: "bookings",     title: "Bookings",      load: () => loadBookings() },
     { id: "messages",     perm: "messages",     title: "Messages",      load: () => loadEnquiries() },
-    { id: "availability", perm: "availability", title: "Availability",  load: () => window.OHPAvailability && window.OHPAvailability.render() },
-    { id: "contacts",     perm: "contacts",     title: "Contacts",      load: () => window.OHPContacts && window.OHPContacts.render() },
-    { id: "reports",      perm: "reports",      title: "Reports",       load: () => window.OHPReports && window.OHPReports.render() },
-    { id: "tracking",     perm: "tracking",     title: "Tracking code", load: () => window.OHPTracking && window.OHPTracking.render() },
-    { id: "newsletter",   perm: "newsletter",   title: "Newsletter",    load: () => window.OHPNewsletter && window.OHPNewsletter.render() },
-    { id: "users",        perm: "users",        title: "Users",         load: () => window.OHPUsers && window.OHPUsers.render() },
-    { id: "audit",        perm: "audit",        title: "Activity",      load: () => window.OHPAudit && window.OHPAudit.render() },
-    { id: "account",      perm: null,           title: "Account",       load: () => window.OHPAccount && window.OHPAccount.render() },
+    { id: "availability", perm: "availability", title: "Availability",  load: () => window.BFXAvailability && window.BFXAvailability.render() },
+    { id: "contacts",     perm: "contacts",     title: "Contacts",      load: () => window.BFXContacts && window.BFXContacts.render() },
+    { id: "reports",      perm: "reports",      title: "Reports",       load: () => window.BFXReports && window.BFXReports.render() },
+    { id: "tracking",     perm: "tracking",     title: "Tracking code", load: () => window.BFXTracking && window.BFXTracking.render() },
+    { id: "newsletter",   perm: "newsletter",   title: "Newsletter",    load: () => window.BFXNewsletter && window.BFXNewsletter.render() },
+    { id: "users",        perm: "users",        title: "Users",         load: () => window.BFXUsers && window.BFXUsers.render() },
+    { id: "audit",        perm: "audit",        title: "Activity",      load: () => window.BFXAudit && window.BFXAudit.render() },
+    { id: "account",      perm: null,           title: "Account",       load: () => window.BFXAccount && window.BFXAccount.render() },
   ];
   const SECTION_BY_ID = Object.fromEntries(SECTIONS.map((s) => [s.id, s]));
   const loaded = new Set();
@@ -114,7 +114,7 @@
     app.hidden = true; setupWrap.hidden = true; loginWrap.hidden = true; enrollWrap.hidden = false;
     document.body.classList.remove("admin-shell", "admin-drawer-open");
     const host = enrollWrap.querySelector("[data-enroll-2fa]");
-    if (window.OHPAccount && window.OHPAccount.renderEnroll) window.OHPAccount.renderEnroll(host, onEnrollComplete);
+    if (window.BFXAccount && window.BFXAccount.renderEnroll) window.BFXAccount.renderEnroll(host, onEnrollComplete);
   }
   async function onEnrollComplete() {
     // 2FA is on now → re-fetch identity so mustEnroll2fa clears, then enter the dashboard.
@@ -414,7 +414,7 @@
   // Expose the authed fetch + current user so the Owner-only modules can reuse them.
   // requireEnroll lets the Account module hand control back to the forced-2FA gate (e.g. after a
   // privileged user disables 2FA and must immediately re-enrol).
-  window.OHPAdmin = { api, user: () => currentUser, refresh, setUser, requireEnroll: showEnroll };
+  window.BFXAdmin = { api, user: () => currentUser, refresh, setUser, requireEnroll: showEnroll };
 
   // ---- init ----
   (async function init() {

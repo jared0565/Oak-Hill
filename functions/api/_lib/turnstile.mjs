@@ -1,7 +1,12 @@
 // functions/api/_lib/turnstile.mjs
 // Cloudflare Turnstile bot check. No-op unless BOTH keys are configured (graceful rollout).
+//
+// In demonstration mode the check is switched off entirely: the demo has no
+// real key, and no visitor should be asked to solve a captcha for a fiction.
+import { isDemo } from "./demo.mjs";
 
 export function turnstileEnabled(env) {
+  if (isDemo(env)) return false;
   return !!(env && env.TURNSTILE_SITE_KEY && env.TURNSTILE_SECRET);
 }
 

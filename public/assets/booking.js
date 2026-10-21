@@ -30,19 +30,19 @@
   }
 
   async function loadSlots() {
-    slotsEl.innerHTML = '<p class="booking-note">Loading open slots…</p>';
+    slotsEl.innerHTML = '<p class="booking-note">Loading sample slots…</p>';
     try {
       const res = await fetch("/api/slots", { headers: { Accept: "application/json" } });
       const data = await res.json();
       renderSlots(data.slots || []);
     } catch {
-      slotsEl.innerHTML = '<p class="booking-note">We could not load slots just now. Please call <a href="tel:+442083611013">0208 361 1013</a>.</p>';
+      slotsEl.innerHTML = '<p class="booking-note">We could not load the sample availability just now. Please try again in a moment.</p>';
     }
   }
 
   function renderSlots(slots) {
     if (!slots.length) {
-      slotsEl.innerHTML = '<p class="booking-note">No open slots are listed right now. Call <a href="tel:+442083611013">0208 361 1013</a> or send a party enquiry and we will find you a date.</p>';
+      slotsEl.innerHTML = '<p class="booking-note">No sample slots are listed right now. Send a demo enquiry and we will show you how a date is matched.</p>';
       return;
     }
     const grid = document.createElement("div");
@@ -66,7 +66,7 @@
   }
 
   function choose(slot, btn) {
-    if (window.OHPTrack) window.OHPTrack("slot_selected");
+    if (window.BFXTrack) window.BFXTrack("slot_selected");
     selected = slot;
     slotsEl.querySelectorAll(".booking-slot").forEach((x) => x.removeAttribute("aria-pressed"));
     btn.setAttribute("aria-pressed", "true");
@@ -110,17 +110,13 @@
       if (res.ok && data.ok) {
         form.hidden = true;
         const ref = document.createElement("strong");
-        ref.textContent = "Thanks — your reference is " + data.ref + ".";
+        ref.textContent = data.demo
+          ? "Demo reference " + data.ref + "."
+          : "Thanks — your reference is " + data.ref + ".";
         const p = document.createElement("p");
-        const tel = document.createElement("a");
-        tel.href = "tel:+442083611013";
-        tel.textContent = "0208 361 1013";
-        p.append(
-          "We've got your request for " + slotLabel(data.slot) +
-          ". The slot stays open until your £100 deposit is paid, which locks it in, so call ",
-          tel,
-          " soon to secure it."
-        );
+        p.textContent = data.demo
+          ? "This is a demonstration booking for " + slotLabel(data.slot) + ". No reservation has been made, no date is held and no payment is taken."
+          : "We've got your request for " + slotLabel(data.slot) + ". The slot stays open until your deposit is paid, which locks it in.";
         successEl.replaceChildren(ref, p);
         successEl.hidden = false;
         successEl.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -130,10 +126,10 @@
         await loadSlots();
         slotsEl.scrollIntoView({ behavior: "smooth", block: "center" });
       } else {
-        statusEl.textContent = data.error || "Something went wrong. Please call us on 0208 361 1013.";
+        statusEl.textContent = data.error || "Something went wrong. Please try again in a moment.";
       }
     } catch {
-      statusEl.textContent = "Network problem. Please call 0208 361 1013.";
+      statusEl.textContent = "Network problem. Please try again in a moment.";
     } finally {
       submitBtn.disabled = false;
     }

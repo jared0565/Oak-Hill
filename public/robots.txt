@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://oak.bytesfx.com/sitemap.xml
+# The origin below is the documented placeholder for the demonstration. Replace
+# it with the demo's real origin before deploying — see docs/REBRAND-HANDOVER.md.
+Sitemap: https://bytesfx-cafe.example.com/sitemap.xml

@@ -6,13 +6,20 @@
   --cream: #fff7ea;
   --paper: #fffdf8;
   --ink: #263238;
-  --muted: #66736c;
+  --muted: #5c6a63;
   --toast: #7b4a2d;
-  --sky: #78b7c5;
+  --sky: #4d8fa0;
   --line: rgba(38, 50, 56, 0.14);
   --shadow: 0 18px 45px rgba(38, 50, 56, 0.16);
   --radius: 8px;
   --max: 1180px;
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+  --sans: "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --focus: #1d4633;
+  --header-h: 117px;
+  --demo-bg: #fdf3d8;
+  --demo-ink: #4a3a12;
+  --demo-line: #d9b23f;
   color-scheme: light;
 }
 
@@ -28,9 +35,27 @@ body {
   margin: 0;
   background: var(--cream);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 16px;
-  line-height: 1.55;
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+}
+
+p,
+li {
+  max-width: 72ch;
+}
+
+figure {
+  margin: 0;
+}
+
+/* The header is sticky, so anything that anchors to a section needs to clear
+   it — otherwise the target heading disappears underneath. */
+h1,
+h2,
+h3,
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 1rem);
 }
 
 body.menu-open {
@@ -48,8 +73,18 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--sky);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* On the dark bands the dark focus ring would vanish, so invert it there. */
+.hero :focus-visible,
+.band :focus-visible,
+.page-hero :focus-visible,
+.site-footer :focus-visible,
+.topbar :focus-visible {
+  outline-color: var(--cream);
 }
 
 .skip-link {
@@ -118,28 +153,35 @@ a {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  min-width: 190px;
+  min-width: 210px;
 }
 
 .brand img {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
+  flex: none;
 }
 
-.brand strong {
+.brand-text {
   display: block;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
-  line-height: 1.05;
 }
 
-.brand span {
+.brand-name {
   display: block;
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+}
+
+.brand-tag {
+  display: block;
+  margin-top: 0.1rem;
   color: var(--muted);
-  font-size: 0.77rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
@@ -263,30 +305,9 @@ button.button {
 .hero {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(125% 120% at 80% 16%, rgba(120, 183, 197, 0.20), transparent 52%),
-    radial-gradient(135% 120% at 10% 96%, rgba(244, 185, 66, 0.14), transparent 50%),
-    linear-gradient(158deg, #235543 0%, var(--park-dark) 58%, #143526 100%);
+  background: var(--park-dark);
   color: white;
 }
-
-.hero-decor {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.hero-dot {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(9px);
-}
-
-.hero-dot--pink { width: 70px; height: 70px; top: 20%; left: 9%; background: #ff5ca8; opacity: 0.26; }
-.hero-dot--sky { width: 110px; height: 110px; bottom: 16%; left: 16%; background: var(--sky); opacity: 0.22; }
-.hero-dot--honey { width: 54px; height: 54px; top: 24%; right: 38%; background: var(--honey); opacity: 0.28; }
-.hero-dot--lime { width: 80px; height: 80px; bottom: 20%; right: 10%; background: #8bc34a; opacity: 0.22; }
 
 .hero-inner {
   position: relative;
@@ -302,26 +323,26 @@ button.button {
 }
 
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+  display: block;
   width: fit-content;
-  margin: 0 0 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  padding: 0.35rem 0.75rem;
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
+  margin: 0 0 0.9rem;
+  color: var(--honey);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+.section .eyebrow,
+.page-hero .eyebrow,
+.notice .eyebrow {
+  color: var(--tomato);
 }
 
 .hero h1,
 .page-hero h1 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(2.5rem, 4.8vw, 4.5rem);
   line-height: 1.05;
   letter-spacing: -0.01em;
@@ -343,80 +364,10 @@ button.button {
   margin-top: 1.55rem;
 }
 
-.hero-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(0.5rem, 1.2vw, 1rem);
-}
-
-.hero-badge-sign {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.hero-badge-sign::before {
-  content: "";
-  position: absolute;
-  width: 86%;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, rgba(255, 253, 240, 0.24), transparent 68%);
-  filter: blur(8px);
-}
-
-.hero-badge-sign img {
-  position: relative;
-  width: min(100%, 410px);
-  height: auto;
-  margin-top: -0.5rem;
-  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.4));
-}
-
-.hero-cert {
-  align-self: flex-end;
-  width: min(220px, 62%);
-  margin: 0;
-  padding: 9px 9px 7px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 24px 46px rgba(0, 0, 0, 0.42);
-  transform: translateX(18px) rotate(9deg);
-  text-align: center;
-}
-
-.hero-cert img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.hero-cert figcaption {
-  margin-top: 7px;
-  color: var(--park-dark);
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
 .hero-note {
   margin: 1.4rem 0 0;
   max-width: 560px;
   color: rgba(255, 255, 255, 0.92);
-}
-
-.hero-chip {
-  display: inline-block;
-  margin-right: 0.5rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  background: var(--honey);
-  color: var(--park-dark);
-  font-size: 0.96rem;
-  font-weight: 900;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -428,18 +379,10 @@ button.button {
   .hero-text > :nth-child(3) { animation-delay: 220ms; }
   .hero-text > :nth-child(4) { animation-delay: 300ms; }
   .hero-text > :nth-child(5) { animation-delay: 380ms; }
-
-  .hero-badge {
-    animation: heroBadgeIn 850ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
-  }
 }
 
 @keyframes heroRise {
   from { opacity: 0; transform: translateY(14px); }
-}
-
-@keyframes heroBadgeIn {
-  from { opacity: 0; transform: scale(0.92) translateY(8px); }
 }
 
 .quick-strip {
@@ -462,7 +405,6 @@ button.button {
 .menu-item,
 .notice,
 .form-panel,
-.quote-card,
 .info-panel {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -509,7 +451,7 @@ button.button {
 .section h2,
 .page-hero h1 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(2.1rem, 4vw, 4rem);
   line-height: 1.05;
   text-wrap: balance;
@@ -539,7 +481,6 @@ button.button {
 
 .feature-card .body,
 .price-card,
-.quote-card,
 .info-panel {
   padding: 1.25rem;
 }
@@ -551,7 +492,7 @@ button.button {
 .info-panel h2,
 .calendar-panel h2 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.7rem;
   line-height: 1.08;
 }
@@ -559,7 +500,6 @@ button.button {
 .feature-card p,
 .price-card p,
 .menu-item p,
-.quote-card p,
 .info-panel p {
   margin: 0.65rem 0 0;
   color: var(--muted);
@@ -573,11 +513,6 @@ button.button {
 .band .section-lede,
 .band p {
   color: rgba(255, 255, 255, 0.86);
-}
-
-/* Quote cards keep dark text even inside a dark band (cream card background) */
-.band .quote-card p {
-  color: var(--muted);
 }
 
 .two-col {
@@ -643,7 +578,7 @@ button.button {
 }
 
 .page-hero {
-  background: linear-gradient(135deg, var(--park-dark), var(--park));
+  background: var(--park-dark);
   color: white;
   padding: clamp(2.5rem, 5vw, 4.25rem) 0;
 }
@@ -869,24 +804,6 @@ textarea {
   font-size: 1.75rem;
 }
 
-.quote-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.quote-card {
-  border-top: 5px solid var(--sky);
-}
-
-.quote-card cite {
-  display: block;
-  margin-top: 1rem;
-  color: var(--ink);
-  font-style: normal;
-  font-weight: 900;
-}
-
 .contact-grid {
   display: grid;
   grid-template-columns: minmax(300px, 0.55fr) minmax(0, 1fr);
@@ -919,7 +836,7 @@ textarea {
 }
 
 .booking-slot strong {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.2rem;
 }
 
@@ -965,7 +882,7 @@ textarea {
 
 .booking-form h3 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.5rem;
 }
 
@@ -980,7 +897,7 @@ textarea {
 
 .booking-success strong {
   display: block;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.3rem;
   color: var(--park-dark);
 }
@@ -1000,7 +917,7 @@ textarea {
 
 .admin > h1 {
   margin: 0.3rem 0 1.5rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(2rem, 4vw, 3rem);
 }
 
@@ -1014,7 +931,7 @@ textarea {
 
 .admin-block h2 {
   margin: 0 0 0.5rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.6rem;
 }
 
@@ -1130,7 +1047,7 @@ textarea {
 .site-footer h2,
 .site-footer h3 {
   margin: 0 0 0.75rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
 }
 
 .site-footer p {
@@ -1138,6 +1055,11 @@ textarea {
 }
 
 @media (max-width: 980px) {
+  /* The top bar is hidden at this width, so the sticky header is shorter. */
+  :root {
+    --header-h: 80px;
+  }
+
   .topbar-inner {
     display: none;
   }
@@ -1183,30 +1105,19 @@ textarea {
     justify-items: start;
   }
 
-  .hero-badge {
-    align-self: start;
-    width: 100%;
-  }
-
-  .hero-badge-sign img {
-    width: min(300px, 64vw);
-  }
-
-  .hero-cert {
-    align-self: center;
-    width: min(210px, 56vw);
-  }
-
   .quick-grid,
   .feature-grid,
   .price-grid,
-  .quote-grid,
   .footer-inner {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 680px) {
+  :root {
+    --header-h: 76px;
+  }
+
   body {
     padding-bottom: 72px;
   }
@@ -1244,7 +1155,6 @@ textarea {
   .price-grid,
   .menu-grid,
   .stat-row,
-  .quote-grid,
   .footer-inner,
   .field-grid {
     grid-template-columns: 1fr;
@@ -1293,7 +1203,7 @@ textarea {
 
 .legal-content h2 {
   margin: 2.4rem 0 0.6rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.7rem;
   line-height: 1.08;
 }
@@ -1405,7 +1315,7 @@ textarea {
 }
 
 .consent-text strong {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.2rem;
 }
 
@@ -1530,7 +1440,7 @@ textarea {
 }
 .share-x:hover { background: rgba(0, 0, 0, 0.06); color: var(--ink); }
 .share-dialog h2 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 1.45rem;
   margin: 0 1.6rem 0.3rem 0;
   color: var(--ink);
@@ -1632,7 +1542,7 @@ body.share-open { overflow: hidden; }
 
 /* ---- Public calendar (calendar.html) ---- */
 .pubcal-head { display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem; }
-.pubcal-head h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.4rem; }
+.pubcal-head h3 { margin: 0; font-family: var(--serif); font-size: 1.4rem; }
 .pubcal-head .pubcal-nav { margin-left: auto; display: flex; gap: 0.4rem; }
 .pubcal-head .pubcal-nav .button { min-height: 40px; padding: 0.4rem 0.9rem; }
 .pubcal-note { color: var(--muted); }
@@ -1681,7 +1591,7 @@ body.share-open { overflow: hidden; }
 .footer-signup { border-bottom: 1px solid rgba(255,255,255,0.18); padding: 0 0 1.5rem; margin: 0 0 1.75rem; text-align: center; }
 .footer-signup-inner { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(1rem, 4vw, 3rem); }
 .footer-signup-text { max-width: 30rem; }
-.footer-signup strong { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; }
+.footer-signup strong { display: block; font-family: var(--serif); font-size: 1.15rem; }
 .footer-signup p { margin: 0.35rem 0 0; color: rgba(255,255,255,0.82); font-size: 0.9rem; }
 .footer-signup a { text-decoration: underline; margin-left: auto; margin-right: auto; }
 .footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; max-width: 480px; }
@@ -1694,3 +1604,356 @@ body.share-open { overflow: hidden; }
 .audit-bots { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; white-space: nowrap; }
 .audit-bot { opacity: 0.6; }
 .audit-bot td:nth-child(3) { font-style: italic; }
+
+/* ==========================================================================
+   BytesFX Café & Bookings — demonstration components
+   Added for the rebrand. Everything above is the original site stylesheet,
+   reworked for contrast, type scale and the removal of decorative blobs.
+   ========================================================================== */
+
+/* ---- The standing demonstration notice ---------------------------------- */
+
+.demo-banner {
+  background: var(--demo-bg);
+  border-bottom: 1px solid var(--demo-line);
+  color: var(--demo-ink);
+}
+
+.demo-banner-inner {
+  width: min(var(--max), calc(100% - 32px));
+  margin: 0 auto;
+  padding: 0.7rem 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.demo-banner strong {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.demo-banner p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* ---- Shorter, in-context notices ---------------------------------------- */
+
+.demo-note {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin: 1.1rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 4px solid var(--demo-line);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+.demo-note::before {
+  content: "Demo";
+  flex: none;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-note p {
+  margin: 0;
+  /* Inherit the note's own colour, so a note inside the dark footer is still
+     legible on its own cream background. */
+  color: inherit;
+}
+
+.demo-note.is-error {
+  border-left-color: var(--tomato);
+  background: #fdeeeb;
+  color: #7a2413;
+}
+
+.demo-note.is-success {
+  border-left-color: var(--park);
+  background: rgba(47, 107, 79, 0.09);
+  color: var(--park-dark);
+}
+
+.demo-note.is-error::before {
+  border-color: var(--tomato);
+}
+
+.demo-note.is-success::before {
+  border-color: var(--park);
+}
+
+/* A caption for an illustrative image, so a generated picture is never read
+   as a photograph of a real premises. */
+.demo-caption {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* ---- Menu --------------------------------------------------------------- */
+
+/* Sticky category navigation, so a long menu can be scanned on a phone. It
+   sits directly under the sticky header rather than under it. */
+.menu-cat-nav {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 90;
+  display: flex;
+  gap: 0.35rem;
+  margin: 0 0 1.5rem;
+  padding: 0.6rem 0;
+  overflow-x: auto;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: thin;
+}
+
+.menu-cat-nav a {
+  flex: none;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.menu-cat-nav a:hover {
+  background: rgba(47, 107, 79, 0.1);
+  border-color: rgba(47, 107, 79, 0.35);
+}
+
+.menu-group + .menu-group {
+  margin-top: 2.75rem;
+}
+
+.menu-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--park-dark);
+}
+
+.menu-group-head h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.menu-group-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* A menu row with a small photo beside it. */
+.menu-item--photo {
+  grid-template-columns: 120px minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.menu-item--photo img {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+/* The caption belongs under the whole row, not squeezed into the photo column. */
+.menu-item--photo .demo-caption {
+  grid-column: 1 / -1;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+}
+
+.menu-item .menu-desc {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.97rem;
+  line-height: 1.5;
+}
+
+.menu-item .price {
+  font-size: 1.05rem;
+}
+
+.menu-item .menu-tags {
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 560px) {
+  .menu-item--photo {
+    grid-template-columns: 88px minmax(0, 1fr);
+  }
+
+  .menu-item--photo img {
+    width: 88px;
+    height: 88px;
+  }
+
+  .menu-item--photo .price {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* ---- Forms -------------------------------------------------------------- */
+
+.form-status.is-error {
+  color: #a8321c;
+}
+
+.form-status.is-success {
+  color: var(--park-dark);
+}
+
+.form-status.is-pending {
+  color: var(--muted);
+}
+
+/* A field that has been prefilled with sample data, so the visitor can see
+   the flow without entering anything of their own. */
+.field-sample input {
+  background: #fbf6ec;
+  border-style: dashed;
+}
+
+/* The admin shell runs full-bleed, so the demo note needs its own inset. */
+body.admin-shell .section-inner.admin > .demo-note {
+  max-width: 62rem;
+  margin: 1.25rem auto;
+}
+
+/* ---- Print --------------------------------------------------------------- */
+/* Used by tools/build-menu-pdf.mjs to produce the downloadable sample menu. */
+
+/* A line that exists only on paper — the printable menu still has to say the
+   images are illustrations and the prices are samples. */
+.print-only {
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: block;
+    margin: 3mm 0 0;
+    color: #444;
+    font-size: 9pt;
+  }
+
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  body {
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  .demo-banner,
+  .site-header,
+  .site-footer,
+  .mobile-actions,
+  .menu-cat-nav,
+  .consent-banner,
+  .share-modal,
+  .skip-link,
+  .demo-note {
+    display: none !important;
+  }
+
+  .page-hero {
+    background: none;
+    color: #000;
+    padding: 0 0 8mm;
+    border-bottom: 2px solid #1d4633;
+  }
+
+  .page-hero h1,
+  .page-hero .section-lede {
+    color: #000;
+  }
+
+  .page-hero h1 {
+    font-size: 22pt;
+  }
+
+  .section {
+    padding: 6mm 0 0;
+    break-inside: avoid;
+  }
+
+  .menu-group {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .menu-group + .menu-group {
+    margin-top: 5mm;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5mm;
+  }
+
+  .menu-item {
+    grid-template-columns: 1fr auto;
+    padding: 1.5mm 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background: none;
+  }
+
+  .menu-item--photo {
+    grid-template-columns: 1fr auto;
+  }
+
+  /* Drop the photo column entirely so the name, description and price line up
+     with the rest of the menu. */
+  .menu-item--photo > :first-child {
+    display: none;
+  }
+
+  .menu-item .price {
+    font-size: 10.5pt;
+  }
+
+  .menu-group-head h2 {
+    font-size: 14pt;
+  }
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

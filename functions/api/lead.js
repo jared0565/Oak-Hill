@@ -1,7 +1,11 @@
 // POST /api/lead — newsletter signup = explicit marketing consent. Reuses upsertContact + spamReason.
+//
+// In demonstration mode the signup is validated and then dropped: no contact
+// is created, no marketing consent is recorded and no email is sent.
 import { validateLead } from "./_lib/lead-core.mjs";
 import { spamReason } from "./_lib/enquiry-core.mjs";
 import { upsertContact } from "./_lib/contacts-db.mjs";
+import { configGuard, isDemo, DEMO_MESSAGES } from "./_lib/demo.mjs";
 
 export async function onRequestPost(ctx) {
   let body;
@@ -9,6 +13,14 @@ export async function onRequestPost(ctx) {
   if (spamReason(body)) return Response.json({ ok: true });
   const v = validateLead(body);
   if (!v.ok) return Response.json({ error: v.error }, { status: 400 });
+
+  const guard = configGuard(ctx.env);
+  if (guard) return guard;
+
+  if (isDemo(ctx.env)) {
+    return Response.json({ ok: true, demo: true, message: DEMO_MESSAGES.newsletter });
+  }
+
   try {
     const cid = await upsertContact(ctx.env.DB, { email: v.value.email, name: v.value.name });
     if (cid) {

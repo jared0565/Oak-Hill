@@ -1,5 +1,5 @@
 (function () {
-  const KEY = "ohpc-admin-token";
+  const KEY = "bfx-admin-token";
   const root = document.querySelector("[data-availability]");
   if (!root) return;
 
@@ -211,5 +211,5 @@
   async function delSlot(id) { const r = await api("/api/admin/slots?id=" + id, { method: "DELETE" }); const d = await r.json().catch(() => ({})); if (r.ok) load(); else alert(d.error || "Could not delete."); }
   async function delEvent(id) { const r = await api("/api/admin/calendar-events?id=" + id, { method: "DELETE" }); const d = await r.json().catch(() => ({})); if (r.ok) load(); else alert(d.error || "Could not delete."); }
 
-  window.OHPAvailability = { render: load };
+  window.BFXAvailability = { render: load };
 })();

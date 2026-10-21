@@ -1,10 +1,10 @@
 // Account & Security — self-service profile, password and 2FA for the signed-in user.
-// IIFE in the same style as admin-users.js: uses window.OHPAdmin.api for authed fetches,
+// IIFE in the same style as admin-users.js: uses window.BFXAdmin.api for authed fetches,
 // builds all DOM with createElement (no innerHTML with server/user data), exposes render().
 (function () {
   const root = document.querySelector("[data-account]");
   if (!root) return;
-  const api = (p, o) => window.OHPAdmin.api(p, o);
+  const api = (p, o) => window.BFXAdmin.api(p, o);
   function el(tag, text, cls) { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
 
   const AVATAR_MAX = 280000; // data-URL char cap enforced server-side too
@@ -105,9 +105,9 @@
       if (!r.ok) { status.textContent = d.error || "Could not save your profile."; return; }
       status.textContent = "Saved.";
       // Keep the shell's user + top-bar avatar in sync.
-      const me = window.OHPAdmin.user() || {};
+      const me = window.BFXAdmin.user() || {};
       const next = { ...me, name: d.name != null ? d.name : body.name, avatar: d.avatar !== undefined ? d.avatar : state.avatar };
-      if (window.OHPAdmin.setUser) window.OHPAdmin.setUser(next);
+      if (window.BFXAdmin.setUser) window.BFXAdmin.setUser(next);
     });
 
     card.append(row, nameLabel, save, status);
@@ -176,7 +176,7 @@
     host.replaceChildren();
     if (enabled) {
       host.appendChild(el("p", "Two-factor is on. You'll be asked for a code from your authenticator when you sign in.", "account-2fa-on"));
-      const role = (window.OHPAdmin.user() || {}).role;
+      const role = (window.BFXAdmin.user() || {}).role;
       if (role === "owner" || role === "manager") {
         host.appendChild(el("p", "Your role requires two-factor authentication. You can disable it to switch authenticator apps, but you'll be asked to set it up again straight away.", "booking-note"));
       }
@@ -199,7 +199,7 @@
         // Owners/managers must keep 2FA: disabling (e.g. to swap authenticators) drops them into
         // the must-enrol state, so hand back to the shell's forced-enrolment gate instead of
         // painting the normal "off" state (which the API would then block them out of).
-        if (d.mustEnroll2fa && window.OHPAdmin.requireEnroll) { window.OHPAdmin.requireEnroll(); return; }
+        if (d.mustEnroll2fa && window.BFXAdmin.requireEnroll) { window.BFXAdmin.requireEnroll(); return; }
         paint2fa(host, false);
       });
       host.append(disableBtn, pwWrap, status);
@@ -314,8 +314,8 @@
 
   // Reflect 2FA state into the shell's user object so re-renders/topbar stay accurate.
   function syncTotp(on) {
-    const me = window.OHPAdmin.user();
-    if (me && window.OHPAdmin.setUser) window.OHPAdmin.setUser({ ...me, totp_enabled: on });
+    const me = window.BFXAdmin.user();
+    if (me && window.BFXAdmin.setUser) window.BFXAdmin.setUser({ ...me, totp_enabled: on });
   }
 
   async function render() {
@@ -339,5 +339,5 @@
     renderSetup(host, d.secret, d.otpauth, onComplete);
   }
 
-  window.OHPAccount = { render, renderEnroll };
+  window.BFXAccount = { render, renderEnroll };
 })();

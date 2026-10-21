@@ -1,5 +1,5 @@
 (function () {
-  const KEY = "ohpc-admin-token";
+  const KEY = "bfx-admin-token";
   const root = document.querySelector("[data-contacts]");
   if (!root) return;
 
@@ -120,5 +120,5 @@
     URL.revokeObjectURL(url);
   }
 
-  window.OHPContacts = { render };
+  window.BFXContacts = { render };
 })();

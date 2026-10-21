@@ -1,7 +1,7 @@
 (function () {
   const root = document.querySelector("[data-users]");
   if (!root) return;
-  const api = (p, o) => window.OHPAdmin.api(p, o);
+  const api = (p, o) => window.BFXAdmin.api(p, o);
   function el(tag, text, cls) { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
   const ROLES = ["owner", "manager", "staff"];
 
@@ -17,7 +17,7 @@
     ["Name", "Email", "Role", "Status", "Last login", ""].forEach((h) => head.appendChild(el("th", h)));
     table.appendChild(el("thead")).appendChild(head);
     const tbody = el("tbody");
-    const me = window.OHPAdmin.user();
+    const me = window.BFXAdmin.user();
     for (const u of users) {
       const tr = el("tr");
       const nameTd = el("td", u.name);
@@ -97,5 +97,5 @@
     if (r.ok) render(); else alert(d.error || "Could not delete.");
   }
 
-  window.OHPUsers = { render };
+  window.BFXUsers = { render };
 })();

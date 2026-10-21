@@ -1,9 +1,9 @@
 {
-  "name": "oak-hill-park-cafe",
+  "name": "bytesfx-cafe-bookings",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Oak Hill Park Cafe — Cloudflare Pages site + booking/admin platform (no build step).",
+  "description": "BytesFX Café & Bookings — a demonstration Cloudflare Pages site with a party-booking and admin platform (no build step).",
   "scripts": {
     "test": "node --test"
   },

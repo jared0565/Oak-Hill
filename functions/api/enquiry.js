@@ -1,8 +1,12 @@
 // POST /api/enquiry — save a contact/party enquiry to D1 and email the cafe (best-effort).
 // Body: { type, name, email, phone?, message?, party_date?, children?, child_age?, source?, company?, elapsed_ms? }
+//
+// In demonstration mode the enquiry is validated and then dropped: nothing is
+// written to the database, no contact is created and no email is sent.
 import { sanitizeEnquiry, validateEnquiry, spamReason } from "./_lib/enquiry-core.mjs";
 import { sendEnquiryEmail } from "./_lib/notify.mjs";
 import { upsertContact } from "./_lib/contacts-db.mjs";
+import { configGuard, isDemo, DEMO_MESSAGES } from "./_lib/demo.mjs";
 
 export async function onRequestPost(ctx) {
   let body;
@@ -23,6 +27,16 @@ export async function onRequestPost(ctx) {
     return Response.json({ error: valid.error }, { status: 400 });
   }
 
+  const guard = configGuard(ctx.env);
+  if (guard) return guard;
+
+  // ---- demonstration mode -------------------------------------------------
+  // The enquiry is validated, then discarded. No row, no contact, no email.
+  if (isDemo(ctx.env)) {
+    return Response.json({ ok: true, demo: true, message: DEMO_MESSAGES.enquiry });
+  }
+
+  // ---- live mode ----------------------------------------------------------
   let ins;
   try {
     ins = await ctx.env.DB
@@ -37,7 +51,7 @@ export async function onRequestPost(ctx) {
       .run();
   } catch (err) {
     return Response.json(
-      { error: "Could not send your message. Please call 0208 361 1013." },
+      { error: "Could not save your message. Please try again in a moment." },
       { status: 500 }
     );
   }

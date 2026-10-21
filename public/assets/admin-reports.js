@@ -1,5 +1,5 @@
 (function () {
-  const KEY = "ohpc-admin-token";
+  const KEY = "bfx-admin-token";
   const root = document.querySelector("[data-reports]");
   if (!root) return;
 
@@ -55,5 +55,5 @@
     return wrap;
   }
 
-  window.OHPReports = { render };
+  window.BFXReports = { render };
 })();

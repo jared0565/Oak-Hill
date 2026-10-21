@@ -1,7 +1,12 @@
 import { buildEmailPayload } from "./enquiry-core.mjs";
+import { isDemo } from "./demo.mjs";
 
 // Best-effort. No-op without a key/addresses. NEVER throws to the caller.
+//
+// The demo guard sits here, at the single point where an outbound email is
+// created, so no caller can reach the Resend API by accident.
 export async function sendEnquiryEmail(env, enquiry) {
+  if (isDemo(env)) return { sent: false, reason: "demo_mode" };
   if (!env?.RESEND_API_KEY) return { sent: false, reason: "no_key" };
   const payload = buildEmailPayload(enquiry, env);
   if (!payload) return { sent: false, reason: "no_address" };
