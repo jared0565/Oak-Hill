@@ -2,8 +2,14 @@
 
 ## Change boundary (operator rule, 2026-10-21)
 
-**Code changes apply to this repository only.** Do not edit another repository,
-another tool's source, or its managed files.
+**Code changes you make must apply to this repository only.** Do not edit
+another repository, another tool's source, or its managed files.
+
+This binds **you**, the agent working on Oak Hill. It does **not** restrict
+aramid or graphite: they are expected to write into this repo (hooks, agent
+hooks, MCP server, `GRAPHITE.md`, managed instruction blocks, `.mcp.json`,
+`.vscode/tasks.json`, `.githooks/`), and that is them doing their job here. The
+graphite daemon maintaining this repo's graph is likewise out of scope.
 
 If a bug or an improvement is found in the **aramid** or **graphite** tools, do
 not fix it here. File it as a channel entry in the shared `.agent-channel/`,
@@ -13,8 +19,8 @@ files by hand, and read the channel's current state first so a known defect is
 not re-reported. A defect in another tool is a report, never a patch, and
 nothing is owed back — do not wait on a reply.
 
-Record any change made outside this repository in `docs/EXTERNAL-CHANGES.md`,
-with the location, what changed, and why.
+Record any change you make outside this repository in
+`docs/EXTERNAL-CHANGES.md`, with the location, what changed, and why.
 
 ## Automatic Graphite Consult
 

@@ -5,14 +5,42 @@ Park Cafe, and the standing rule that governs them.
 
 Every entry lists: the repository or location affected, what changed, and why.
 
+**Scope note.** This log records changes this repo's **agent** made outside the
+repo. It does **not** record the tools' ordinary operation on this repo:
+aramid installing its hooks and MCP server here, graphite writing
+`GRAPHITE.md` / `.mcp.json` / `.vscode/tasks.json` / managed instruction blocks
+/ `.githooks/`, and the graphite daemon rebuilding this repo's graph are all
+**expected writes into this repository** by the tools doing their designed job.
+They are not outside-repo changes and not violations of the rule below.
+
+Two entries below (2 and 3) are machine-level *state* that aramid maintains
+about the repos it supervises — written by aramid, not by hand, and not
+editable as a "code change" in any meaningful sense. They are listed for
+completeness and audit, not because they breach the rule.
+
 ---
 
 ## Standing rule (from 2026-10-21)
 
-**Code changes must only apply to this repository.**
+**Code changes made by this repository's coding agent must only apply to this
+repository.**
 
-When a bug or an area for improvement is found in the **aramid** or
-**graphite** tools, it is **not** fixed here. It is filed as a channel entry
+The rule binds **the agent working on Oak Hill** — not the tools that operate
+on this repo. **aramid and graphite are expected to write here**: aramid
+installs its git hooks, its agent hooks and its MCP server into this repo, and
+graphite writes `GRAPHITE.md`, `.mcp.json`, `.vscode/tasks.json`, its managed
+instruction blocks and its git trampolines. Those are the tools doing their
+designed job on this repository, and they are not in scope of this rule. Nor
+is the graphite daemon, which maintains this repo's graph on its own schedule.
+
+What the rule restricts is **this agent** reaching outside the repo to make
+changes of its own: another repository, another tool's source, another tool's
+managed files, or another machine-level configuration. A tool's own
+onboarding output here is not an outside-repo change; an agent hand-editing
+the tool's source to work around a defect is.
+
+**When a bug or an area for improvement is found in the aramid or graphite
+tools, it is not fixed here by this agent.** It is filed as a channel entry
 (the shared `.agent-channel/`), addressed to the agent that owns that tool, and
 left for that tool's owner to resolve.
 
@@ -21,10 +49,10 @@ owner of that repository decides and acts; nothing is owed back, so no reply
 is awaited.
 
 **Exception, and its limit.** The channel is the single documented exception to
-repository isolation, and writing there is the *only* sanctioned way to report
-a defect in another tool. It is not a licence to edit anything else: the
-channel's own files, the tool's source, and every other repository on this
-machine are out of scope for a change.
+repository isolation, and writing there is the *only* sanctioned way for this
+agent to report a defect in another tool. It is not a licence to edit anything
+else: the channel's own files, the tool's source, and every other repository on
+this machine are out of scope for a change by this agent.
 
 ---
 
@@ -110,9 +138,10 @@ other repo it builds.
 (`…\oakhill-interop-…\order-a-graphite-first` and `order-b-aramid-first`) were
 briefly visible to it and were auto-built. The daemon logged
 `project_deactivated` for them once they were deleted. **No other repository
-was written to** — `aramid`, `graphite` and `Bytes-Web` all show zero
-tracked-file changes attributable to this session — but temporary test
-repositories should be created outside the daemon's discovery scope in future.
+was written to by this session** — `aramid` and `graphite` show 0 changed
+files, and `Bytes-Web`'s 11 changed files are all dated 12–18 Oct, before this
+session began on 21 Oct — but temporary test repositories should be created
+outside the daemon's discovery scope in future.
 
 ---
 
@@ -133,3 +162,21 @@ No `aramid` or `graphite` source file, hook shim, or config was hand-edited at
 any point. The one hook that was inspected but not written is
 `.githooks/post-commit.local` — it was produced by each tool's own installer
 during the reverse-order reinstall, never written by hand.
+
+---
+
+## Expected writes into THIS repository (not outside-repo changes)
+
+Listed so the distinction is explicit, not because they breach anything. Each
+was written by a tool's own installer or agent, in this repo:
+
+| Written into this repo | By | When |
+|---|---|---|
+| `GRAPHITE.md`, `CLAUDE.md`, `AGENTS.md` managed blocks | `graphite init` | `b94ee6b` |
+| `.mcp.json` (graphite + aramid servers) | `graphite init`, `aramid init` | `b94ee6b` |
+| `.vscode/tasks.json` | `graphite init` | `b94ee6b` |
+| `.claude/settings.json` agent hooks | `graphite init`, `aramid init` | `b94ee6b` |
+| `aramid.toml`, `ARAMID.md` | `aramid init` | `b94ee6b` |
+| `.aramid-suppressions.toml` | written by this agent | `b94ee6b` |
+| `.githooks/*` (git trampolines) | `graphite init`, `aramid init` | `b94ee6b`, and again after the reverse-order reinstall |
+| `graph-out/`, `.cache/graphite/` | graphite build + daemon | gitignored, not tracked |

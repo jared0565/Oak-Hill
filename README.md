@@ -83,6 +83,8 @@ The static front end avoids WordPress plugin attack surface by default. If deplo
 
 ## Working on this repo
 
-Changes belong to **this repository only**. If a bug or an improvement is found in the **aramid** or **graphite** tools, do not fix it here — file it as a channel entry in the shared `.agent-channel/` so the tool's owner can resolve it.
+Changes an agent makes belong to **this repository only**. If a bug or an improvement is found in the **aramid** or **graphite** tools, don't fix it here — file it as a channel entry in the shared `.agent-channel/` so the tool's owner can resolve it.
+
+(This bounds the agent, not the tools: aramid and graphite are expected to write into this repo — hooks, agent hooks, MCP server, managed instruction files — and the graphite daemon maintains this repo's graph on its own schedule.)
 
 Any change made outside this repository is recorded in [`docs/EXTERNAL-CHANGES.md`](docs/EXTERNAL-CHANGES.md), with the location, what changed, and why.
