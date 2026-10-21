@@ -1,0 +1,43 @@
+# aramid suppressions -- reviewed, reason-bearing entries for findings that are
+# NOT real issues. Each entry binds a specific finding id to a tool/rule/path.
+#
+# These 5 are all FALSE POSITIVES from gitleaks' generic-api-key rule:
+#   - 4x Cloudflare's documented always-fail Turnstile test keys
+#     (2x0000000000000000000000000000000AA) in a planning doc
+#   - 1x the RFC 6238 TOTP test vector (GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ)
+# None is a live credential, so none needs rotation.
+
+[[suppress]]
+tool = "gitleaks"
+rule = "generic-api-key"
+path = "tests/totp-core.test.mjs"
+id = "c11c6e86c9ee2be9d4fd2bf736b00963efd35c6580d819deea279379aabf9c43"
+reason = "False positive: RFC 6238 TOTP test vector (GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ), the published always-known base32 seed, not a live credential."
+
+[[suppress]]
+tool = "gitleaks"
+rule = "generic-api-key"
+path = "docs/superpowers/plans/2026-06-14-staff-roles-identity-core-plan.md"
+id = "01578010c6b136781fe670b937f3798e8caf122466da96f244dea524e1644114"
+reason = "False positive: Cloudflare's documented always-fail Turnstile test secret (2x0000000000000000000000000000000AA), not a live credential."
+
+[[suppress]]
+tool = "gitleaks"
+rule = "generic-api-key"
+path = "docs/superpowers/plans/2026-06-14-staff-roles-identity-core-plan.md"
+id = "7fb072a3860749dbf102b3be252bbebe4dce17b6fe2810057281354fa36bc507"
+reason = "False positive: Cloudflare's documented always-fail Turnstile test secret (2x0000000000000000000000000000000AA), not a live credential."
+
+[[suppress]]
+tool = "gitleaks"
+rule = "generic-api-key"
+path = "docs/superpowers/plans/2026-06-14-staff-roles-identity-core-plan.md"
+id = "670d3d15fe6ea11fa8602c906346f63bfb01cd5745f9be7a501d8c1636c8a4e2"
+reason = "False positive: Cloudflare's documented always-fail Turnstile test secret (2x0000000000000000000000000000000AA), not a live credential."
+
+[[suppress]]
+tool = "gitleaks"
+rule = "generic-api-key"
+path = "docs/superpowers/plans/2026-06-14-staff-roles-identity-core-plan.md"
+id = "05b1f12108920a658b5b54a0f6eb7559491a138bfa005a98e28d8866d1272841"
+reason = "False positive: Cloudflare's documented always-fail Turnstile test secret (2x0000000000000000000000000000000AA), not a live credential."
