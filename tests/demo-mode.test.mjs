@@ -12,7 +12,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { resolveMode, isDemo, configGuard, demoRef, DEMO_MESSAGES, DEMO_NOTICE } from "../functions/api/_lib/demo.mjs";
-import { sampleSlots, sampleEvents, listDemoSlots } from "../functions/api/_lib/demo-store.mjs";
+import { sampleSlots, sampleEvents, listDemoSlots, privateHireDate } from "../functions/api/_lib/demo-store.mjs";
 import { sendEnquiryEmail } from "../functions/api/_lib/notify.mjs";
 import { turnstileEnabled } from "../functions/api/_lib/turnstile.mjs";
 
@@ -116,18 +116,20 @@ test("the notices say what the site is", () => {
 
 // ---- the isolated demo store ------------------------------------------------
 
-test("the sample slot list is synthetic, deterministic and skips Mondays", () => {
+test("the sample slot list is synthetic, deterministic and falls on trading days only", () => {
   const now = new Date("2026-10-21T09:00:00Z");
   const a = sampleSlots(now);
   const b = sampleSlots(now);
   assert.deepEqual(a, b, "the same day must produce the same list");
   assert.ok(a.length > 0);
 
+  const hire = privateHireDate(now);
   for (const s of a) {
     assert.match(s.date, /^\d{4}-\d{2}-\d{2}$/);
     assert.ok(s.date > "2026-10-21", "slots must be in the future");
     const dow = new Date(s.date + "T00:00:00Z").getUTCDay();
-    assert.notEqual(dow, 1, "Mondays are closed in the sample list");
+    assert.ok(dow >= 1 && dow <= 5, "the sample café trades Monday to Friday");
+    assert.notEqual(s.date, hire, "the day taken for a private hire has no slots");
     assert.ok(s.start_time < s.end_time);
     assert.equal(typeof s.label, "string");
   }
@@ -136,7 +138,8 @@ test("the sample slot list is synthetic, deterministic and skips Mondays", () =>
 });
 
 test("the sample calendar shows a closure and a private hire", () => {
-  const events = sampleEvents("2026-10-01", "2026-10-31");
+  const now = new Date("2026-10-21T09:00:00Z");
+  const events = sampleEvents("2026-10-01", "2026-12-31", now);
   assert.ok(events.length > 0);
   assert.ok(events.some((e) => e.kind === "closure"));
   assert.ok(events.some((e) => e.kind === "event"));
@@ -146,6 +149,27 @@ test("the sample calendar shows a closure and a private hire", () => {
   }
   // A range that cannot be parsed yields nothing rather than throwing.
   assert.deepEqual(sampleEvents("nonsense", "also nonsense"), []);
+});
+
+test("a slot is never offered on a day the calendar calls closed", () => {
+  // The one thing the demonstration must never do is offer a booking on a day
+  // it says the café is shut.
+  const now = new Date("2026-10-21T09:00:00Z");
+  const slots = sampleSlots(now);
+  const closed = new Set(
+    sampleEvents("2026-10-01", "2026-12-31", now)
+      .filter((e) => e.kind === "closure")
+      .map((e) => e.start_date)
+  );
+  assert.ok(closed.size > 0, "the sample calendar must show closures");
+  for (const s of slots) {
+    assert.ok(!closed.has(s.date), "a slot was offered on a closed day: " + s.date);
+  }
+  // And the private-hire day is booked out: it carries an event, not a slot.
+  const hire = privateHireDate(now);
+  const hired = sampleEvents(hire, hire, now);
+  assert.ok(hired.some((e) => e.kind === "event"), "the private hire day must be marked");
+  assert.ok(!slots.some((s) => s.date === hire), "the private hire day must have no slots");
 });
 
 test("the demo store falls back to the sample list when there is no database", async () => {

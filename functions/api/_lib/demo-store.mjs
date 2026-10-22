@@ -1,31 +1,38 @@
-// functions/api/_lib/demo-store.mjs
 // The demonstration's isolated slot store.
 //
 // In demo mode the public calendar and the booking flow must work on a machine
 // that has never run a migration and must never write a reservation. This
-// module provides that: a synthetic, deterministic list of slots generated from
-// today's date, used whenever the local database has no slots of its own.
+// module provides that: a synthetic, deterministic café generated from
+// today's date.
 //
-// Nothing here touches the database. The one exception is listDemoSlots, which
-// *reads* slots the owner has added through the admin console, so the demo
-// reflects the owner's own setup when there is one.
+// One rule generates the whole café: **it trades Monday to Friday, and is
+// closed at the weekend.** Everything below follows from that single fact, so
+// the calendar, the slot picker and the party packages can never disagree:
+//
+//   - slots        : trading days only, four weeks ahead, three a day
+//   - closures     : Saturday and Sunday
+//   - private hire : one Wednesday, so a booked-out day is visible too
+//
+// The slots deliberately exclude the private-hire day. A day that is marked
+// "Private hire" must not also offer a slot, and a day that is marked "Closed"
+// must not be bookable at all — that contradiction is what the earlier
+// database-backed list produced, where the database's own Mondays were
+// offered as bookable while the calendar called every Monday closed.
+//
+// Demo mode always shows this synthetic café. Slots the owner has added
+// through the console belong to the live build, and the console is where they
+// are visible; mixing a real café's rows into a fictional café's calendar is
+// how the two came to contradict each other on screen.
 
 const LABELS = [
   "Weekday party",
-  "Weekend party",
-  "Soft play party",
   "Cake ceremony",
+  "Soft play party",
+  "Afternoon party",
 ];
 
-// A Monday in, Monday out, 9.30am to 4.30pm week; 10am to 5pm at the weekend.
-function timesFor(dayOfWeek) {
-  if (dayOfWeek === 0 || dayOfWeek === 6) {
-    return [
-      ["10:00", "12:00"],
-      ["12:30", "14:30"],
-      ["15:00", "17:00"],
-    ];
-  }
+// The café's trading day: three party slots, 9.30am to 4.30pm.
+function timesFor() {
   return [
     ["09:30", "11:30"],
     ["12:00", "14:00"],
@@ -33,18 +40,34 @@ function timesFor(dayOfWeek) {
   ];
 }
 
-// The synthetic list: the next 28 days, closed on Mondays.
+const isWeekend = (dow) => dow === 0 || dow === 6;
+const midnightUTC = (now) => Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+
+// The day taken for a private hire: the first Wednesday at least a week away.
+// Deterministic, so the same café is generated for everyone on the same day.
+export function privateHireDate(now = new Date()) {
+  const today = midnightUTC(now);
+  for (let add = 7; add <= 21; add++) {
+    const stamp = new Date(today + add * 86400000);
+    if (stamp.getUTCDay() === 3) return stamp.toISOString().slice(0, 10);
+  }
+  return null;
+}
+
+// The synthetic list: the next 28 days, on trading days only.
 export function sampleSlots(now = new Date()) {
-  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const today = midnightUTC(now);
+  const hire = privateHireDate(now);
   const slots = [];
   for (let day = 1; day <= 28; day++) {
     const stamp = new Date(today + day * 86400000);
-    const dow = stamp.getUTCDay();
-    if (dow === 1) continue;
-    for (const [start_time, end_time] of timesFor(dow)) {
+    if (isWeekend(stamp.getUTCDay())) continue;
+    const date = stamp.toISOString().slice(0, 10);
+    if (date === hire) continue; // that day is a private hire
+    for (const [start_time, end_time] of timesFor()) {
       slots.push({
         id: slots.length + 1,
-        date: stamp.toISOString().slice(0, 10),
+        date,
         start_time,
         end_time,
         label: LABELS[slots.length % LABELS.length],
@@ -55,34 +78,38 @@ export function sampleSlots(now = new Date()) {
 }
 
 // Sample calendar entries so the public calendar shows its states: a closure
-// and a booked-out event. Purely synthetic.
-export function sampleEvents(from, to) {
+// at the weekend and a booked-out day mid-week. Purely synthetic.
+//
+// `now` is the same clock the slot list uses, so the two can never disagree
+// about which day is taken for a private hire.
+export function sampleEvents(from, to, now = new Date()) {
   const start = new Date(`${from}T00:00:00Z`);
   const end = new Date(`${to}T00:00:00Z`);
   const events = [];
   if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) return events;
-
+  const hire = privateHireDate(now);
   for (let stamp = start.getTime(); stamp <= end.getTime(); stamp += 86400000) {
     const d = new Date(stamp);
+    const date = d.toISOString().slice(0, 10);
     const dow = d.getUTCDay();
-    if (dow === 1) {
+    if (isWeekend(dow)) {
       events.push({
         id: events.length + 1,
         kind: "closure",
         title: "Closed",
-        start_date: d.toISOString().slice(0, 10),
-        end_date: d.toISOString().slice(0, 10),
+        start_date: date,
+        end_date: date,
         all_day: 1,
         start_time: null,
         end_time: null,
       });
-    } else if (dow === 4) {
+    } else if (date === hire) {
       events.push({
         id: events.length + 1,
         kind: "event",
         title: "Private hire",
-        start_date: d.toISOString().slice(0, 10),
-        end_date: d.toISOString().slice(0, 10),
+        start_date: date,
+        end_date: date,
         all_day: 1,
         start_time: null,
         end_time: null,
@@ -92,24 +119,9 @@ export function sampleEvents(from, to) {
   return events;
 }
 
-// Slots for the public calendar. Prefers slots the owner has added to the
-// local database; falls back to the synthetic list when there are none, so the
-// demonstration works with no setup at all.
-export async function listDemoSlots(env) {
-  try {
-    const today = new Date().toISOString().slice(0, 10);
-    const { results } = await env.DB.prepare(
-      `SELECT id, date, start_time, end_time, label FROM slots
-       WHERE status = 'available' AND date >= ?
-         AND NOT EXISTS (
-           SELECT 1 FROM calendar_events c
-           WHERE c.kind = 'closure' AND c.start_date <= slots.date AND c.end_date >= slots.date
-         )
-       ORDER BY date, start_time`
-    ).bind(today).all();
-    if (results && results.length) return { slots: results, source: "database" };
-  } catch (e) {
-    /* No database in this environment — the sample list stands in for it. */
-  }
+// Slots for the public calendar. In demonstration mode these are always the
+// synthetic list above, so the calendar, the picker and the copy all describe
+// the same café. A live build reads the owner's own rows from the database.
+export function listDemoSlots() {
   return { slots: sampleSlots(), source: "sample" };
 }

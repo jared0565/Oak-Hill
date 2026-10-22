@@ -20,6 +20,30 @@ function clean(v, max) {
   return (v == null ? "" : String(v)).trim().slice(0, max);
 }
 
+// Checks the party size and the child's age. The visible forms constrain both,
+// but a request can skip the form entirely, so the server checks them as well.
+// A blank field means "not supplied" and is allowed. Returns a plain-English
+// message when a value is present but not acceptable, or null when both are fine.
+function partyProblem(children, childAge) {
+  const kids = (children == null ? "" : String(children)).trim();
+  if (kids) {
+    const n = Number(kids);
+    if (!Number.isInteger(n)) {
+      return "The number of children should be a whole number between 1 and 25.";
+    }
+    if (n < 1) return "There must be at least one child on a party.";
+    if (n > 25) return "There can be up to 25 children on a party.";
+  }
+  const age = (childAge == null ? "" : String(childAge)).trim();
+  if (age) {
+    const n = Number(age);
+    if (!Number.isInteger(n) || n < 1 || n > 17) {
+      return "The children's age should be between 1 and 17.";
+    }
+  }
+  return null;
+}
+
 export async function onRequestPost(ctx) {
   let body;
   try {
@@ -40,7 +64,14 @@ export async function onRequestPost(ctx) {
     return Response.json({ error: "That email address does not look right." }, { status: 400 });
   }
 
-  const children = body.children ? Math.max(0, Math.min(100, Number(body.children) || 0)) : null;
+  // The number of children and the child's age are checked here, before the
+  // demonstration and live branches, so both are held to the same rule.
+  const problem = partyProblem(body.children, body.child_age);
+  if (problem) {
+    return Response.json({ error: problem }, { status: 400 });
+  }
+
+  const children = body.children == null || String(body.children).trim() === "" ? null : Number(body.children);
   const childAge = clean(body.child_age, 40) || null;
   const notes = clean(body.notes, 1000) || null;
 

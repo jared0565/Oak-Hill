@@ -8,6 +8,30 @@ import { sendEnquiryEmail } from "./_lib/notify.mjs";
 import { upsertContact } from "./_lib/contacts-db.mjs";
 import { configGuard, isDemo, DEMO_MESSAGES } from "./_lib/demo.mjs";
 
+// Checks the party size and the child's age. The visible forms constrain both,
+// but a request can skip the form entirely, so the server checks them as well.
+// A blank field means "not supplied" and is allowed. Returns a plain-English
+// message when a value is present but not acceptable, or null when both are fine.
+function partyProblem(children, childAge) {
+  const kids = (children == null ? "" : String(children)).trim();
+  if (kids) {
+    const n = Number(kids);
+    if (!Number.isInteger(n)) {
+      return "The number of children should be a whole number between 1 and 25.";
+    }
+    if (n < 1) return "There must be at least one child on a party.";
+    if (n > 25) return "There can be up to 25 children on a party.";
+  }
+  const age = (childAge == null ? "" : String(childAge)).trim();
+  if (age) {
+    const n = Number(age);
+    if (!Number.isInteger(n) || n < 1 || n > 17) {
+      return "The children's age should be between 1 and 17.";
+    }
+  }
+  return null;
+}
+
 export async function onRequestPost(ctx) {
   let body;
   try {
@@ -25,6 +49,13 @@ export async function onRequestPost(ctx) {
   const valid = validateEnquiry(enquiry);
   if (!valid.ok) {
     return Response.json({ error: valid.error }, { status: 400 });
+  }
+
+  // The number of children and the child's age are checked here, before the
+  // demonstration and live branches, so both are held to the same rule.
+  const problem = partyProblem(body.children, body.child_age);
+  if (problem) {
+    return Response.json({ error: problem }, { status: 400 });
   }
 
   const guard = configGuard(ctx.env);
