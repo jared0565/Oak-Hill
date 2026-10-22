@@ -66,7 +66,32 @@ In demonstration mode:
 The live path is intact behind the two-setting rule, so the same code can be
 pointed at a real café.
 
-### The pages
+### The staff sign-in
+
+The foot of every public page carries a **Staff sign in** form — the way in to
+the owner dashboard, which until now had no link from the public site at all.
+
+- It posts to the site's existing `/api/auth/login` endpoint and stores the
+  session token in `sessionStorage` under `bfx-admin-token` — the same key the
+  dashboard reads. So signing in at the foot of a page and clicking **Open the
+  dashboard** lands you already authenticated. There is one session, not two.
+- It **does not re-implement the captcha or the second factor**. When either is
+  required, the form says so and points at `/admin.html`, which handles both.
+  The server-side protections are untouched: the bot gate, the five-strike
+  fifteen-minute lockout and the 2FA requirement all still apply to this
+  endpoint exactly as they did to the dashboard's own form.
+- It is injected by `public/assets/script.js`, the same way the footer
+  newsletter block is, so all ten public pages get it consistently. `admin.html`
+  has its own shell and its own login form and is unaffected.
+- Wrong credentials return the endpoint's generic message — the same one for
+  an unknown address, so the form does not reveal which accounts exist.
+- **This is the one form on the site that creates records**, so the legal
+  pages were updated to say so: a successful sign-in creates a session record,
+  writes to the activity log and records the last-signed-in time; a failed
+  attempt is logged too. See `public/privacy.html` ("The staff sign-in") and
+  the storage table in `public/cookies.html`.
+
+
 
 All twelve rewritten: `index`, `menu`, `soft-play`, `parties`, `calendar`,
 `contact`, `admin`, `privacy`, `terms`, `cookies`, `unsubscribe`, and the

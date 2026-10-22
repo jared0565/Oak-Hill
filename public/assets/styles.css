@@ -1946,6 +1946,97 @@ body.admin-shell .section-inner.admin > .demo-note {
   }
 }
 
+/* ---- Staff sign-in strip (injected at the foot of the footer) ---------- */
+
+.footer-staff {
+  margin-top: 1.75rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.footer-staff-inner {
+  width: min(var(--max), calc(100% - 32px));
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.9rem 2rem;
+}
+
+.footer-staff-text {
+  flex: 1 1 15rem;
+}
+
+.footer-staff-text strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+.footer-staff-text p {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
+  max-width: 34ch;
+}
+
+.footer-staff-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.6rem;
+  flex: 1 1 24rem;
+}
+
+.footer-staff-form label {
+  display: grid;
+  gap: 0.25rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.footer-staff-form input {
+  width: auto;
+  min-width: 12rem;
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.95rem;
+}
+
+.footer-staff-form .button {
+  min-height: 42px;
+  padding: 0.55rem 1.1rem;
+  color: #fff;
+}
+
+.footer-staff-status {
+  flex: 1 1 100%;
+  min-height: 1.2em;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+}
+
+.footer-staff-status a {
+  color: var(--honey);
+  text-decoration: underline;
+}
+
+@media (max-width: 680px) {
+  .footer-staff-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .footer-staff-form input {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 /* ---- Reduced motion ----------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {

@@ -84,9 +84,11 @@
           <thead><tr><th scope="col">Name</th><th scope="col">Provider</th><th scope="col">Purpose</th><th scope="col">Lasts</th></tr></thead>
           <tbody>
             <tr><td>bytesfx-consent</td><td>This site</td><td>Stores the cookie choices you made</td><td>Until you clear it</td></tr>
+            <tr><td>bfx-admin-token</td><td>This site</td><td>Holds your staff session so the dashboard knows you are signed in. Session storage, not a cookie, and only if you sign in.</td><td>Until you close the tab</td></tr>
             <tr><td>None</td><td>This site</td><td>No cookies are set</td><td>Not applicable</td></tr>
           </tbody>
         </table>
+        <p>Neither entry is a cookie in the technical sense: both live in the browser's storage API. The first is local storage and stays until you clear it; the second is session storage and is cleared when you close the tab. Neither is sent to any other site, and neither identifies you to anyone but this one.</p>
 
         <h2>The cookie banner</h2>
         <p>The banner at the foot of the page offers three ways to decide: accept all cookies, reject optional cookies, or choose which categories you allow. Whichever you pick is saved in your browser, as described above, and the banner then stays out of the way. If you make no choice at all, the site stores nothing and the banner will ask again next time.</p>

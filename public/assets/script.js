@@ -320,3 +320,95 @@
       .catch(function () { btn.disabled = false; status.textContent = "Network problem. Please try again."; });
   });
 })();
+
+// ---- Staff sign-in (footer) — the way in to the owner dashboard ----
+//
+// The dashboard itself is /admin.html, and it owns the full sign-in flow. This
+// is the same endpoint and the same session store, so signing in here and
+// clicking through lands you already authenticated.
+//
+// It deliberately does NOT re-implement the captcha or the second factor: when
+// either is required, the form says so and points at the full page, which
+// handles them. Nothing here weakens the server-side protections — the
+// endpoint still applies the bot gate, the lockout and the 2FA check.
+(function () {
+  var footer = document.querySelector(".site-footer");
+  if (!footer) return;
+  var legal = footer.querySelector(".footer-legal");
+  if (!legal) return;
+
+  function el(tag, text, cls) { var n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; }
+
+  var wrap = el("div", null, "footer-staff");
+  var inner = el("div", null, "footer-staff-inner");
+
+  var textCol = el("div", null, "footer-staff-text");
+  textCol.appendChild(el("strong", "Staff sign in"));
+  var lead = el("p");
+  lead.appendChild(document.createTextNode("For the owner of this demonstration. Signing in here opens the booking dashboard."));
+  textCol.appendChild(lead);
+  inner.appendChild(textCol);
+
+  var form = el("form", null, "footer-staff-form");
+  form.setAttribute("data-staff-login", "");
+
+  var emailLabel = el("label");
+  emailLabel.appendChild(el("span", "Email"));
+  var email = document.createElement("input");
+  email.type = "email"; email.name = "email"; email.required = true;
+  email.autocomplete = "username"; email.placeholder = "you@example.com";
+  emailLabel.appendChild(email);
+
+  var passLabel = el("label");
+  passLabel.appendChild(el("span", "Password"));
+  var pass = document.createElement("input");
+  pass.type = "password"; pass.name = "password"; pass.required = true;
+  pass.autocomplete = "current-password";
+  passLabel.appendChild(pass);
+
+  var btn = el("button", "Sign in", "button"); btn.type = "submit";
+  var status = el("p", null, "footer-staff-status");
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+
+  form.append(emailLabel, passLabel, btn, status);
+  inner.appendChild(form);
+  wrap.appendChild(inner);
+  footer.insertBefore(wrap, legal);
+
+  // Message plus an optional link, with a space between them.
+  function say(message, linkText) {
+    status.textContent = message + (linkText ? " " : "");
+    if (!linkText) return;
+    var link = el("a", linkText);
+    link.href = "admin.html";
+    status.appendChild(link);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    status.textContent = "Checking…";
+    fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.value, password: pass.value })
+    }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (res.ok && res.d.token) {
+          // Same session store the dashboard reads, so the next click lands authenticated.
+          sessionStorage.setItem("bfx-admin-token", res.d.token);
+          pass.value = "";
+          say("Signed in" + (res.d.user && res.d.user.name ? " as " + res.d.user.name : "") + ".", "Open the dashboard");
+        } else if (res.d.twofa) {
+          // The second factor is handled on the dedicated page, not here.
+          say(res.d.error || "Two-factor authentication is required.", "Finish signing in on the full page");
+          btn.disabled = false;
+        } else {
+          say(res.d.error || "Sign-in failed.", "Sign in on the full page instead");
+          btn.disabled = false;
+        }
+      })
+      .catch(function () { btn.disabled = false; status.textContent = "Network problem. Please try again."; });
+  });
+})();
