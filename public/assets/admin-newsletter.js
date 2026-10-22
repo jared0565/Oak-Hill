@@ -97,7 +97,7 @@
 
   function recipientLine(n) {
     if (!n) return "No subscribers have opted in yet.";
-    return n + " subscriber" + (n === 1 ? "" : "s") + " opted in to cafe news will receive this.";
+    return n + " subscriber" + (n === 1 ? "" : "s") + " opted in to BytesFX Café news will receive this.";
   }
 
   window.BFXNewsletter = { render };

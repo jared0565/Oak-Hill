@@ -43,13 +43,13 @@ export function renderNewsletter({ bodyText, unsubUrl, cafeName, cafeAddress }) 
     '<hr style="border:none;border-top:1px solid #d8d8d8;margin:28px 0 16px">' +
     '<p style="font-size:12px;color:#6b6b6b;margin:0">' +
     escapeHtml(name) + (addr ? " &middot; " + escapeHtml(addr) : "") + "<br>" +
-    'You\'re receiving this because you signed up for cafe news. ' +
+    'You\'re receiving this because you signed up for café news. ' +
     '<a href="' + escapeHtml(unsubUrl) + '" style="color:#1d4633">Unsubscribe</a>.' +
     "</p></div>";
   const text =
     String(bodyText || "").trim() +
     "\n\n—\n" + name + (addr ? "\n" + addr : "") +
-    "\nYou're receiving this because you signed up for cafe news." +
+    "\nYou're receiving this because you signed up for café news." +
     "\nUnsubscribe: " + unsubUrl;
   return { html, text };
 }
