@@ -1,0 +1,56 @@
+# Cloudflare Pages redirects — one live URL per page.
+#
+# Why this file exists. Cloudflare Pages serves an HTML page at its
+# extension-less path (/menu serves menu.html) and then 308-redirects the
+# .html path back to it. So every page had two live URLs, while the page's
+# own <link rel="canonical"> and its sitemap.xml entry named the .html one
+# — the declared canonical URL was itself a redirect.
+#
+# These rules settle it the way the site already declares. Two rules per
+# page are needed:
+#
+#   * the .html path is served directly with a 200, so the canonical URL,
+#     the sitemap entry and every internal link resolve with no redirect
+#     hop;
+#   * the extension-less path 301s to the .html path, so the duplicate URL
+#     is retired permanently instead of being served a second time.
+#
+# A 301 on its own would not do: Pages' built-in .html -> extension-less
+# redirect would send the visitor straight back, and the two would loop.
+#
+# "/" is the home page and is left serving index.html — Pages does not apply
+# a redirect rule to "/", so /index is retired to the .html form and
+# /index.html is served directly. "/admin" is left alone: the staff console
+# is not part of the public set and has no public twin.
+
+/index              /index.html  301
+/index.html         /            200
+
+/menu               /menu.html   301
+/menu.html          /menu        200
+
+/soft-play          /soft-play.html  301
+/soft-play.html     /soft-play   200
+
+/parties            /parties.html  301
+/parties.html       /parties     200
+
+/calendar           /calendar.html  301
+/calendar.html      /calendar    200
+
+/contact            /contact.html  301
+/contact.html       /contact     200
+
+/privacy            /privacy.html  301
+/privacy.html       /privacy     200
+
+/terms              /terms.html  301
+/terms.html         /terms       200
+
+/cookies            /cookies.html  301
+/cookies.html       /cookies     200
+
+/unsubscribe        /unsubscribe.html  301
+/unsubscribe.html   /unsubscribe  200
+
+/404.html           /404         200
