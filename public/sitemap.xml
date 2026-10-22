@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  The origin below is the documented placeholder for the demonstration. Replace
-  it with the demo's real origin before deploying — see docs/REBRAND-HANDOVER.md.
+  The origin below is the URL this deployment actually serves. If a custom
+  domain is attached to the Pages project, replace it with that instead — and
+  update the canonical in every page at the same time.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bytesfx-cafe.example.com/index.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/menu.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/menu.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/soft-play.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/soft-play.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/parties.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/parties.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/calendar.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/calendar.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/contact.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/contact.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/privacy.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/privacy.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/terms.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/terms.html</loc>
   </url>
   <url>
-    <loc>https://bytesfx-cafe.example.com/cookies.html</loc>
+    <loc>https://oak-hill-park-cafe.pages.dev/cookies.html</loc>
   </url>
 </urlset>

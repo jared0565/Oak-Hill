@@ -18,13 +18,14 @@
 # A 301 on its own would not do: Pages' built-in .html -> extension-less
 # redirect would send the visitor straight back, and the two would loop.
 #
-# "/" is the home page and is left serving index.html — Pages does not apply
-# a redirect rule to "/", so /index is retired to the .html form and
-# /index.html is served directly. "/admin" is left alone: the staff console
-# is not part of the public set and has no public twin.
+# "/" is the home page. Pages does not apply a redirect rule to "/" itself,
+# so the root is the one live URL for the home page and every other spelling
+# of it is retired to it: /index and /index.html both 301 to the root, which
+# is the URL the home page's canonical tag names. "/admin" is left alone:
+# the staff console is not part of the public set and has no public twin.
 
-/index              /index.html  301
-/index.html         /            200
+/index              /            301
+/index.html         /            301
 
 /menu               /menu.html   301
 /menu.html          /menu        200

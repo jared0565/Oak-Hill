@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 
-# The origin below is the documented placeholder for the demonstration. Replace
-# it with the demo's real origin before deploying — see docs/REBRAND-HANDOVER.md.
-Sitemap: https://bytesfx-cafe.example.com/sitemap.xml
+# The origin below is the URL this deployment actually serves. If a custom
+# domain is attached to the Pages project, replace it with that instead — and
+# update the canonical in every page at the same time.
+Sitemap: https://oak-hill-park-cafe.pages.dev/sitemap.xml

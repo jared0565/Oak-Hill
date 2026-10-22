@@ -282,16 +282,23 @@ the original `admin.html`**, not introduced by the rebrand:
 
 ## 8. Limitations, and the decisions a real café would still have to make
 
-1. **The origin is a placeholder.** `https://bytesfx-cafe.example.com` appears
-   in every canonical URL, `og:` tag, sitemap entry and the robots file.
-   `example.com` is reserved by the IETF, so it cannot point at a real
-   business by accident — but it must be replaced before deployment. One
-   search-and-replace across `public/`.
+1. **The origin is the Pages URL, not a domain of the café's own.** Every
+   canonical URL, `og:` tag, sitemap entry and the robots file name
+   `https://oak-hill-park-cafe.pages.dev`, because that is the URL the
+   deployment actually serves: the Pages project has **no custom domain
+   attached**, and the previous canonical, `oak.bytesfx.com`, does not
+   resolve. A canonical must name a URL that serves the page, so a name
+   pointing at a host that does not exist would be worse than the project
+   URL. **Attaching a domain is the owner's call** — it is one click in
+   Cloudflare and one search-and-replace here, and it would carry the old
+   project name out of the site's public URLs.
 2. **The Cloudflare environment still holds the old email settings.**
-   `RESEND_API_KEY`, `ENQUIRY_FROM` and `ENQUIRY_NOTIFY_TO` are set from the
-   previous deployment and point at the old business's sender domain and inbox.
-   **No external service was modified.** The demonstration code cannot reach
-   them, but they should be cleared.
+   `RESEND_API_KEY` is set from the previous deployment and points at the old
+   business's sender domain; `ENQUIRY_FROM` and `ENQUIRY_NOTIFY_TO` are not
+   configured, so no message can be sent even if the key were used.
+   **No external service was modified.** The demonstration runs with
+   `DEMO_MODE=true`, so the code cannot reach them, but the key should still
+   be cleared.
 3. **The Pages project and the D1 database still carry the old names.**
    `oak-hill-park-cafe` and `oak-hill-bookings` name live cloud resources.
    Renaming them would orphan the deployment and the database, so they were
@@ -315,29 +322,45 @@ the original `admin.html`**, not introduced by the rebrand:
    it will write to whatever database it is pointed at. In the demonstration
    it should be pointed at a local D1, not the production one.
 
-## 9. Future deployment — not done here
+## 9. Deployment
 
-Nothing has been pushed, merged, deployed, or changed outside this repository.
-No DNS was touched, no paid resource was provisioned, and **Bytes-Web was not
-modified**.
+**No DNS was touched, no paid resource was provisioned, and Bytes-Web was not
+modified.** The Pages project still has no custom domain, so the site is
+served at `https://oak-hill-park-cafe.pages.dev`.
 
-When the owner is ready:
+The deployment is a merge into `master`, which triggers the existing deploy
+workflow: the unit tests run first, then the D1 migrations are applied to the
+remote database, then the Pages project is rebuilt. **`feature/bytesfx-rebrand`
+is the branch to merge**, and it is a fast-forward — `master` is an ancestor
+of it.
 
-1. Replace the placeholder origin across `public/`.
-2. Clear the old email environment variables, or point them at a verified
-   sender.
-3. Decide whether the Pages project and the D1 database are renamed. If so,
-   do it in Cloudflare first, then in `wrangler.jsonc`, then in
+What is already done:
+
+1. **The origin is set** — `https://oak-hill-park-cafe.pages.dev`, the URL the
+   deployment actually serves. See limitation 1 above.
+2. **The public site has one live URL per page.** `public/_redirects` serves
+   each page at its `.html` path — the URL its canonical tag and its sitemap
+   entry name — and retires the extension-less twin with a 301. The home page
+   is the root, and `/index` and `/index.html` both 301 to it.
+
+What is still the owner's:
+
+3. **The old email key is still in the environment.** `RESEND_API_KEY` remains
+   set from the previous deployment. It cannot be used — the site runs with
+   `DEMO_MODE=true` and no sender or recipient address is configured — but it
+   should still be cleared.
+4. **The Pages project and the D1 database still carry the old names.** They
+   name live cloud resources, so they were left alone. Renaming them is the
+   owner's decision: Cloudflare first, then `wrangler.jsonc`, then
    `.github/workflows/deploy.yml`.
-4. Run the tests (`npm test`) and open the site on a real deploy.
-5. Merge `feature/bytesfx-rebrand` into `master`, which triggers the existing
-   deploy workflow. **Note that the workflow applies the D1 migrations to the
-   remote database** — that is unchanged behaviour, and it is worth confirming
-   it is still wanted before the first merge of this branch.
-6. Only then consider whether a live version is wanted at all, and what would
-   have to change to make it real: the prices, the opening hours, the address,
-   the food-hygiene position, the allergen process, the deposit and consumer
-   contract, and the legal pages.
+5. **The demonstration is the default.** `DEMO_MODE=true`, so a booking
+   creates no reservation, an enquiry sends no message, and the public
+   calendar shows the synthetic sample café. Turning live behaviour on
+   needs two settings, `DEMO_MODE=false` and `LIVE_MODE_ACK=true`.
+
+What a real, non-demonstration café would still need: the prices, the opening
+hours, the address, the food-hygiene position, the allergen process, the
+deposit and consumer contract, and legal review of the legal pages.
 
 ## 10. Proposed commit message
 
