@@ -85,16 +85,16 @@
         </div>
         <div class="price-grid">
           <article class="price-card">
-            <span class="kicker">Monday to Thursday</span>
+            <span class="kicker">Monday to Friday</span>
             <h3>Sample weekday party</h3>
             <p class="price">&pound;165</p>
             <p>For 10 children. Each extra child is &pound;7.</p>
           </article>
           <article class="price-card featured">
-            <span class="kicker">Friday to Sunday and holidays</span>
+            <span class="kicker">Saturday, Sunday and holidays</span>
             <h3>Sample weekend party</h3>
             <p class="price">&pound;175</p>
-            <p>For 10 children. Each extra child is &pound;8.</p>
+            <p>For 10 children. Each extra child is &pound;8. The café is closed at the weekend, so a weekend party hires the whole space.</p>
           </article>
           <article class="price-card">
             <span class="kicker">Sample capacity</span>
@@ -103,7 +103,7 @@
             <p>Up to 25 children, with two hours of exclusive use in the sample layout.</p>
           </article>
         </div>
-        <div class="demo-note"><p>Sample menu and prices.</p></div>
+        <div class="demo-note"><p>Sample packages and prices.</p></div>
       </div>
     </section>
 
@@ -121,7 +121,10 @@
           </ul>
         </div>
         <div class="image-stack">
-          <img src="assets/images/generated/party-setup.jpg" width="1024" height="683" alt="A party table set up with bunting, paper plates, cups and gift bags, with nobody at the table" loading="lazy">
+          <picture>
+            <source type="image/webp" srcset="assets/images/generated/party-setup-512.webp 512w, assets/images/generated/party-setup-1024.webp 1024w" sizes="(max-width: 680px) calc(100vw - 32px), 487px">
+            <img src="assets/images/generated/party-setup.jpg" srcset="assets/images/generated/party-setup.jpg 1024w" sizes="(max-width: 680px) calc(100vw - 32px), 487px" width="1024" height="683" alt="A party table set up with bunting, paper plates, cups and gift bags, with nobody at the table" loading="lazy" decoding="async">
+          </picture>
           <p class="demo-caption">AI-generated illustration</p>
         </div>
       </div>
@@ -135,11 +138,17 @@
         </div>
         <div class="party-gallery">
           <figure>
-            <img src="assets/images/generated/party-cake.jpg" width="1024" height="1024" alt="A round birthday cake with plain buttercream and unlit candles on a wooden stand, with confetti scattered around it" loading="lazy">
+            <picture>
+              <source type="image/webp" srcset="assets/images/generated/party-cake-512.webp 512w, assets/images/generated/party-cake-1024.webp 1024w" sizes="(max-width: 680px) calc(100vw - 32px), (max-width: 980px) 45vw, 582px">
+              <img src="assets/images/generated/party-cake.jpg" srcset="assets/images/generated/party-cake.jpg 1024w" sizes="(max-width: 680px) calc(100vw - 32px), (max-width: 980px) 45vw, 582px" width="1024" height="1024" alt="A round birthday cake with plain buttercream and unlit candles on a wooden stand, with confetti scattered around it" loading="lazy" decoding="async">
+            </picture>
             <figcaption class="demo-caption">AI-generated illustration</figcaption>
           </figure>
           <figure>
-            <img src="assets/images/generated/party-table-detail.jpg" width="1024" height="1024" alt="A party table top with paper plates, cups, paper hats and small bowls of snacks under pastel bunting" loading="lazy">
+            <picture>
+              <source type="image/webp" srcset="assets/images/generated/party-table-detail-512.webp 512w, assets/images/generated/party-table-detail-1024.webp 1024w" sizes="(max-width: 680px) calc(100vw - 32px), (max-width: 980px) 45vw, 582px">
+              <img src="assets/images/generated/party-table-detail.jpg" srcset="assets/images/generated/party-table-detail.jpg 1024w" sizes="(max-width: 680px) calc(100vw - 32px), (max-width: 980px) 45vw, 582px" width="1024" height="1024" alt="A party table top with paper plates, cups, paper hats and small bowls of snacks under pastel bunting" loading="lazy" decoding="async">
+            </picture>
             <figcaption class="demo-caption">AI-generated illustration</figcaption>
           </figure>
         </div>
@@ -179,15 +188,15 @@
           <p class="section-lede">Work out an estimate using the sample package prices above. The figures are illustrative.</p>
           <label>Party day
             <select name="party-day">
-              <option value="weekday">Monday to Thursday</option>
-              <option value="weekend">Friday to Sunday, half-term or public holiday</option>
+              <option value="weekday">Monday to Friday</option>
+              <option value="weekend">Saturday, Sunday or a public holiday</option>
             </select>
           </label>
           <label>Number of children
             <input name="party-guests" type="number" min="10" max="25" value="10">
           </label>
           <div class="calculator-output" data-party-output aria-live="polite"></div>
-          <div class="demo-note"><p>Sample menu and prices.</p></div>
+          <div class="demo-note"><p>Sample prices.</p></div>
         </aside>
 
         <form class="form-panel" data-static-form data-enquiry-type="party">
@@ -264,6 +273,7 @@
     <a href="menu.html">Menu</a>
     <a href="soft-play.html">Soft play</a>
     <a href="parties.html">Parties</a>
+    <a href="calendar.html">Book</a>
     <a href="contact.html">Contact</a>
   </nav>
   <script src="assets/consent.js" defer></script>

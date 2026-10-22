@@ -87,7 +87,10 @@
           <p>For questions about the demonstration itself, the <a href="https://web.bytesfx.com/" rel="noopener">BytesFX website</a> is the place to start.</p>
         </div>
         <figure>
-          <img src="assets/images/generated/cafe-courtyard.jpg" width="1024" height="683" alt="Outdoor seating under a plain canopy, with small round tables, wooden chairs and two olive trees in pots" loading="lazy">
+          <picture>
+            <source type="image/webp" srcset="assets/images/generated/cafe-courtyard-512.webp 512w, assets/images/generated/cafe-courtyard-1024.webp 1024w" sizes="(max-width: 680px) calc(100vw - 32px), 487px">
+            <img src="assets/images/generated/cafe-courtyard.jpg" srcset="assets/images/generated/cafe-courtyard.jpg 1024w" sizes="(max-width: 680px) calc(100vw - 32px), 487px" width="1024" height="683" alt="Outdoor seating under a plain canopy, with small round tables, wooden chairs and two olive trees in pots" loading="lazy" decoding="async">
+          </picture>
           <figcaption class="demo-caption">AI-generated illustration</figcaption>
         </figure>
       </div>
@@ -106,7 +109,7 @@
             <label>Company <input name="company" tabindex="-1" autocomplete="off"></label>
           </div>
           <span class="kicker">General enquiry</span>
-          <h2>Send a message</h2>
+          <h3>Send a message</h3>
           <div class="field-grid">
             <label class="field-sample">Your name <input name="name" value="Alex Sample" autocomplete="name" required></label>
             <label class="field-sample">Telephone <input name="phone" type="tel" value="020 0000 0000" autocomplete="tel"></label>
@@ -120,8 +123,6 @@
       </div>
     </section>
   </main>
-
-  <div class="demo-note"><p>Demo signup — no email will be sent.</p></div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -155,6 +156,7 @@
     <a href="menu.html">Menu</a>
     <a href="soft-play.html">Soft play</a>
     <a href="parties.html">Parties</a>
+    <a href="calendar.html">Book</a>
     <a href="contact.html">Contact</a>
   </nav>
   <script src="assets/consent.js" defer></script>

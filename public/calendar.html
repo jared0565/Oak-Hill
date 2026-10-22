@@ -84,13 +84,14 @@
         </div>
 
         <div class="booking" data-booking>
+          <p class="booking-note" data-booking-summary></p>
           <div class="booking-slots" data-booking-slots aria-live="polite">
             <p class="booking-note">Loading sample slots&hellip;</p>
           </div>
 
           <form class="booking-form form-panel" data-booking-form hidden>
             <span class="kicker">Your details</span>
-            <h3 data-booking-chosen>Hold this slot</h3>
+            <h3 data-booking-chosen>Your chosen slot</h3>
             <div class="field-grid">
               <label class="field-sample">Your name <input name="name" value="Alex Sample" autocomplete="name" required></label>
               <label class="field-sample">Telephone <input name="phone" type="tel" value="020 0000 0000" autocomplete="tel" required></label>
@@ -100,14 +101,14 @@
             </div>
             <label>Notes <textarea name="notes" rows="3" placeholder="Preferred food, anything we should know"></textarea></label>
             <div class="cluster">
-              <button class="button" type="submit" data-booking-submit>Hold this slot</button>
+              <button class="button" type="submit" data-booking-submit>Request this slot</button>
               <button class="button ghost" type="button" data-booking-cancel>Choose a different slot</button>
             </div>
             <p class="form-status" data-booking-status aria-live="polite"></p>
             <p class="form-note">This submission goes nowhere: no reservation is made, nothing is stored and no confirmation is sent. A live build would hold the slot and take a deposit — see the <a href="privacy.html">privacy notice</a> and the <a href="terms.html">demonstration terms</a>.</p>
           </form>
 
-          <div class="booking-success" data-booking-success hidden></div>
+          <div class="booking-success" data-booking-success hidden tabindex="-1"></div>
         </div>
 
         <div class="demo-note"><p>Demo booking — no reservation will be made.</p></div>
@@ -143,7 +144,7 @@
             <div class="body">
               <span class="kicker">Availability</span>
               <h3>Sample dates, generated daily</h3>
-              <p>Four weeks of slots are generated from today's date, with Mondays closed and a sample private hire on Thursdays. Nothing is read from a booking system, because there is not one behind this page.</p>
+              <p>Sample availability is generated from today's date. <span data-availability-summary>Loading the sample availability&hellip;</span> Nothing is read from a booking system, because there is not one behind this page.</p>
             </div>
           </article>
           <article class="feature-card">
@@ -199,6 +200,7 @@
     <a href="menu.html">Menu</a>
     <a href="soft-play.html">Soft play</a>
     <a href="parties.html">Parties</a>
+    <a href="calendar.html">Book</a>
     <a href="contact.html">Contact</a>
   </nav>
   <script src="assets/consent.js" defer></script>

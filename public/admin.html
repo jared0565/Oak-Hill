@@ -20,7 +20,12 @@
   <main id="main" class="section">
     <div class="section-inner admin">
       <span class="kicker">Staff only</span>
-      <h1>Booking admin</h1>
+      <!-- The app shell's "Overview" is the page's one real h1. This heading is the
+           logged-out view's level-1 heading without adding a second h1 to the DOM:
+           role="heading" + aria-level="1" still exposes it as a level-1 heading.
+           admin.css hides it in the signed-in shell, so exactly one level-1
+           heading is exposed in either state. -->
+      <p class="admin-view-title" role="heading" aria-level="1">Booking admin</p>
 
       <div class="demo-note">
         <p>This console is still fully authenticated — sign-in, two-factor authentication and staff permissions all work as designed. In demonstration mode the public booking form creates no reservation, and the public availability list shows sample availability rather than a real diary.</p>
@@ -140,65 +145,66 @@
           </header>
 
           <main class="admin-content" data-admin-content>
-            <section class="admin-panel" data-panel="overview" id="panel-overview" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="overview" id="overview" tabindex="-1" hidden>
               <h2>Overview</h2>
               <div data-overview><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="bookings" id="panel-bookings" data-perm="bookings" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="bookings" id="bookings" data-perm="bookings" tabindex="-1" hidden>
               <h2>Bookings</h2>
               <div class="admin-table-wrap" data-admin-bookings><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="messages" id="panel-messages" data-perm="messages" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="messages" id="messages" data-perm="messages" tabindex="-1" hidden>
               <h2>Messages</h2>
               <p class="section-lede">Contact and party enquiries submitted through the website.</p>
               <div class="admin-table-wrap" data-admin-enquiries><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="availability" id="panel-availability" data-perm="availability" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="availability" id="availability" data-perm="availability" tabindex="-1" hidden>
               <h2>Availability</h2>
               <p class="section-lede">Manage party slots, events and closures. A closure stops that day's slots being bookable on the website.</p>
+              <p class="section-lede">The public calendar always shows the fictional café's synthetic sample availability, so it never shows the slot rows listed here.</p>
               <div data-availability><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="contacts" id="panel-contacts" data-perm="contacts" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="contacts" id="contacts" data-perm="contacts" tabindex="-1" hidden>
               <h2>Contacts</h2>
               <p class="section-lede">One record per person, from bookings and enquiries. Search, tag, add notes, export, or erase someone's details on request.</p>
               <div data-contacts><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="reports" id="panel-reports" data-perm="reports" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="reports" id="reports" data-perm="reports" tabindex="-1" hidden>
               <h2>Reports</h2>
               <p class="section-lede">Visits and traffic are counted anonymously with no cookies. Booking and enquiry numbers come from your live data.</p>
               <div data-reports><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="tracking" id="panel-tracking" data-perm="tracking" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="tracking" id="tracking" data-perm="tracking" tabindex="-1" hidden>
               <h2>Tracking code</h2>
               <p class="section-lede">Paste tracking snippets (Google tag, Meta Pixel, etc.) to run on the public site. <strong>Analytics</strong> and <strong>Advertising</strong> tags run only after the visitor consents. Only known ad/analytics providers are allowed by the site's security policy; tags using <code>document.write</code> may not work when added this way.</p>
               <div data-tracking><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="newsletter" id="panel-newsletter" data-perm="newsletter" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="newsletter" id="newsletter" data-perm="newsletter" tabindex="-1" hidden>
               <h2>Newsletter</h2>
               <p class="section-lede">Write a message and send it to everyone who opted in to BytesFX Café news. In this demonstration, sending is switched off: no marketing consent is recorded, so there is no mailing list and nothing can be sent. The composer still works, so you can see how a real broadcast behaves.</p>
               <div data-newsletter><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="users" id="panel-users" data-perm="users" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="users" id="users" data-perm="users" tabindex="-1" hidden>
               <h2>Users</h2>
               <p class="section-lede">Staff accounts and roles. Owners can add people, change roles, reset passwords, disable or remove accounts.</p>
               <div data-users><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="audit" id="panel-audit" data-perm="audit" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="audit" id="audit" data-perm="audit" tabindex="-1" hidden>
               <h2>Activity</h2>
               <p class="section-lede">Sign-ins and changes, newest first — who did what, when, and from where. Bot attempts are hidden unless you tick the box.</p>
               <div data-audit><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
-            <section class="admin-panel" data-panel="account" id="panel-account" tabindex="-1" hidden>
+            <section class="admin-panel" data-panel="account" id="account" tabindex="-1" hidden>
               <h2>Account</h2>
               <div data-account><p class="booking-note">Loading&hellip;</p></div>
             </section>
