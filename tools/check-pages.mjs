@@ -65,8 +65,8 @@ const AUDIT = () => {
     overflow,
     deadAnchors: anchors,
     unlabelled: labels,
-    demoBanner: !!document.querySelector(".demo-banner"),
-    demoNotes: document.querySelectorAll(".demo-note").length,
+    demoBadge: document.querySelectorAll(".demo-badge").length,
+    demoNotes: document.querySelectorAll(".notice-box").length,
     captions: document.querySelectorAll(".demo-caption").length,
     title: document.title,
     canonical: document.querySelector("link[rel=canonical]")?.href || null,
@@ -124,6 +124,8 @@ for (const vp of VIEWPORTS) {
     if (a.noAlt.length) issues.push(`no alt: ${a.noAlt.join(", ")}`);
     if (a.noDims.length) issues.push(`no dims: ${a.noDims.join(", ")}`);
     if (a.h1 !== 1) issues.push(`h1 count ${a.h1}`);
+    // Every visitor-facing page carries the badge that says what the site is.
+    if (a.demoBadge !== 1) issues.push(`demo badge count ${a.demoBadge}`);
     if (a.jumps.length) issues.push(`heading jumps ${a.jumps.join(",")}`);
     if (a.overflow) issues.push(`h-overflow ${a.overflow}`);
     if (a.deadAnchors.length) issues.push(`dead anchors ${a.deadAnchors.join(",")}`);

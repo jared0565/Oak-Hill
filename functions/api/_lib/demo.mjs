@@ -21,17 +21,30 @@
 // deployment can never quietly accept real bookings. Arming live takes two
 // deliberate settings, and neither can be flipped by a visitor.
 
-// The standing notice, used site-wide.
+// The standing notice. The site carries a small "Demonstration site" badge
+// rather than a notice across every page, so this is the one place the
+// boundary is stated in full — and it is what the server says if a caller
+// ever asks what mode it is in.
 export const DEMO_NOTICE =
-  "Demonstration website by BytesFX. This is a fictional café. Menus, prices and availability are illustrative. No real bookings or payments are accepted.";
+  "BytesFX Café & Bookings is a demonstration site: the forms are checked and then discarded, and nothing a visitor sends is stored or sent.";
 
-// Shorter notices, used next to the thing they describe.
+// The messages the visitor reads back after submitting something.
+//
+// These are the only place in the whole site where the demonstration is
+// stated in as many words, and they are there on purpose. Everywhere else
+// reads as a café website and the badge carries the disclosure; here, a
+// visitor has just handed over a name, a phone number and the date of a
+// child's party, and telling them "we have your booking" when nothing has
+// been booked would be a false statement about a transaction.
 export const DEMO_MESSAGES = {
-  menu: "Sample menu and prices.",
-  image: "AI-generated illustration",
-  booking: "Demo booking — no reservation will be made.",
-  enquiry: "Demo enquiry — no message will be sent.",
-  newsletter: "Demo signup — no email will be sent.",
+  menu: "Menu and prices.",
+  image: "Demo Image",
+  booking:
+    "Your request has been checked. As this is a demonstration site, no reservation has been made and no email has been sent.",
+  enquiry:
+    "Your message has been received. As this is a demonstration site, nothing has actually been sent and nothing has been stored.",
+  newsletter:
+    "Thanks for signing up. As this is a demonstration site, no sign-up has been recorded and no email will be sent.",
 };
 
 // "demo" | "live" | "unconfigured"

@@ -54,20 +54,20 @@
   }
 
   async function loadSlots() {
-    slotsEl.innerHTML = '<p class="booking-note">Loading sample slots…</p>';
+    slotsEl.innerHTML = '<p class="booking-note">Loading the free slots…</p>';
     try {
       const res = await fetch("/api/slots", { headers: { Accept: "application/json" } });
       const data = await res.json();
       renderSlots(data.slots || []);
     } catch {
-      slotsEl.innerHTML = '<p class="booking-note">We could not load the sample availability just now. Please try again in a moment.</p>';
+      slotsEl.innerHTML = '<p class="booking-note">We could not load the availability just now. Please try again in a moment.</p>';
     }
   }
 
   function renderSlots(slots) {
     const summary = root.querySelector("[data-booking-summary]");
     if (!slots.length) {
-      slotsEl.innerHTML = '<p class="booking-note">No sample slots are listed right now. Send a demo enquiry and we will show you how a date is matched.</p>';
+      slotsEl.innerHTML = '<p class="booking-note">No slots are listed right now. Send us an enquiry and we will match a date for you.</p>';
       if (summary) summary.textContent = "";
       return;
     }
@@ -76,7 +76,7 @@
     if (summary) {
       const days = new Set(slots.map((s) => s.date));
       summary.textContent =
-        slots.length + " sample slots across " + days.size + " days. The next one is " + slotLabel(slots[0]) + ".";
+        slots.length + " slots across " + days.size + " days. The next one is " + slotLabel(slots[0]) + ".";
     }
     const grid = document.createElement("div");
     grid.className = "booking-grid";
@@ -162,12 +162,12 @@
         form.hidden = true;
         const ref = document.createElement("strong");
         ref.textContent = data.demo
-          ? "Demo reference " + data.ref + "."
+          ? "Your reference is " + data.ref + "."
           : "Thanks — your reference is " + data.ref + ".";
         const p = document.createElement("p");
         p.textContent = data.demo
-          ? (data.message || "Demo booking — no reservation will be made.") +
-            " " + slotLabel(data.slot) + ". No date is held and no payment is taken."
+          ? (data.message || "Your request has been checked. As this is a demonstration site, no reservation has been made and no email has been sent.") +
+            " " + slotLabel(data.slot) + " was the slot you asked for."
           : "We've got your request for " + slotLabel(data.slot) + ". The slot stays open until your deposit is paid, which locks it in.";
         successEl.replaceChildren(ref, p);
         successEl.hidden = false;

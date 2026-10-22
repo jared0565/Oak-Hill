@@ -106,12 +106,18 @@ test("a demo booking reference is unmistakably synthetic", () => {
 });
 
 test("the notices say what the site is", () => {
-  assert.match(DEMO_NOTICE, /Demonstration website by BytesFX/);
-  assert.match(DEMO_NOTICE, /fictional café/);
-  assert.match(DEMO_NOTICE, /No real bookings or payments are accepted/);
-  assert.match(DEMO_MESSAGES.menu, /Sample menu and prices/);
-  assert.match(DEMO_MESSAGES.booking, /Demo booking — no reservation will be made/);
-  assert.match(DEMO_MESSAGES.enquiry, /Demo enquiry — no message will be sent/);
+  // The site itself carries a badge rather than notices across every page,
+  // so these are the one place the boundary is stated in full.
+  assert.match(DEMO_NOTICE, /demonstration site/i);
+  assert.match(DEMO_NOTICE, /nothing a visitor sends is stored or sent/i);
+  assert.match(DEMO_MESSAGES.menu, /Menu and prices/);
+  // The three the visitor reads back after submitting something must say
+  // plainly that nothing was booked, sent or stored.
+  assert.match(DEMO_MESSAGES.booking, /no reservation has been made/i);
+  assert.match(DEMO_MESSAGES.booking, /no email has been sent/i);
+  assert.match(DEMO_MESSAGES.enquiry, /nothing has actually been sent/i);
+  assert.match(DEMO_MESSAGES.enquiry, /nothing has been stored/i);
+  assert.match(DEMO_MESSAGES.newsletter, /no sign-up has been recorded/i);
 });
 
 // ---- the isolated demo store ------------------------------------------------

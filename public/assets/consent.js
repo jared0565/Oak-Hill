@@ -102,13 +102,13 @@
     banner.hidden = true;
     banner.innerHTML =
       '<div class="consent-text">' +
-      '<strong>Cookies on this demonstration</strong>' +
+      '<strong>Cookies on this site</strong>' +
       '<p>This site stores one choice of yours in your browser. No analytics or advertising tags run here. See the <a href="cookies.html">cookie notice</a>.</p>' +
       '</div>' +
       '<form class="consent-options" hidden>' +
       '<label><input type="checkbox" id="consent-necessary" name="necessary" checked disabled> Strictly necessary (always on)</label>' +
-      '<label><input type="checkbox" id="consent-analytics" name="analytics"> Analytics: count visits anonymously (not running in this demonstration)</label>' +
-      '<label><input type="checkbox" id="consent-advertising" name="advertising"> Advertising: measure if our local ads work (not running in this demonstration)</label>' +
+      '<label><input type="checkbox" id="consent-analytics" name="analytics"> Analytics: count visits anonymously</label>' +
+      '<label><input type="checkbox" id="consent-advertising" name="advertising"> Advertising: measure if our local ads work</label>' +
       '</form>' +
       '<div class="consent-actions">' +
       '<button type="button" class="button" data-consent-accept>Allow all categories</button>' +

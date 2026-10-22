@@ -40,7 +40,7 @@
       slots = (await sRes.json()).slots || [];
       events = (await eRes.json()).events || [];
     } catch {
-      root.replaceChildren(el("p", "Couldn't load the sample calendar just now — please try again in a moment.", "pubcal-note"));
+      root.replaceChildren(el("p", "Couldn't load the calendar just now — please try again in a moment.", "pubcal-note"));
       return;
     }
     describeAvailability();
@@ -71,7 +71,7 @@
         : names[0] + "s to " + names[names.length - 1] + "s"
       : "no days";
 
-    let text = "The sample café trades " + range + ", so " + slots.length + " slots are open over the next four weeks";
+    let text = "The café trades " + range + ", so " + slots.length + " slots are open over the next four weeks";
     if (hires.length) text += ", and " + fmtDateLong(hires[0].start_date) + " is taken for a private hire";
     if (closedDays.size) {
       const closed = [...closedDays].sort((a, b) => a - b).map((d) => DAY_NAMES[d]);

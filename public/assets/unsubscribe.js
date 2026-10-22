@@ -25,7 +25,7 @@
       root.appendChild(btn);
     } else {
       root.appendChild(el("p", "This address is not subscribed to BytesFX Café & Bookings emails."));
-      root.appendChild(el("p", "In this demonstration no marketing consent is recorded, so these buttons change nothing on the server. They show how a real preference page behaves.", "booking-note"));
+      root.appendChild(el("p", "No marketing consent is recorded, so these buttons change nothing on the server. They show how a preference page behaves.", "booking-note"));
       const btn = button("Re-subscribe", true);
       btn.addEventListener("click", () => act(true, btn));
       root.appendChild(btn);

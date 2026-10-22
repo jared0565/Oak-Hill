@@ -11,14 +11,9 @@
   <link rel="stylesheet" href="assets/admin.css">
 </head>
 <body>
-  <div class="demo-banner" role="note">
-    <div class="demo-banner-inner">
-      <strong>Demonstration site</strong>
-      <p>Demonstration website by BytesFX. This is a fictional café. Menus, prices and availability are illustrative. No real bookings or payments are accepted.</p>
-    </div>
-  </div>
   <main id="main" class="section">
     <div class="section-inner admin">
+        <p class="demo-badge">Demonstration site</p>
       <span class="kicker">Staff only</span>
       <!-- The app shell's "Overview" is the page's one real h1. This heading is the
            logged-out view's level-1 heading without adding a second h1 to the DOM:
@@ -27,8 +22,9 @@
            heading is exposed in either state. -->
       <p class="admin-view-title" role="heading" aria-level="1">Booking admin</p>
 
-      <div class="demo-note">
-        <p>This console is still fully authenticated — sign-in, two-factor authentication and staff permissions all work as designed. In demonstration mode the public booking form creates no reservation, and the public availability list shows sample availability rather than a real diary.</p>
+      <div class="notice">
+        <strong>Staff console</strong>
+        <p>This console is fully authenticated — sign-in, two-factor authentication and staff permissions all work as designed. The public calendar runs on its own availability list, so it does not reflect the slot rows listed here.</p>
       </div>
 
       <div data-admin-setup hidden>
@@ -164,7 +160,7 @@
             <section class="admin-panel" data-panel="availability" id="availability" data-perm="availability" tabindex="-1" hidden>
               <h2>Availability</h2>
               <p class="section-lede">Manage party slots, events and closures. A closure stops that day's slots being bookable on the website.</p>
-              <p class="section-lede">The public calendar always shows the fictional café's synthetic sample availability, so it never shows the slot rows listed here.</p>
+              <p class="section-lede">The public calendar runs on its own availability list, so it does not reflect the slot rows listed here.</p>
               <div data-availability><p class="booking-note">Loading&hellip;</p></div>
             </section>
 
@@ -188,7 +184,7 @@
 
             <section class="admin-panel" data-panel="newsletter" id="newsletter" data-perm="newsletter" tabindex="-1" hidden>
               <h2>Newsletter</h2>
-              <p class="section-lede">Write a message and send it to everyone who opted in to BytesFX Café news. In this demonstration, sending is switched off: no marketing consent is recorded, so there is no mailing list and nothing can be sent. The composer still works, so you can see how a real broadcast behaves.</p>
+              <p class="section-lede">Write a message and send it to everyone who opted in to BytesFX Café news. Sending is switched off while no marketing consent is recorded, so the composer works but nothing goes out.</p>
               <div data-newsletter><p class="booking-note">Loading&hellip;</p></div>
             </section>
 

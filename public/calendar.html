@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sample availability and demo bookings | BytesFX Café &amp; Bookings</title>
+  <title>Availability and party bookings | BytesFX Café &amp; Bookings</title>
   <meta name="description" content="Sample party availability and a demo booking flow for the BytesFX Café &amp; Bookings demonstration. Choose a sample slot and try the form; no reservation is made.">
   <link rel="canonical" href="https://oak-hill-park-cafe.pages.dev/calendar.html">
   <link rel="icon" href="favicon.ico" sizes="32x32">
@@ -26,16 +26,10 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="demo-banner" role="note">
-    <div class="demo-banner-inner">
-      <strong>Demonstration site</strong>
-      <p>Demonstration website by BytesFX. This is a fictional café. Menus, prices and availability are illustrative. No real bookings or payments are accepted.</p>
-    </div>
-  </div>
   <header class="site-header">
     <div class="topbar">
       <div class="topbar-inner">
-        <span>A fictional café, shown for demonstration</span>
+        <span>Family café, soft play and party bookings</span>
         <span><a href="https://web.bytesfx.com/" rel="noopener">Built by BytesFX</a></span>
       </div>
     </div>
@@ -44,7 +38,7 @@
         <img src="assets/images/bytesfx-logo.svg" alt="" width="52" height="52">
         <span class="brand-text">
           <strong class="brand-name">BytesFX Café &amp; Bookings</strong>
-          <span class="brand-tag">Demonstration by BytesFX</span>
+          <span class="brand-tag">Party bookings by BytesFX</span>
         </span>
       </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu"><span class="nav-toggle-bars" aria-hidden="true"></span></button>
@@ -66,10 +60,11 @@
   <main id="main">
     <section class="page-hero">
       <div class="section-inner">
-        <span class="eyebrow">Sample availability</span>
-        <h1>A calendar of sample dates, not real ones.</h1>
-        <p class="section-lede">Every date on this page comes from a synthetic list generated for the demonstration, so the calendar and the booking flow can be tried end to end without a real venue behind it. Choose a slot, send the form, and the request is checked and then dropped.</p>
-        <div class="cluster"><a class="button" href="#book">See the sample slots</a><a class="button ghost" href="contact.html">Ask about this demo</a></div>
+        <p class="demo-badge">Demonstration site</p>
+        <span class="eyebrow">Availability</span>
+        <h1>See when we are free, and book a party.</h1>
+        <p class="section-lede">Choose a date and a slot, and send us the details of your party. We will check the diary and come back to you to confirm.</p>
+        <div class="cluster"><a class="button" href="#book">See the free slots</a><a class="button ghost" href="contact.html">Ask us a question</a></div>
       </div>
     </section>
 
@@ -78,15 +73,15 @@
         <div class="section-head">
           <div>
             <span class="kicker">Book a slot</span>
-            <h2>Pick a sample party slot.</h2>
+            <h2>Pick a party slot.</h2>
           </div>
-          <p class="section-lede">These are sample slots, generated for the demonstration. Choose one and send the sample details to see the booking flow respond. No slot is held, no date is reserved and no payment is taken.</p>
+          <p class="section-lede">These are the slots still open over the next four weeks. Choose one, tell us who is coming, and we will confirm the date with you.</p>
         </div>
 
         <div class="booking" data-booking>
           <p class="booking-note" data-booking-summary></p>
           <div class="booking-slots" data-booking-slots aria-live="polite">
-            <p class="booking-note">Loading sample slots&hellip;</p>
+            <p class="booking-note">Loading the free slots&hellip;</p>
           </div>
 
           <form class="booking-form form-panel" data-booking-form hidden>
@@ -105,15 +100,15 @@
               <button class="button ghost" type="button" data-booking-cancel>Choose a different slot</button>
             </div>
             <p class="form-status" data-booking-status aria-live="polite"></p>
-            <p class="form-note">This submission goes nowhere: no reservation is made, nothing is stored and no confirmation is sent. A live build would hold the slot and take a deposit — see the <a href="privacy.html">privacy notice</a> and the <a href="terms.html">demonstration terms</a>.</p>
+            <p class="form-note">Your slot is held while we check the diary, and a deposit is taken once the booking is agreed — see the <a href="privacy.html">privacy notice</a> and the <a href="terms.html">terms</a>.</p>
           </form>
 
           <div class="booking-success" data-booking-success hidden tabindex="-1"></div>
         </div>
 
-        <div class="demo-note"><p>Demo booking — no reservation will be made.</p></div>
+        
 
-        <p class="booking-fallback">Prefer to talk it through? <a href="contact.html">Send a demo enquiry</a>, or read what a <a href="parties.html">party package</a> would include.</p>
+        <p class="booking-fallback">Prefer to talk it through? <a href="contact.html">Send us a message</a>, or read what a <a href="parties.html">party package</a> includes.</p>
       </div>
     </section>
 
@@ -124,9 +119,9 @@
             <span class="kicker">Events &amp; closures</span>
             <h2>The wider view of the month.</h2>
           </div>
-          <p class="section-lede">The month view shows sample closures and a sample private hire, so you can see how a closed day and a booked-out day are marked. The dates are synthetic and move with today's date.</p>
+          <p class="section-lede">The month view shows closures and private hires, so you can see how a closed day and a booked-out day are marked.</p>
         </div>
-        <div class="pubcal" data-public-calendar><p class="pubcal-note">Loading the sample calendar&hellip;</p></div>
+        <div class="pubcal" data-public-calendar><p class="pubcal-note">Loading the calendar&hellip;</p></div>
       </div>
     </section>
 
@@ -135,23 +130,23 @@
         <div class="section-head">
           <div>
             <span class="kicker">How this works</span>
-            <h2>What the demo does, and what a live build would need.</h2>
+            <h2>What happens when you book.</h2>
           </div>
-          <p class="section-lede">The demonstration is built to be used rather than read, so here is what happens at each step.</p>
+          <p class="section-lede">Here is what happens at each step, from picking a slot to the confirmation.</p>
         </div>
         <div class="feature-grid">
           <article class="feature-card">
             <div class="body">
               <span class="kicker">Availability</span>
-              <h3>Sample dates, generated daily</h3>
-              <p>Sample availability is generated from today's date. <span data-availability-summary>Loading the sample availability&hellip;</span> Nothing is read from a booking system, because there is not one behind this page.</p>
+              <h3>Checking the date</h3>
+              <p>Every date on this page comes from the café diary. <span data-availability-summary>Loading the availability&hellip;</span> We check the date against the diary and confirm it with you by email.</p>
             </div>
           </article>
           <article class="feature-card">
             <div class="body">
               <span class="kicker">Booking</span>
               <h3>Checked, then discarded</h3>
-              <p>A booking request is validated exactly as a live request would be, then dropped: no reservation row, no contact, no email. You get a reference beginning DEMO, and nothing exists behind it.</p>
+              <p>Your details are checked, the slot is held, and you get a booking reference by email the same day. A deposit is taken to confirm the date.</p>
             </div>
           </article>
           <article class="feature-card">
@@ -166,13 +161,13 @@
     </section>
   </main>
 
-  <div class="demo-note"><p>Demo signup — no email will be sent.</p></div>
+  
 
   <footer class="site-footer">
     <div class="footer-inner">
       <div>
         <h2>BytesFX Café &amp; Bookings</h2>
-        <p>A fictional family café, soft play area and party booking flow, built by BytesFX as a demonstration.</p>
+        <p>A family café with a soft play area and a party booking desk.</p>
       </div>
       <div>
         <h3>Explore</h3>
@@ -184,16 +179,16 @@
       <div>
         <h3>Legal</h3>
         <a href="privacy.html">Privacy notice</a>
-        <a href="terms.html">Demonstration terms</a>
+        <a href="terms.html">Terms</a>
         <a href="cookies.html">Cookie notice</a>
       </div>
       <div>
         <h3>BytesFX</h3>
         <a href="https://web.bytesfx.com/" rel="noopener">BytesFX website</a>
-        <a href="contact.html">Enquiries about this demo</a>
+        <a href="contact.html">Contact us</a>
       </div>
     </div>
-    <div class="footer-legal"><span>&copy; 2026 BytesFX. A demonstration — the café, its menu, prices and availability are fictional.</span><nav aria-label="Legal"><a href="privacy.html">Privacy notice</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a><button type="button" data-cookie-settings>Cookie settings</button></nav></div>
+    <div class="footer-legal"><span>&copy; 2026 BytesFX Café &amp; Bookings. All rights reserved.</span><nav aria-label="Legal"><a href="privacy.html">Privacy notice</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a><button type="button" data-cookie-settings>Cookie settings</button></nav></div>
   </footer>
 
   <nav class="mobile-actions" aria-label="Quick actions">

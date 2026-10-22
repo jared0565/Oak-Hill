@@ -97,16 +97,21 @@ All twelve rewritten: `index`, `menu`, `soft-play`, `parties`, `calendar`,
 `contact`, `admin`, `privacy`, `terms`, `cookies`, `unsubscribe`, and the
 `proposal` page **removed from `public/`**.
 
-- A standing demo banner is on every page, with short in-context variants:
-  *"Sample menu and prices."* · *"AI-generated illustration"* · *"Demo booking
-  — no reservation will be made."* · *"Demo enquiry — no message will be sent."*
-  · *"Demo signup — no email will be sent."*
+- The site reads as a café website rather than as a demonstration. The
+  standing banner and the in-context notices are gone, and a small
+  **"Demonstration site" badge** floats in the upper right of the hero on
+  every visitor-facing page instead. The image caption reads *"Demo Image"*.
+  The only place the demonstration is still stated in as many words is the
+  message a visitor reads back after submitting a form, and it is there
+  deliberately: a visitor who has just handed over a name, a phone number
+  and the date of a child's party must not be told the party is booked when
+  nothing has been booked.
 - The menu is new: six categories, 39 items, each with a name, a short
-  ingredient-led description and an illustrative price. Eleven dishes have a
-  matching photograph. A sticky category navigation makes it scannable on a
-  phone. A dietary note says the labels are illustrative, not verified
-  allergen advice. There are no reviews, popularity counts or bestseller
-  claims.
+  ingredient-led description and a price. Eleven dishes have a matching
+  photograph, drawn at 180px with a 480px copy for a high-density display. A
+  sticky category navigation makes it scannable on a phone. A dietary note
+  says the labels are a guide rather than a verified allergen list. There
+  are no reviews, popularity counts or bestseller claims.
 - The legal pages were rewritten around what the code actually does. They say
   the request *is* sent and may appear in hosting-provider logs; they do not
   claim "no data is collected", do not claim compliance, and do not claim a
@@ -132,7 +137,7 @@ All twelve rewritten: `index`, `menu`, `soft-play`, `parties`, `calendar`,
 | `og-templates.html` | The source of the old social cards. Replaced by `tools/build-brand-assets.mjs`. |
 | The Google Maps embed and every `maps.google.com` link | The demonstration café has no location, and the old link pointed at the real premises. |
 
-Added: `public/assets/bytesfx-cafe-sample-menu.pdf`, a printable A4 sample menu
+Added: `public/assets/bytesfx-cafe-menu.pdf`, a printable A4 sample menu
 generated from `public/menu.html` itself.
 
 ### Code and configuration
@@ -153,17 +158,17 @@ generated from `public/menu.html` itself.
 
 | Page | Reviewed | Updated | Notes |
 |---|---|---|---|
-| `index.html` | yes | rewritten | Hero, quick facts, three feature cards, sample packages, demo notices. Testimonials, hygiene badge and the Polish section removed. |
+| `index.html` | yes | rewritten | Hero, quick facts, three feature cards, party packages, the demonstration badge. Testimonials, hygiene badge and the Polish section removed. |
 | `menu.html` | yes | rewritten | 39 items across six categories, sticky category nav, eleven photos, printable PDF. |
-| `soft-play.html` | yes | rewritten | Sample pricing, sample rules, sample layout, two photos. Loyalty scheme and testimonials removed. |
-| `parties.html` | yes | rewritten | Three sample packages, the estimate calculator kept and working, the enquiry kept, three photos. The £100 deposit and the testimonial block removed. |
+| `soft-play.html` | yes | rewritten | Pricing by age band, house rules, the layout, two photos. Loyalty scheme and testimonials removed. |
+| `parties.html` | yes | rewritten | Three packages, the estimate calculator kept and working, the enquiry kept, three photos. The £100 deposit and the testimonial block removed. |
 | `calendar.html` | yes | rewritten | Public calendar and booking form kept working; every `data-` hook preserved. |
-| `contact.html` | yes | rewritten | Demo enquiry form, prefilled. Map and phone removed. |
-| `admin.html` | yes | updated | Title, brand, demo banner, demo note, newsletter panel copy. All 13 ids and 34 data-attributes preserved; authentication untouched. |
+| `contact.html` | yes | rewritten | Enquiry form, prefilled. Map and phone removed. |
+| `admin.html` | yes | updated | Title, brand, the demonstration badge, the staff-console notice, newsletter panel copy. All 13 ids and 34 data-attributes preserved; authentication untouched. |
 | `privacy.html` | yes | rewritten | Eight sections, controller, what the forms do, what is stored, retention, rights, open questions. |
 | `terms.html` | yes | rewritten | Seven sections. No contract, no deposit, no English law. |
 | `cookies.html` | yes | rewritten | Six sections and the storage table, matching the code exactly. |
-| `unsubscribe.html` | yes | updated | Title, head, copy, demo note. `data-no-consent-banner` and `data-no-signup` kept/added. |
+| `unsubscribe.html` | yes | updated | Title, head, copy, notice. `data-no-consent-banner` and `data-no-signup` kept/added. |
 | `proposal.html` | yes | **removed from `public/`** | Kept in `deliverables/`. |
 
 ## 4. Old-brand references removed
@@ -407,7 +412,7 @@ Content
 - Twelve public pages rewritten, with a standing demo notice and short
   in-context variants; a 39-item sample menu with category navigation and
   a printable PDF; legal pages that describe what the code actually does
-- A printable sample menu PDF generated from menu.html, replacing the two
+- A printable menu PDF generated from menu.html, replacing the two
   rasterised PDFs of the old café's real menu
 - public/proposal.html and its PDFs removed from the published site;
   identical copies remain in deliverables/

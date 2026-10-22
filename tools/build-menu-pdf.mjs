@@ -2,7 +2,7 @@
 //
 //   node tools/build-menu-pdf.mjs
 //
-// Output: public/assets/bytesfx-cafe-sample-menu.pdf
+// Output: public/assets/bytesfx-cafe-menu.pdf
 //
 // The PDF is rendered from public/menu.html with Puppeteer, so the menu text
 // stays in one place: the HTML page. The stylesheet's @media print rules strip
@@ -18,7 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const source = path.join(root, "public", "menu.html");
 const outDir = path.join(root, "public", "assets");
-const outFile = path.join(outDir, "bytesfx-cafe-sample-menu.pdf");
+const outFile = path.join(outDir, "bytesfx-cafe-menu.pdf");
 
 async function main() {
   if (!fs.existsSync(source)) {

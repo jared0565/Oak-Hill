@@ -50,7 +50,7 @@
       const base = weekend ? 175 : 165;
       const extra = weekend ? 8 : 7;
       const total = base + Math.max(0, count - 10) * extra;
-      output.innerHTML = "<span>Sample party total</span><strong>&pound;" + total + "</strong><small>Includes " + count + " children. An illustrative figure for the demonstration — no deposit is taken and no date is held.</small>";
+      output.innerHTML = "<span>Party estimate</span><strong>&pound;" + total + "</strong><small>Includes " + count + " children. An estimate for your party.</small>";
     };
 
     day.addEventListener("change", update);
@@ -124,7 +124,7 @@
         if (res.ok && out.ok) {
           if (status) {
             status.textContent = out.message ||
-              "The demo enquiry form works. Nothing was sent and nothing was stored.";
+              "Your message has been received. As this is a demonstration site, nothing has actually been sent and nothing has been stored.";
           }
           setState("is-success");
           form.reset();
@@ -148,10 +148,13 @@
   var modal = null, lastFocus = null;
 
   function shareUrl() {
-    // Share the address the visitor is actually on. The canonical link points
-    // at the site's documented placeholder origin, which resolves nowhere —
-    // sharing that would hand someone a dead link.
-    return location.origin + location.pathname + location.search;
+    // Share the one live URL for the page, which is what the canonical tag
+    // names. The query string is dropped: transactional pages carry a
+    // per-recipient token in it, and sharing that would hand the token to
+    // whoever the link was sent to.
+    var canon = document.querySelector('link[rel="canonical"]');
+    if (canon && canon.href) return canon.href.split("?")[0];
+    return location.origin + location.pathname;
   }
 
   function build() {
@@ -347,12 +350,12 @@
   var wrap = el("div", null, "footer-signup");
   var inner = el("div", null, "footer-signup-inner");
   var textCol = el("div", null, "footer-signup-text");
-  textCol.appendChild(el("strong", "Demo newsletter signup"));
+  textCol.appendChild(el("strong", "Newsletter signup"));
   var lead = el("p");
-  lead.appendChild(document.createTextNode("Sign up to see how the newsletter flow behaves. "));
-  var demo = el("span", "Demo signup — no email will be sent.");
+  lead.appendChild(document.createTextNode("Sign up for our news and offers. "));
+  var demo = el("span", "No address is kept and no email will be sent.");
   lead.appendChild(demo);
-  lead.appendChild(document.createTextNode(" Nothing is stored and no address is kept. See the "));
+  lead.appendChild(document.createTextNode(" See the "));
   var priv = el("a", "privacy notice"); priv.href = "privacy.html";
   lead.appendChild(priv);
   lead.appendChild(document.createTextNode("."));
@@ -363,7 +366,7 @@
   var hp = document.createElement("input"); hp.type = "text"; hp.name = "company"; hp.tabIndex = -1; hp.autocomplete = "off";
   hp.setAttribute("aria-hidden", "true"); hp.style.cssText = "position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden";
   var email = document.createElement("input"); email.type = "email"; email.required = true; email.value = "alex@example.com"; email.placeholder = "you@example.com"; email.id = "footer-newsletter-email"; email.name = "email"; email.autocomplete = "email"; email.setAttribute("aria-label", "Email address");
-  var btn = el("button", "Try the signup", "button"); btn.type = "submit";
+  var btn = el("button", "Sign up", "button"); btn.type = "submit";
   var status = el("p", null, "footer-signup-status");
   form.append(hp, email, btn);
   inner.appendChild(form);
@@ -380,8 +383,8 @@
       .then(function (res) {
         if (res.ok && res.d.ok) {
           wrap.replaceChildren(
-            el("strong", "Demo signup complete"),
-            el("p", res.d.message || "Demo signup — no email will be sent. Nothing was stored.")
+            el("strong", "Thanks for signing up"),
+            el("p", res.d.message || "Thanks for signing up. As this is a demonstration site, no sign-up has been recorded and no email will be sent.")
           );
           if (window.BFXTrack) window.BFXTrack("lead_captured");
         } else { btn.disabled = false; status.textContent = (res.d && res.d.error) || "Could not sign you up. Please try again."; }
@@ -414,7 +417,7 @@
   var textCol = el("div", null, "footer-staff-text");
   textCol.appendChild(el("strong", "Staff sign in"));
   var lead = el("p");
-  lead.appendChild(document.createTextNode("For the owner of this demonstration. Signing in here opens the booking dashboard."));
+  lead.appendChild(document.createTextNode("For the owner. Signing in here opens the booking dashboard."));
   textCol.appendChild(lead);
   inner.appendChild(textCol);
 
