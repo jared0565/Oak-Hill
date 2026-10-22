@@ -16,6 +16,9 @@ graph-out/
 .cache/graphite/
 .graphite-daemon/
 
+# Impeccable audit artefacts (critique snapshots, detector output)
+.impeccable/
+
 **/.cache/graphite/
 **/.graphite/
 .githooks/

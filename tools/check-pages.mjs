@@ -20,6 +20,7 @@ const PAGES = [
   "terms.html",
   "cookies.html",
   "unsubscribe.html",
+  "404.html",
   "admin.html",
 ];
 const VIEWPORTS = [
@@ -91,15 +92,29 @@ for (const vp of VIEWPORTS) {
     await page.goto(`${BASE}/${p}`, { waitUntil: "networkidle2", timeout: 45000 });
     // Scroll the whole page so lazy-loaded images actually request, then
     // return to the top before measuring.
+    //
+    // The scroll has to be slow enough for Chrome's lazy loader to start each
+    // image, and the wait happens at the bottom: scrolling back to the top
+    // first cancels the loads of images that are still far below the fold. A
+    // fast scroll used to leave images unstarted, which the check below could
+    // not tell apart from a genuinely broken image.
     await page.evaluate(async () => {
-      const step = window.innerHeight;
-      for (let y = 0; y < document.body.scrollHeight; y += step) {
+      const step = Math.floor(window.innerHeight / 2);
+      for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
         window.scrollTo(0, y);
-        await new Promise((r) => setTimeout(r, 60));
+        await new Promise((r) => setTimeout(r, 120));
       }
-      window.scrollTo(0, 0);
+      window.scrollTo(0, document.documentElement.scrollHeight);
     });
-    await new Promise((r) => setTimeout(r, 700));
+    // Wait for every image to settle, so that one still pending afterwards is
+    // a real failure rather than a slow network.
+    await page
+      .waitForFunction(() => [...document.querySelectorAll("img")].every((i) => i.complete), {
+        timeout: 20000,
+      })
+      .catch(() => {});
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await new Promise((r) => setTimeout(r, 300));
     const a = await page.evaluate(AUDIT);
     const text = await page.evaluate(() => document.body.innerText);
     const oldBrand = (text.match(new RegExp(OLD_BRAND, "g")) || []);
