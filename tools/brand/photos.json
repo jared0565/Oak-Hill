@@ -122,5 +122,55 @@
       "suffix": "base",
       "prompt": "A stack of fluffy pancakes with maple syrup and berries on a ceramic plate, small jug of syrup, cafe table, morning light"
     }
-  ]
+  ],
+  "thumbnails": {
+    "_comment": "Right-sized square thumbnails derived from the menu photographs above, not separately generated images. Each is the source cropped to the largest centred square (what CSS object-fit: cover does) and resized to 240×240 with LANCZOS. The 1024px originals are kept because menu-breakfast.jpg is also used on the homepage at 381×238.",
+    "width": 240,
+    "height": 240,
+    "crop": "centre square",
+    "resample": "LANCZOS",
+    "jpeg": { "quality": 80, "subsampling": 2, "progressive": true, "optimize": true },
+    "webp": { "quality": 80, "method": 6 },
+    "files": [
+      { "file": "menu-breakfast-thumb.jpg", "source": "menu-breakfast.jpg", "format": "jpeg" },
+      { "file": "menu-breakfast-thumb.webp", "source": "menu-breakfast.jpg", "format": "webp" },
+      { "file": "menu-toastie-thumb.jpg", "source": "menu-toastie.jpg", "format": "jpeg" },
+      { "file": "menu-toastie-thumb.webp", "source": "menu-toastie.jpg", "format": "webp" },
+      { "file": "menu-sandwich-thumb.jpg", "source": "menu-sandwich.jpg", "format": "jpeg" },
+      { "file": "menu-sandwich-thumb.webp", "source": "menu-sandwich.jpg", "format": "webp" },
+      { "file": "menu-kids-meal-thumb.jpg", "source": "menu-kids-meal.jpg", "format": "jpeg" },
+      { "file": "menu-kids-meal-thumb.webp", "source": "menu-kids-meal.jpg", "format": "webp" },
+      { "file": "menu-cake-carrot-thumb.jpg", "source": "menu-cake-carrot.jpg", "format": "jpeg" },
+      { "file": "menu-cake-carrot-thumb.webp", "source": "menu-cake-carrot.jpg", "format": "webp" },
+      { "file": "menu-chocolate-cake-thumb.jpg", "source": "menu-chocolate-cake.jpg", "format": "jpeg" },
+      { "file": "menu-chocolate-cake-thumb.webp", "source": "menu-chocolate-cake.jpg", "format": "webp" },
+      { "file": "menu-hot-chocolate-thumb.jpg", "source": "menu-hot-chocolate.jpg", "format": "jpeg" },
+      { "file": "menu-hot-chocolate-thumb.webp", "source": "menu-hot-chocolate.jpg", "format": "webp" },
+      { "file": "menu-coffee-thumb.jpg", "source": "menu-coffee.jpg", "format": "jpeg" },
+      { "file": "menu-coffee-thumb.webp", "source": "menu-coffee.jpg", "format": "webp" },
+      { "file": "menu-cold-drinks-thumb.jpg", "source": "menu-cold-drinks.jpg", "format": "jpeg" },
+      { "file": "menu-cold-drinks-thumb.webp", "source": "menu-cold-drinks.jpg", "format": "webp" },
+      { "file": "menu-soup-thumb.jpg", "source": "menu-soup.jpg", "format": "jpeg" },
+      { "file": "menu-soup-thumb.webp", "source": "menu-soup.jpg", "format": "webp" },
+      { "file": "menu-pancakes-thumb.jpg", "source": "menu-pancakes.jpg", "format": "jpeg" },
+      { "file": "menu-pancakes-thumb.webp", "source": "menu-pancakes.jpg", "format": "webp" }
+    ]
+  },
+  "webpVariants": {
+    "_comment": "WebP renditions of the photographs above, at the widths the pages actually draw them at. These are the same pixels at a smaller size, not a re-crop, so a page can pick one with srcset instead of shipping a 1024px JPEG to a 380px box. The JPEG originals are kept: they are the fallback for a browser without WebP, and the 1024px rendition is still the right choice on a 3x display. Built by tools/build-image-variants.py.",
+    "quality": 80,
+    "method": 6,
+    "widths": [512, 1024],
+    "sources": [
+      "cafe-interior-hero.jpg",
+      "cafe-window-table.jpg",
+      "cafe-courtyard.jpg",
+      "soft-play-room.jpg",
+      "soft-play-corner.jpg",
+      "party-setup.jpg",
+      "party-cake.jpg",
+      "party-table-detail.jpg",
+      "menu-breakfast.jpg"
+    ]
+  }
 }
