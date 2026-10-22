@@ -43,7 +43,41 @@
       root.replaceChildren(el("p", "Couldn't load the sample calendar just now — please try again in a moment.", "pubcal-note"));
       return;
     }
+    describeAvailability();
     render();
+  }
+
+  const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  // The explanation of the calendar is written from the data that is actually
+  // on screen. It used to be a fixed sentence about Mondays, which described
+  // the generator rather than whatever the page was showing.
+  function describeAvailability() {
+    const target = document.querySelector("[data-availability-summary]");
+    if (!target) return;
+
+    const openDays = new Set();
+    slots.forEach((s) => openDays.add(new Date(s.date + "T00:00:00Z").getUTCDay()));
+    const trading = [...openDays].sort((a, b) => a - b);
+
+    const closedDays = new Set();
+    events.filter((e) => e.kind === "closure").forEach((e) => closedDays.add(new Date(e.start_date + "T00:00:00Z").getUTCDay()));
+    const hires = events.filter((e) => e.kind === "event" && /private hire/i.test(e.title || ""));
+
+    const names = trading.map((d) => DAY_NAMES[d]);
+    const range = names.length
+      ? names.length === 1
+        ? names[0] + "s"
+        : names[0] + "s to " + names[names.length - 1] + "s"
+      : "no days";
+
+    let text = "The sample café trades " + range + ", so " + slots.length + " slots are open over the next four weeks";
+    if (hires.length) text += ", and " + fmtDateLong(hires[0].start_date) + " is taken for a private hire";
+    if (closedDays.size) {
+      const closed = [...closedDays].sort((a, b) => a - b).map((d) => DAY_NAMES[d]);
+      text += ". " + (closed.length > 1 ? closed[0] + "s and " + closed[1] + "s are" : closed[0] + " is") + " closed";
+    }
+    target.textContent = text + ".";
   }
 
   function header() {

@@ -215,7 +215,7 @@
     // Mobile: a chosen section closes the drawer.
     closeDrawer();
     // Move focus to the panel heading for keyboard users.
-    const panel = document.getElementById("panel-" + id);
+    const panel = document.getElementById(id);
     if (panel) { try { panel.focus({ preventScroll: false }); } catch (_) { panel.focus(); } }
   }
 

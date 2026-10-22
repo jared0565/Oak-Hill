@@ -106,14 +106,14 @@
       '<p>This site stores one choice of yours in your browser. No analytics or advertising tags run here. See the <a href="cookies.html">cookie notice</a>.</p>' +
       '</div>' +
       '<form class="consent-options" hidden>' +
-      '<label><input type="checkbox" checked disabled> Strictly necessary (always on)</label>' +
-      '<label><input type="checkbox" name="analytics"> Analytics: count visits anonymously (not running in this demonstration)</label>' +
-      '<label><input type="checkbox" name="advertising"> Advertising: measure if our local ads work (not running in this demonstration)</label>' +
+      '<label><input type="checkbox" id="consent-necessary" name="necessary" checked disabled> Strictly necessary (always on)</label>' +
+      '<label><input type="checkbox" id="consent-analytics" name="analytics"> Analytics: count visits anonymously (not running in this demonstration)</label>' +
+      '<label><input type="checkbox" id="consent-advertising" name="advertising"> Advertising: measure if our local ads work (not running in this demonstration)</label>' +
       '</form>' +
       '<div class="consent-actions">' +
-      '<button type="button" class="button" data-consent-accept>Accept all cookies</button>' +
-      '<button type="button" class="button ghost" data-consent-reject>Reject optional cookies</button>' +
-      '<button type="button" class="button ghost" data-consent-customise>Choose cookies</button>' +
+      '<button type="button" class="button" data-consent-accept>Allow all categories</button>' +
+      '<button type="button" class="button ghost" data-consent-reject>Reject optional categories</button>' +
+      '<button type="button" class="button ghost" data-consent-customise>Choose categories</button>' +
       '<button type="button" class="button" data-consent-save hidden>Save my choices</button>' +
       '</div>';
     document.body.appendChild(banner);

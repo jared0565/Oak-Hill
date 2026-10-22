@@ -3,37 +3,40 @@
   const nav = document.querySelector("[data-primary-nav]");
 
   if (navToggle && nav) {
+    const isOpen = () => nav.getAttribute("data-open") === "true";
+
+    const setOpen = (open) => {
+      nav.setAttribute("data-open", String(open));
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      document.body.classList.toggle("menu-open", open);
+    };
+
     navToggle.addEventListener("click", () => {
-      const isOpen = nav.getAttribute("data-open") === "true";
-      nav.setAttribute("data-open", String(!isOpen));
-      navToggle.setAttribute("aria-expanded", String(!isOpen));
-      navToggle.setAttribute("aria-label", isOpen ? "Open menu" : "Close menu");
-      document.body.classList.toggle("menu-open", !isOpen);
+      const open = !isOpen();
+      setOpen(open);
+      if (open) {
+        // An overlay that opens without taking focus leaves a keyboard user
+        // tabbing through the page behind it.
+        const first = nav.querySelector("a, button");
+        if (first) first.focus();
+      } else {
+        navToggle.focus();
+      }
+    });
+
+    // Escape closes the menu, the way the share dialog and the cookie panel
+    // already do.
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !isOpen()) return;
+      setOpen(false);
+      navToggle.focus();
     });
   }
 
   // The click-to-load map embed was removed with the café's real address: the
   // demonstration café has no location, so there is nothing to map and no
   // third-party embed to consent-gate.
-
-  document.querySelectorAll("[data-tabs]").forEach((tabRoot) => {
-    const tabs = Array.from(tabRoot.querySelectorAll("[role='tab']"));
-    const panels = Array.from(tabRoot.querySelectorAll("[role='tabpanel']"));
-
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const target = tab.getAttribute("aria-controls");
-
-        tabs.forEach((item) => {
-          item.setAttribute("aria-selected", String(item === tab));
-        });
-
-        panels.forEach((panel) => {
-          panel.hidden = panel.id !== target;
-        });
-      });
-    });
-  });
 
   const calculator = document.querySelector("[data-party-calculator]");
   if (calculator) {
@@ -59,13 +62,57 @@
     const renderedAt = Date.now();
     const status = form.querySelector("[data-form-status]");
     const submitBtn = form.querySelector("button[type=submit], button:not([type])");
+
+    // The message has to name the field that is wrong. "Please fill in your
+    // name, phone, email and pick a slot" when only the name is empty tells
+    // the visitor nothing about which box to look at.
+    const fieldName = (el) => {
+      const label = el.id ? form.querySelector(`label[for="${CSS.escape(el.id)}"]`) : el.closest("label");
+      const text = label ? label.textContent.trim().replace(/\s*\*$/, "") : "";
+      const first = text.split(/\s+/)[0];
+      return (first || el.name || "field").toLowerCase();
+    };
+
+    const setState = (kind) => {
+      if (!status) return;
+      status.classList.remove("is-error", "is-success");
+      if (kind) status.classList.add(kind);
+    };
+
+    const markInvalid = (el, on) => {
+      if (on) el.setAttribute("aria-invalid", "true");
+      else el.removeAttribute("aria-invalid");
+    };
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
       data.type = form.getAttribute("data-enquiry-type") || "general";
       data.elapsed_ms = Date.now() - renderedAt;
       data.source = location.pathname;
+
+      // Check the fields here first, so the message names one field and that
+      // field is marked, rather than sending a request that fails for a
+      // reason the visitor cannot see.
+      const required = Array.from(form.querySelectorAll("input[required], select[required], textarea[required]"));
+      const missing = required.find((el) => !String(el.value || "").trim());
+      const badEmail = required.find((el) => el.type === "email" && String(el.value || "").trim() && !el.validity.valid);
+      const bad = missing || badEmail;
+      if (bad) {
+        required.forEach((el) => markInvalid(el, el === bad));
+        if (status) {
+          status.textContent = badEmail
+            ? "That email address does not look right."
+            : "Please fill in your " + fieldName(bad) + ".";
+        }
+        setState("is-error");
+        bad.focus();
+        return;
+      }
+      required.forEach((el) => markInvalid(el, false));
+
       if (status) status.textContent = "Sending…";
+      setState(null);
       if (submitBtn) submitBtn.disabled = true;
       try {
         const res = await fetch("/api/enquiry", {
@@ -79,12 +126,15 @@
             status.textContent = out.message ||
               "The demo enquiry form works. Nothing was sent and nothing was stored.";
           }
+          setState("is-success");
           form.reset();
         } else if (status) {
           status.textContent = out.error || "Sorry, something went wrong. Please try again in a moment.";
+          setState("is-error");
         }
       } catch {
         if (status) status.textContent = "Sorry, something went wrong. Please try again in a moment.";
+        setState("is-error");
       } finally {
         if (submitBtn) submitBtn.disabled = false;
       }
@@ -98,9 +148,10 @@
   var modal = null, lastFocus = null;
 
   function shareUrl() {
-    var canon = document.querySelector('link[rel="canonical"]');
-    if (canon && canon.href) return canon.href;
-    return location.origin + location.pathname;
+    // Share the address the visitor is actually on. The canonical link points
+    // at the site's documented placeholder origin, which resolves nowhere —
+    // sharing that would hand someone a dead link.
+    return location.origin + location.pathname + location.search;
   }
 
   function build() {
@@ -135,6 +186,24 @@
       '</div>';
     document.body.appendChild(modal);
     modal.addEventListener("click", onClick);
+    // Keep Tab inside the dialog. aria-modal tells assistive technology the
+    // rest of the page is inert, so focus must not escape into it.
+    modal.addEventListener("keydown", function (e) {
+      if (e.key !== "Tab") return;
+      var focusable = [].slice.call(
+        modal.querySelectorAll("a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])")
+      ).filter(function (el) { return el.offsetParent !== null; });
+      if (!focusable.length) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
     document.addEventListener("keydown", function (e) {
       if (!modal.hidden && e.key === "Escape") close();
     });
@@ -293,7 +362,7 @@
   var form = document.createElement("form"); form.className = "footer-signup-form";
   var hp = document.createElement("input"); hp.type = "text"; hp.name = "company"; hp.tabIndex = -1; hp.autocomplete = "off";
   hp.setAttribute("aria-hidden", "true"); hp.style.cssText = "position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden";
-  var email = document.createElement("input"); email.type = "email"; email.required = true; email.value = "alex@example.com"; email.placeholder = "you@example.com"; email.setAttribute("aria-label", "Email address");
+  var email = document.createElement("input"); email.type = "email"; email.required = true; email.value = "alex@example.com"; email.placeholder = "you@example.com"; email.id = "footer-newsletter-email"; email.name = "email"; email.autocomplete = "email"; email.setAttribute("aria-label", "Email address");
   var btn = el("button", "Try the signup", "button"); btn.type = "submit";
   var status = el("p", null, "footer-signup-status");
   form.append(hp, email, btn);

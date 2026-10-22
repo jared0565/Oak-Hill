@@ -29,6 +29,30 @@
     return fmtDate(s.date) + ", " + fmtTime(s.start_time) + "–" + fmtTime(s.end_time);
   }
 
+  // The status line has to say which kind of message it is carrying: it used
+  // to be green by default, so a server error was rendered in the success
+  // colour and read as a confirmation.
+  function setStatus(kind, text) {
+    statusEl.classList.remove("is-error", "is-success");
+    if (kind) statusEl.classList.add(kind);
+    if (text != null) statusEl.textContent = text;
+  }
+
+  // The message has to name the field that is wrong, and that field has to be
+  // marked. "Please fill in your name, phone, email and pick a slot" when only
+  // the name is empty tells the visitor nothing about which box to look at.
+  function fieldName(el) {
+    const label = el.id ? form.querySelector(`label[for="${CSS.escape(el.id)}"]`) : el.closest("label");
+    const text = label ? label.textContent.trim().replace(/\s*\*$/, "") : "";
+    const first = text.split(/\s+/)[0];
+    return (first || el.name || "field").toLowerCase();
+  }
+
+  function markInvalid(el, on) {
+    if (on) el.setAttribute("aria-invalid", "true");
+    else el.removeAttribute("aria-invalid");
+  }
+
   async function loadSlots() {
     slotsEl.innerHTML = '<p class="booking-note">Loading sample slots…</p>';
     try {
@@ -41,9 +65,18 @@
   }
 
   function renderSlots(slots) {
+    const summary = root.querySelector("[data-booking-summary]");
     if (!slots.length) {
       slotsEl.innerHTML = '<p class="booking-note">No sample slots are listed right now. Send a demo enquiry and we will show you how a date is matched.</p>';
+      if (summary) summary.textContent = "";
       return;
+    }
+    // Say what is available and when the next one is. The list alone leaves a
+    // visitor to work that out from a grid of dates.
+    if (summary) {
+      const days = new Set(slots.map((s) => s.date));
+      summary.textContent =
+        slots.length + " sample slots across " + days.size + " days. The next one is " + slotLabel(slots[0]) + ".";
     }
     const grid = document.createElement("div");
     grid.className = "booking-grid";
@@ -70,10 +103,10 @@
     selected = slot;
     slotsEl.querySelectorAll(".booking-slot").forEach((x) => x.removeAttribute("aria-pressed"));
     btn.setAttribute("aria-pressed", "true");
-    chosenEl.textContent = "Hold " + slotLabel(slot);
+    chosenEl.textContent = "Chosen: " + slotLabel(slot);
     successEl.hidden = true;
     form.hidden = false;
-    statusEl.textContent = "";
+    setStatus(null, "");
     form.scrollIntoView({ behavior: "smooth", block: "center" });
     form.querySelector("[name='name']").focus();
   }
@@ -88,8 +121,26 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!selected) return;
+
+    // Check the fields here first, so the message names one field and that
+    // field is marked, rather than sending a request that fails for a reason
+    // the visitor cannot see.
+    const required = Array.from(form.querySelectorAll("input[required], select[required], textarea[required]"));
+    const missing = required.find((el) => !String(el.value || "").trim());
+    const badEmail = required.find((el) => el.type === "email" && String(el.value || "").trim() && !el.validity.valid);
+    const bad = missing || badEmail;
+    if (bad) {
+      required.forEach((el) => markInvalid(el, el === bad));
+      setStatus("is-error", badEmail
+        ? "That email address does not look right."
+        : "Please fill in your " + fieldName(bad) + ".");
+      bad.focus();
+      return;
+    }
+    required.forEach((el) => markInvalid(el, false));
+
     submitBtn.disabled = true;
-    statusEl.textContent = "Sending your request…";
+    setStatus(null, "Sending your request…");
     const fd = new FormData(form);
     const payload = {
       slot_id: selected.id,
@@ -115,21 +166,32 @@
           : "Thanks — your reference is " + data.ref + ".";
         const p = document.createElement("p");
         p.textContent = data.demo
-          ? "This is a demonstration booking for " + slotLabel(data.slot) + ". No reservation has been made, no date is held and no payment is taken."
+          ? (data.message || "Demo booking — no reservation will be made.") +
+            " " + slotLabel(data.slot) + ". No date is held and no payment is taken."
           : "We've got your request for " + slotLabel(data.slot) + ". The slot stays open until your deposit is paid, which locks it in.";
         successEl.replaceChildren(ref, p);
         successEl.hidden = false;
+        // The confirmation is the one thing the visitor must not miss, and it
+        // is now the only thing on screen. Say it out loud, and put the cursor
+        // on it, rather than leaving it below a form that has just vanished.
+        successEl.setAttribute("role", "status");
+        setStatus(null, "");
         successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        successEl.focus();
+        // The chosen slot kept its "held" ring while the text next to it said
+        // no date was held.
+        slotsEl.querySelectorAll(".booking-slot").forEach((x) => x.removeAttribute("aria-pressed"));
+        selected = null;
       } else if (res.status === 409) {
-        statusEl.textContent = data.error || "That slot was just taken. Please pick another.";
+        setStatus("is-error", data.error || "That slot was just taken. Please pick another.");
         form.hidden = true;
         await loadSlots();
         slotsEl.scrollIntoView({ behavior: "smooth", block: "center" });
       } else {
-        statusEl.textContent = data.error || "Something went wrong. Please try again in a moment.";
+        setStatus("is-error", data.error || "Something went wrong. Please try again in a moment.");
       }
     } catch {
-      statusEl.textContent = "Network problem. Please try again in a moment.";
+      setStatus("is-error", "Network problem. Please try again in a moment.");
     } finally {
       submitBtn.disabled = false;
     }
