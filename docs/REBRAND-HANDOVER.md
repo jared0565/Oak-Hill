@@ -322,17 +322,28 @@ the original `admin.html`**, not introduced by the rebrand:
    it will write to whatever database it is pointed at. In the demonstration
    it should be pointed at a local D1, not the production one.
 
-## 9. Deployment
+## 9. Deployment — done, on the operator's instruction
 
-**No DNS was touched, no paid resource was provisioned, and Bytes-Web was not
-modified.** The Pages project still has no custom domain, so the site is
-served at `https://oak-hill-park-cafe.pages.dev`.
+The site is deployed. `feature/bytesfx-rebrand` was fast-forwarded into
+`master` and pushed on 22 October 2026, which triggered the existing deploy
+workflow: the unit tests ran, the D1 migrations were applied to the remote
+database, and the Pages project rebuilt. **No DNS was touched, no paid
+resource was provisioned, and Bytes-Web was not modified.** The Pages project
+still has no custom domain, so the site is served at
+`https://oak-hill-park-cafe.pages.dev`.
 
-The deployment is a merge into `master`, which triggers the existing deploy
-workflow: the unit tests run first, then the D1 migrations are applied to the
-remote database, then the Pages project is rebuilt. **`feature/bytesfx-rebrand`
-is the branch to merge**, and it is a fast-forward — `master` is an ancestor
-of it.
+Verified on the live deployment, not on a local build:
+
+- the workflow reported **"No migrations to apply"** — the remote database was
+  already at the current schema, so the deploy changed no production data;
+- `/api/slots` returns 57 slots, all Monday to Friday, none on a day the
+  calendar calls closed and none on the private-hire day;
+- `/api/code` returns no tracking snippets and `demo: true`;
+- the URL matrix answers as intended: every page at its `.html` path with a
+  200, the extension-less twin with a 301, `/` with a 200, and an unknown path
+  with a 404;
+- the repo's own page checker passes on the live site, all twelve pages at
+  1280px and 390px, with no issues.
 
 What is already done:
 
