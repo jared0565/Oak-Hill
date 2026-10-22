@@ -124,9 +124,11 @@
     }
   ],
   "thumbnails": {
-    "_comment": "Right-sized square thumbnails derived from the menu photographs above, not separately generated images. Each is the source cropped to the largest centred square (what CSS object-fit: cover does) and resized to 240×240 with LANCZOS. The 1024px originals are kept because menu-breakfast.jpg is also used on the homepage at 381×238.",
+    "_comment": "Right-sized square thumbnails derived from the menu photographs above, not separately generated images. Each is the source cropped to the largest centred square (what CSS object-fit: cover does) and resized to 240×240 with LANCZOS, with a 480×480 copy alongside it for a 2x display. The 1024px originals are kept because menu-breakfast.jpg is also used on the homepage at 381×238.",
     "width": 240,
     "height": 240,
+    "width2x": 480,
+    "height2x": 480,
     "crop": "centre square",
     "resample": "LANCZOS",
     "jpeg": { "quality": 80, "subsampling": 2, "progressive": true, "optimize": true },

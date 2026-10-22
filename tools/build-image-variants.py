@@ -53,19 +53,31 @@ def build_thumbnails(spec) -> int:
     thumbs = spec.get("thumbnails")
     if not thumbs or not thumbs.get("files"):
         return 0
-    size = (thumbs.get("width", 240), thumbs.get("height", 240))
     jpeg = thumbs.get("jpeg", {})
     webp = thumbs.get("webp", {})
+
+    # The 1x size, and the 2x size beside it for a high-density display. The
+    # 2x file name is the 1x name with the width in it, so the two are
+    # obviously a pair: menu-x-thumb.jpg and menu-x-thumb-480.jpg.
+    sizes = [(thumbs.get("width", 240), thumbs.get("height", 240))]
+    if thumbs.get("width2x"):
+        sizes.append((thumbs["width2x"], thumbs.get("height2x", thumbs["width2x"])))
 
     written = 0
     for entry in thumbs["files"]:
         source = OUT_DIR / entry["source"]
         if not source.exists():
             sys.exit(f"photos.json lists {entry['source']}, but it is not in {OUT_DIR}")
-        with Image.open(source) as original:
-            original.load()
-            thumb = as_rgb(centre_square(original).resize(size, RESAMPLE))
-            target = OUT_DIR / entry["file"]
+        for width, height in sizes:
+            with Image.open(source) as original:
+                original.load()
+                thumb = as_rgb(centre_square(original).resize((width, height), RESAMPLE))
+            if width == sizes[0][0]:
+                name = entry["file"]
+            else:
+                stem, _, ext = entry["file"].rpartition(".")
+                name = f"{stem}-{width}.{ext}"
+            target = OUT_DIR / name
             if entry["format"] == "jpeg":
                 thumb.save(target, "JPEG", **jpeg)
             else:

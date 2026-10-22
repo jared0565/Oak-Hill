@@ -197,6 +197,8 @@
   "thumbnails": {
     "width": 240,
     "height": 240,
+    "width2x": 480,
+    "height2x": 480,
     "crop": "centre square",
     "resample": "LANCZOS",
     "files": [
@@ -209,12 +211,28 @@
         "bytes": 12623
       },
       {
+        "file": "menu-breakfast-thumb-480.jpg",
+        "source": "menu-breakfast.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 35964
+      },
+      {
         "file": "menu-breakfast-thumb.webp",
         "source": "menu-breakfast.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 9134
+      },
+      {
+        "file": "menu-breakfast-thumb-480.webp",
+        "source": "menu-breakfast.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 23364
       },
       {
         "file": "menu-toastie-thumb.jpg",
@@ -225,12 +243,28 @@
         "bytes": 12658
       },
       {
+        "file": "menu-toastie-thumb-480.jpg",
+        "source": "menu-toastie.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 38020
+      },
+      {
         "file": "menu-toastie-thumb.webp",
         "source": "menu-toastie.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 10036
+      },
+      {
+        "file": "menu-toastie-thumb-480.webp",
+        "source": "menu-toastie.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 27756
       },
       {
         "file": "menu-sandwich-thumb.jpg",
@@ -241,12 +275,28 @@
         "bytes": 12519
       },
       {
+        "file": "menu-sandwich-thumb-480.jpg",
+        "source": "menu-sandwich.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 35523
+      },
+      {
         "file": "menu-sandwich-thumb.webp",
         "source": "menu-sandwich.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 9724
+      },
+      {
+        "file": "menu-sandwich-thumb-480.webp",
+        "source": "menu-sandwich.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 24360
       },
       {
         "file": "menu-kids-meal-thumb.jpg",
@@ -257,12 +307,28 @@
         "bytes": 9911
       },
       {
+        "file": "menu-kids-meal-thumb-480.jpg",
+        "source": "menu-kids-meal.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 25783
+      },
+      {
         "file": "menu-kids-meal-thumb.webp",
         "source": "menu-kids-meal.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 6346
+      },
+      {
+        "file": "menu-kids-meal-thumb-480.webp",
+        "source": "menu-kids-meal.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 13834
       },
       {
         "file": "menu-cake-carrot-thumb.jpg",
@@ -273,12 +339,28 @@
         "bytes": 10057
       },
       {
+        "file": "menu-cake-carrot-thumb-480.jpg",
+        "source": "menu-cake-carrot.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 27068
+      },
+      {
         "file": "menu-cake-carrot-thumb.webp",
         "source": "menu-cake-carrot.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 6724
+      },
+      {
+        "file": "menu-cake-carrot-thumb-480.webp",
+        "source": "menu-cake-carrot.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 16152
       },
       {
         "file": "menu-chocolate-cake-thumb.jpg",
@@ -289,12 +371,28 @@
         "bytes": 9045
       },
       {
+        "file": "menu-chocolate-cake-thumb-480.jpg",
+        "source": "menu-chocolate-cake.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 23373
+      },
+      {
         "file": "menu-chocolate-cake-thumb.webp",
         "source": "menu-chocolate-cake.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 5500
+      },
+      {
+        "file": "menu-chocolate-cake-thumb-480.webp",
+        "source": "menu-chocolate-cake.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 12966
       },
       {
         "file": "menu-hot-chocolate-thumb.jpg",
@@ -305,12 +403,28 @@
         "bytes": 9801
       },
       {
+        "file": "menu-hot-chocolate-thumb-480.jpg",
+        "source": "menu-hot-chocolate.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 27274
+      },
+      {
         "file": "menu-hot-chocolate-thumb.webp",
         "source": "menu-hot-chocolate.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 6608
+      },
+      {
+        "file": "menu-hot-chocolate-thumb-480.webp",
+        "source": "menu-hot-chocolate.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 16282
       },
       {
         "file": "menu-coffee-thumb.jpg",
@@ -321,12 +435,28 @@
         "bytes": 8993
       },
       {
+        "file": "menu-coffee-thumb-480.jpg",
+        "source": "menu-coffee.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 23401
+      },
+      {
         "file": "menu-coffee-thumb.webp",
         "source": "menu-coffee.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 5246
+      },
+      {
+        "file": "menu-coffee-thumb-480.webp",
+        "source": "menu-coffee.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 11564
       },
       {
         "file": "menu-cold-drinks-thumb.jpg",
@@ -337,12 +467,28 @@
         "bytes": 8220
       },
       {
+        "file": "menu-cold-drinks-thumb-480.jpg",
+        "source": "menu-cold-drinks.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 22303
+      },
+      {
         "file": "menu-cold-drinks-thumb.webp",
         "source": "menu-cold-drinks.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 4194
+      },
+      {
+        "file": "menu-cold-drinks-thumb-480.webp",
+        "source": "menu-cold-drinks.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 10002
       },
       {
         "file": "menu-soup-thumb.jpg",
@@ -353,12 +499,28 @@
         "bytes": 12586
       },
       {
+        "file": "menu-soup-thumb-480.jpg",
+        "source": "menu-soup.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 34454
+      },
+      {
         "file": "menu-soup-thumb.webp",
         "source": "menu-soup.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 9236
+      },
+      {
+        "file": "menu-soup-thumb-480.webp",
+        "source": "menu-soup.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 21954
       },
       {
         "file": "menu-pancakes-thumb.jpg",
@@ -369,12 +531,28 @@
         "bytes": 12813
       },
       {
+        "file": "menu-pancakes-thumb-480.jpg",
+        "source": "menu-pancakes.jpg",
+        "format": "jpeg",
+        "width": 480,
+        "height": 480,
+        "bytes": 35612
+      },
+      {
         "file": "menu-pancakes-thumb.webp",
         "source": "menu-pancakes.jpg",
         "format": "webp",
         "width": 240,
         "height": 240,
         "bytes": 9206
+      },
+      {
+        "file": "menu-pancakes-thumb-480.webp",
+        "source": "menu-pancakes.jpg",
+        "format": "webp",
+        "width": 480,
+        "height": 480,
+        "bytes": 22736
       }
     ]
   },

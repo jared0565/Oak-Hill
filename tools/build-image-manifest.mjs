@@ -87,31 +87,42 @@ const entries = spec.photos.map((p) => {
 // Thumbnails are derived from the photographs above, not generated separately,
 // so they carry no prompt — only their source and the transform that made them.
 const thumbSpec = spec.thumbnails || { files: [] };
-const thumbEntries = thumbSpec.files.map((t) => {
-  const file = path.join(outDir, t.file);
-  if (!fs.existsSync(file)) {
-    throw new Error(`photos.json lists ${t.file}, but it is not in ${outDir}`);
+const thumbEntries = [];
+for (const t of thumbSpec.files) {
+  // Each thumbnail is generated at 1x and, when photos.json declares a 2x
+  // width, at 2x as well. The 2x name is the 1x name with the width in it.
+  const sizes = [[thumbSpec.width, thumbSpec.height]];
+  if (thumbSpec.width2x) sizes.push([thumbSpec.width2x, thumbSpec.height2x]);
+  for (const [wantW, wantH] of sizes) {
+    const is2x = wantW !== thumbSpec.width;
+    const name = is2x
+      ? `${t.file.replace(/\.([^.]+)$/, `-${wantW}.$1`)}`
+      : t.file;
+    const file = path.join(outDir, name);
+    if (!fs.existsSync(file)) {
+      throw new Error(`photos.json lists ${name}, but it is not in ${outDir}`);
+    }
+    if (!entries.some((e) => e.file === t.source)) {
+      throw new Error(`photos.json thumbnail ${name} names a source that is not listed: ${t.source}`);
+    }
+    const dim = dimensions(file);
+    if (!dim) throw new Error(`could not read the dimensions of ${name}`);
+    if (wantW && dim.width !== wantW) {
+      throw new Error(`${name} is ${dim.width}px wide, but photos.json says ${wantW}px`);
+    }
+    if (wantH && dim.height !== wantH) {
+      throw new Error(`${name} is ${dim.height}px tall, but photos.json says ${wantH}px`);
+    }
+    thumbEntries.push({
+      file: name,
+      source: t.source,
+      format: t.format,
+      width: dim.width,
+      height: dim.height,
+      bytes: fs.statSync(file).size,
+    });
   }
-  if (!entries.some((e) => e.file === t.source)) {
-    throw new Error(`photos.json thumbnail ${t.file} names a source that is not listed: ${t.source}`);
-  }
-  const dim = dimensions(file);
-  if (!dim) throw new Error(`could not read the dimensions of ${t.file}`);
-  if (thumbSpec.width && dim.width !== thumbSpec.width) {
-    throw new Error(`${t.file} is ${dim.width}px wide, but photos.json says ${thumbSpec.width}px`);
-  }
-  if (thumbSpec.height && dim.height !== thumbSpec.height) {
-    throw new Error(`${t.file} is ${dim.height}px tall, but photos.json says ${thumbSpec.height}px`);
-  }
-  return {
-    file: t.file,
-    source: t.source,
-    format: t.format,
-    width: dim.width,
-    height: dim.height,
-    bytes: fs.statSync(file).size,
-  };
-});
+}
 
 // The WebP renditions are derived from the photographs above, at the widths
 // the pages actually draw them at. The file list is derived from the same
@@ -178,6 +189,8 @@ fs.writeFileSync(
         _comment: undefined,
         width: thumbSpec.width,
         height: thumbSpec.height,
+        width2x: thumbSpec.width2x,
+        height2x: thumbSpec.height2x,
         crop: thumbSpec.crop,
         resample: thumbSpec.resample,
         files: thumbEntries,
