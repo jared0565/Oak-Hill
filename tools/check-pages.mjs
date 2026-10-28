@@ -238,10 +238,13 @@ console.log("\n=== theme ===");
       ["nav link", ".primary-nav a"],
       ["share button", ".nav-share"],
       ["theme switch", ".theme-toggle"],
+      // The photographic band is on the homepage only, so it is measured
+      // where it is and passed over where it is not.
+      ["band heading", ".photo-band h2", true],
     ];
-    return targets.map(([name, selector]) => {
+    return targets.map(([name, selector, optional]) => {
       const el = document.querySelector(selector);
-      if (!el) return { name, missing: true };
+      if (!el) return optional ? null : { name, missing: true };
       const bg = backdropOf(el);
       const fg = parse(getComputedStyle(el).color);
       const flat = fg.rgb.map((c, j) => fg.a * c + (1 - fg.a) * bg[j]);
@@ -250,6 +253,7 @@ console.log("\n=== theme ===");
   });
 
   for (const s of samples) {
+    if (!s) continue;
     if (s.missing) { issues.push(`missing: ${s.name}`); continue; }
     if (s.ratio < 4.5) issues.push(`contrast ${s.name} ${s.ratio}:1`);
     console.log(`  ${s.ratio >= 4.5 ? "ok" : "X"}  ${s.name.padEnd(16)} ${s.ratio}:1`);

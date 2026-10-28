@@ -705,6 +705,106 @@ button.button {
   box-shadow: 0 14px 30px rgba(38, 50, 56, 0.13);
 }
 
+/* ---- the photographic band ------------------------------------------------
+   One photograph, edge to edge, with the type reversed out of it. The wash is
+   a panel the type sits inside, not a layer over the whole band, so the page
+   checker can measure the type's contrast against the wash instead of against
+   the page behind it. */
+.photo-band {
+  --band-ink: 20 52 36;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: clamp(460px, 66vh, 620px);
+}
+
+.photo-band__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: block;
+}
+
+.photo-band__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+}
+
+.photo-band__wash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  align-items: center;
+  background-color: rgb(var(--band-ink) / 0.94);
+  /* The wash is masked rather than painted with a gradient. A gradient over
+     a colour keeps that colour underneath, and the colour is what the page
+     checker reads when it measures the type; the mask fades the wash away
+     where the picture should show and holds it where the type sits. */
+  -webkit-mask-image: linear-gradient(95deg, #000 0%, #000 50%, transparent 66%);
+  mask-image: linear-gradient(95deg, #000 0%, #000 50%, transparent 66%);
+}
+
+.photo-band__inner {
+  color: var(--on-band);
+}
+
+.photo-band__inner .kicker {
+  color: var(--honey);
+}
+
+.photo-band h2 {
+  max-width: 17ch;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.photo-band__lede {
+  max-width: 44ch;
+  margin: 1rem 0 0;
+  color: rgba(255, 247, 234, 0.9);
+  font-size: var(--text-body);
+}
+
+.photo-band__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.6rem;
+}
+
+.photo-band .button.ghost {
+  background: rgba(255, 247, 234, 0.1);
+  color: var(--on-band);
+  border-color: rgba(255, 247, 234, 0.4);
+}
+
+@media (max-width: 680px) {
+  .photo-band {
+    min-height: 480px;
+  }
+
+  .photo-band__wash {
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 88%, transparent 100%);
+  }
+
+  .photo-band__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .photo-band__actions .button {
+    width: 100%;
+  }
+}
+
 .stat-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
