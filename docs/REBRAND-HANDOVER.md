@@ -415,6 +415,14 @@ Verified on the live deployment, not on a local build:
 - the repo's own page checker passes on the live site, all twelve pages at
   1280px and 390px, with no issues.
 
+**Deployed again on 28 October 2026**, with the light and dark mode: two
+commits on `master` (`8d652bc` the mode switch, `1443ae7` the test browser's
+dependencies past a published advisory). The workflow ran the unit tests,
+applied the migrations and rebuilt the Pages project, and the same page
+checker passes on the live site, including the mode pass: the system setting
+is followed while nothing is stored, the switch overrides it, the choice
+survives a reload, and the dark page's eleven text pairs all clear 4.5:1.
+
 What is already done:
 
 1. **The origin is set** — `https://oak-hill-park-cafe.pages.dev`, the URL the
