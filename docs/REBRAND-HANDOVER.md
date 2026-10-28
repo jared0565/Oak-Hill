@@ -474,6 +474,24 @@ checker passes on the live site, including the mode pass: the system setting
 is followed while nothing is stored, the switch overrides it, the choice
 survives a reload, and the dark page's eleven text pairs all clear 4.5:1.
 
+**Deployed a third time on 28 October 2026**, with the switch, the policy and
+the dependencies: seven commits on `master`, from `d81ee67` to `f81ebf5`. The
+workflow ran the unit tests, applied the migrations — **"No migrations to
+apply!"**, so no production data changed — and rebuilt the Pages project.
+
+Verified on the live deployment:
+
+- the response now carries the tight content-security policy, and the page
+  checker passes on the live site: all twelve pages at 1280px and 390px, with
+  no issues and no console errors, which is where a blocked script or style
+  would show;
+- the staff console's two switches both name the action they will take, and
+  both are renamed when the mode moves — a click on the visible switch turns
+  the page from dark to light and renames both switches to "Switch to dark
+  mode";
+- the demonstration's own promise still holds: no third-party host is allowed
+  by the policy, and `/api/code` still serves no snippet.
+
 What is already done:
 
 1. **The origin is set** — `https://oak-hill-park-cafe.pages.dev`, the URL the
