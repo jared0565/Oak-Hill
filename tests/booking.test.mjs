@@ -218,7 +218,7 @@ function buildPage({ slotResponse, bookResponse } = {}) {
   vm.runInContext(SOURCE, context);
 
   return {
-    root, form, slotsEl, statusEl, successEl, chosenEl, submitBtn, fields, calls,
+    root, form, slotsEl, statusEl, successEl, chosenEl, submitBtn, summary, fields, calls,
     async settle() { await tick(); },
     slotButtons() { return slotsEl.querySelectorAll(".booking-slot"); },
     async submit() {
@@ -269,9 +269,33 @@ test("the free slots are offered, and choosing one opens the form", async () => 
   // Nothing is sent until a slot has been chosen.
   assert.deepEqual(page.calls.map((c) => c.url), ["/api/slots"]);
 
+  // The summary says how much is free and when the next slot is.
+  assert.equal(
+    page.summary.textContent,
+    "2 slots across 1 days. The next one is Mon 2 Feb, 9:30am–11:30am."
+  );
+
   buttons[0].fire("click", {});
   assert.equal(page.chosenEl.textContent, "Chosen: Mon 2 Feb, 9:30am–11:30am");
   assert.equal(page.form.hidden, false);
+});
+
+test("the confirmation says that the demonstration reserved nothing", async () => {
+  // The server sends no message of its own, so the wording comes from the
+  // page. This is the sentence that says the site is a demonstration, and it
+  // must not be softened.
+  const page = buildPage({
+    slotResponse: SLOTS,
+    bookResponse: ok({ ok: true, demo: true, ref: "ABC-123", slot: { id: 1, date: "2026-02-02", start_time: "09:30", end_time: "11:30" } }),
+  });
+  await page.settle();
+  page.slotButtons()[0].fire("click", {});
+
+  await page.submit();
+
+  const paragraph = page.successEl.children[1];
+  assert.match(paragraph.textContent, /no reservation has been made and no email has been sent/);
+  assert.match(paragraph.textContent, /Mon 2 Feb, 9:30am–11:30am was the slot you asked for/);
 });
 
 test("a form with everything filled in sends the request", async () => {
