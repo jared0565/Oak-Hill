@@ -72,7 +72,7 @@ const AUDIT = () => {
     // the signed-out view and another for the signed-in top bar, and only
     // one of the two is showing at a time.
     themeSwitch: [...document.querySelectorAll("[data-theme-toggle]")].filter(
-      (b) => b.getClientRects().length > 0
+      (b) =>  b.getClientRects().length > 0
     ).length,
     theme: document.documentElement.getAttribute("data-theme"),
     title: document.title,
@@ -135,8 +135,8 @@ for (const vp of VIEWPORTS) {
     if (a.demoBadge !== 1) issues.push(`demo badge count ${a.demoBadge}`);
     // Every page must offer the mode switch, and the page must know which
     // mode it is in before it paints.
-    if (a.themeSwitch !== 1) issues.push(`theme switch count ${a.themeSwitch}`);
-    if (a.theme !== "light" && a.theme !== "dark") issues.push(`theme not set: ${a.theme}`);
+    if (a.themeSwitch !== 1)  issues.push(`theme switch count ${a.themeSwitch}`);
+    if (a.theme !== "light" && a.theme !== "dark")  issues.push(`theme not set: ${a.theme}`);
     if (a.jumps.length) issues.push(`heading jumps ${a.jumps.join(",")}`);
     if (a.overflow) issues.push(`h-overflow ${a.overflow}`);
     if (a.deadAnchors.length) issues.push(`dead anchors ${a.deadAnchors.join(",")}`);

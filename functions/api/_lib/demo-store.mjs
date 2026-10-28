@@ -59,8 +59,8 @@ export function sampleSlots(now = new Date()) {
   const today = midnightUTC(now);
   const hire = privateHireDate(now);
   const slots = [];
-  for (let day = 1; day <= 28; day++) {
-    const stamp = new Date(today + day * 86400000);
+  for (let day = 1;  day <= 28; day++) {
+    const stamp =  new Date(today + day * 86400000);
     if (isWeekend(stamp.getUTCDay())) continue;
     const date = stamp.toISOString().slice(0, 10);
     if (date === hire) continue; // that day is a private hire
@@ -86,9 +86,9 @@ export function sampleEvents(from, to, now = new Date()) {
   const start = new Date(`${from}T00:00:00Z`);
   const end = new Date(`${to}T00:00:00Z`);
   const events = [];
-  if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())) return events;
+  if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime()))  return events;
   const hire = privateHireDate(now);
-  for (let stamp = start.getTime(); stamp <= end.getTime(); stamp += 86400000) {
+  for (let stamp = start.getTime();  stamp <= end.getTime(); stamp += 86400000) {
     const d = new Date(stamp);
     const date = d.toISOString().slice(0, 10);
     const dow = d.getUTCDay();

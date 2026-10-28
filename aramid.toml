@@ -3,3 +3,12 @@ schema_version = 1
 semgrep_block_armed = false
 agent_block_armed = false
 bake_started = "2026-10-21"
+
+[js_mutation]
+# The gate mutates every changed line of a queued range and only closes a
+# finding when it has watched the mutant die. Nineteen lines across the four
+# files it had flagged produce 36 mutants, and the default budget of 20
+# would leave half of them untested.
+max_mutants = 60
+wall_budget_s = 1200
+

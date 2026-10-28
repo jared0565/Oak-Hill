@@ -35,7 +35,7 @@
   function setStatus(kind, text) {
     statusEl.classList.remove("is-error", "is-success");
     if (kind) statusEl.classList.add(kind);
-    if (text != null) statusEl.textContent = text;
+    if (text != null)  statusEl.textContent = text;
   }
 
   // The message has to name the field that is wrong, and that field has to be
@@ -44,8 +44,8 @@
   function fieldName(el) {
     const label = el.id ? form.querySelector(`label[for="${CSS.escape(el.id)}"]`) : el.closest("label");
     const text = label ? label.textContent.trim().replace(/\s*\*$/, "") : "";
-    const first = text.split(/\s+/)[0];
-    return (first || el.name || "field").toLowerCase();
+    const first =  text.split(/\s+/)[0];
+    return  (first || el.name || "field").toLowerCase();
   }
 
   function markInvalid(el, on) {
@@ -126,11 +126,11 @@
     // field is marked, rather than sending a request that fails for a reason
     // the visitor cannot see.
     const required = Array.from(form.querySelectorAll("input[required], select[required], textarea[required]"));
-    const missing = required.find((el) => !String(el.value || "").trim());
-    const badEmail = required.find((el) => el.type === "email" && String(el.value || "").trim() && !el.validity.valid);
-    const bad = missing || badEmail;
+    const missing =  required.find((el) => !String(el.value || "").trim());
+    const badEmail =  required.find((el) => el.type === "email" && String(el.value || "").trim() && !el.validity.valid);
+    const bad =  missing || badEmail;
     if (bad) {
-      required.forEach((el) => markInvalid(el, el === bad));
+      required.forEach((el) =>  markInvalid(el, el === bad));
       setStatus("is-error", badEmail
         ? "That email address does not look right."
         : "Please fill in your " + fieldName(bad) + ".");
@@ -183,12 +183,12 @@
         slotsEl.querySelectorAll(".booking-slot").forEach((x) => x.removeAttribute("aria-pressed"));
         selected = null;
       } else if (res.status === 409) {
-        setStatus("is-error", data.error || "That slot was just taken. Please pick another.");
+        setStatus("is-error",  data.error || "That slot was just taken. Please pick another.");
         form.hidden = true;
         await loadSlots();
         slotsEl.scrollIntoView({ behavior: "smooth", block: "center" });
       } else {
-        setStatus("is-error", data.error || "Something went wrong. Please try again in a moment.");
+        setStatus("is-error",  data.error || "Something went wrong. Please try again in a moment.");
       }
     } catch {
       setStatus("is-error", "Network problem. Please try again in a moment.");

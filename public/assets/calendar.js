@@ -54,15 +54,15 @@
   // the generator rather than whatever the page was showing.
   function describeAvailability() {
     const target = document.querySelector("[data-availability-summary]");
-    if (!target) return;
+    if (!target)  return;
 
     const openDays = new Set();
     slots.forEach((s) => openDays.add(new Date(s.date + "T00:00:00Z").getUTCDay()));
     const trading = [...openDays].sort((a, b) => a - b);
 
     const closedDays = new Set();
-    events.filter((e) => e.kind === "closure").forEach((e) => closedDays.add(new Date(e.start_date + "T00:00:00Z").getUTCDay()));
-    const hires = events.filter((e) => e.kind === "event" && /private hire/i.test(e.title || ""));
+    events.filter((e) =>  e.kind === "closure").forEach((e) => closedDays.add(new Date(e.start_date + "T00:00:00Z").getUTCDay()));
+    const hires =  events.filter((e) => e.kind === "event" && /private hire/i.test(e.title || ""));
 
     const names = trading.map((d) => DAY_NAMES[d]);
     const range = names.length
