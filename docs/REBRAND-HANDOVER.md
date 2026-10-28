@@ -346,14 +346,14 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **143 tests, 143 pass, 0 fail.** (95 at the rebrand; 109
+`npm test` — **146 tests, 146 pass, 0 fail.** (95 at the rebrand; 109
 after the mode switch, the policy and the dependency work; 27 more in
 the four files the mutation gate had flagged, which until then had no
 test of their own — `tests/demo-store.test.mjs`,
 `tests/booking.test.mjs`, `tests/calendar.test.mjs` and
 `tests/check-pages.test.mjs`; 4 more in the full-bleed band's
-`tests/photo-band.test.mjs` and 3 more in
-`tests/portrait-anchor.test.mjs`.)
+`tests/photo-band.test.mjs`, 3 more in `tests/portrait-anchor.test.mjs`
+and 3 more holding the page colour.)
 
 `tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
 Each test asserts on the *absence* of a write or a request, so it would fail
@@ -561,6 +561,17 @@ all twelve pages at 1280px and 390px, with no issues, and the mode pass
 still clears 4.5:1 on every text pair. The portrait is served from the
 site's own origin at 487×649 CSS pixels, cropped from the 486×486 square at
 its native resolution, so nothing on the page is upscaled.
+
+**Deployed a sixth time on 28 October 2026**, with the page colour:
+`2a5e0bc` on `master`. The page moved off the yellow cream and onto warm
+paper. The deploy ran the unit tests, applied the migrations — **"No
+migrations to apply!"** — and rebuilt the Pages project.
+
+Verified on the live deployment: the page checker passes on the live
+site, all twelve pages at 1280px and 390px, with no issues, and the
+computed page colour on the live site reads `rgb(250, 243, 240)` with a
+card at `rgb(255, 253, 248)` and a translucent header that matches the
+page exactly.
 
 What is already done:
 
