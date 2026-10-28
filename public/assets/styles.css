@@ -687,6 +687,13 @@ button.button {
   object-fit: cover;
 }
 
+/* The one portrait on the site. Every other picture is landscape or square,
+   so this one anchors the section it stands in rather than sitting beside
+   it. */
+.image-stack img.portrait {
+  aspect-ratio: 3 / 4;
+}
+
 .party-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
