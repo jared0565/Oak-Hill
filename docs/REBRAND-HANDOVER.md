@@ -243,6 +243,16 @@ the hosts to allow are the application's own list in
 `functions/api/_lib/snippet-core.mjs`, and `tests/csp.test.mjs` fails at the
 moment the mode is armed without it.
 
+**A live policy should not have to allow `'unsafe-inline'`.** The
+tracking-code manager pastes the owner's snippet in as an inline script, so a
+live policy would have to allow inline scripts to run — and that is the
+loosest thing a policy can allow. The better shape is to serve an approved
+snippet from this origin (so the policy can stay `'self'`) or to give it a
+nonce, and that change is worth making before the site is ever armed. It is
+not made here: the live path cannot be exercised end to end, because there is
+no live deployment, no third-party tag and no real bot check to test against,
+and the demonstration's own policy allows no inline script at all.
+
 ## 3. The pages, reviewed and updated
 
 | Page | Reviewed | Updated | Notes |
