@@ -16,6 +16,14 @@
 //   LIVE_MODE_ACK  "true"  -> required, in addition to DEMO_MODE="false",
 //                            before the live path can arm at all.
 //
+// Arming live is a third deliberate step, in the same file as the other two:
+// the Content-Security-Policy in public/_headers allows no third-party host
+// and no inline script, because a demonstration loads no third-party tag. A
+// live site pastes tracking tags in as inline scripts and loads the bot check
+// from Cloudflare, so its policy has to be widened to match — the list of
+// hosts to allow is the application's own, in _lib/snippet-core.mjs, and
+// tests/csp.test.mjs fails the moment the mode is armed without it.
+//
 // Fail-safe rule: an unrecognised or missing DEMO_MODE is NOT live. The site
 // reports that it is unconfigured and writes nothing, so a misconfigured
 // deployment can never quietly accept real bookings. Arming live takes two

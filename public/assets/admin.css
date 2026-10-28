@@ -23,6 +23,19 @@
   }
 }
 
+/* The "Protected" pill beside an owner's name. A class rather than an inline
+   style because the site's policy does not allow inline styles. */
+.admin-protected-badge {
+  margin-left: .4rem;
+  font-size: .72em;
+  font-weight: 600;
+  color: #0a7d28;
+  border: 1px solid #0a7d28;
+  border-radius: 999px;
+  padding: .05rem .45rem;
+  vertical-align: middle;
+}
+
 /* ---- full-bleed shell (only while the signed-in app is showing) ---- */
 body.admin-shell { background: var(--admin-bg); }
 body.admin-shell #main.section { padding: 0; }

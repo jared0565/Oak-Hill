@@ -913,6 +913,20 @@ button.button {
   gap: 0.8rem;
 }
 
+/* The spam honeypot: a field a visitor never sees and a bot fills in. It is
+   moved off-screen rather than display:none, so that it still submits, and it
+   carries aria-hidden so that assistive technology skips it. It is a class
+   rather than an inline style because the site's policy does not allow inline
+   styles. */
+.honeypot {
+  position: absolute;
+  left: -5000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 label {
   display: grid;
   gap: 0.35rem;

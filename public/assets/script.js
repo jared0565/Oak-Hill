@@ -364,7 +364,7 @@
 
   var form = document.createElement("form"); form.className = "footer-signup-form";
   var hp = document.createElement("input"); hp.type = "text"; hp.name = "company"; hp.tabIndex = -1; hp.autocomplete = "off";
-  hp.setAttribute("aria-hidden", "true"); hp.style.cssText = "position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden";
+  hp.setAttribute("aria-hidden", "true"); hp.className = "honeypot";
   var email = document.createElement("input"); email.type = "email"; email.required = true; email.value = "alex@example.com"; email.placeholder = "you@example.com"; email.id = "footer-newsletter-email"; email.name = "email"; email.autocomplete = "email"; email.setAttribute("aria-label", "Email address");
   var btn = el("button", "Sign up", "button"); btn.type = "submit";
   var status = el("p", null, "footer-signup-status");

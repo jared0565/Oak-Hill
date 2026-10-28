@@ -202,6 +202,47 @@ the switch is used, nothing is written at all.
   the new origin and the new name.
 - `package.json` / `package-lock.json` renamed to `bytesfx-cafe-bookings`.
 
+### The content-security policy, tightened to what the demonstration does
+
+The policy in `public/_headers` used to allow `'unsafe-inline'` scripts and a
+dozen advertising and analytics hosts. A demonstration serves no third-party
+tag at all — `/api/code` returns an empty list in demonstration mode, and the
+site loads no font, script, image or frame from anywhere but its own origin —
+so those allowances only widened the blast radius of an injection. They are
+gone:
+
+| Directive | Was | Now |
+|---|---|---|
+| `script-src` | `'self' 'unsafe-inline'` + 13 tag hosts | `'self'` |
+| `style-src` | `'self' 'unsafe-inline'` | `'self'` |
+| `img-src` | `'self' data:` + 12 tag hosts | `'self' data:` |
+| `connect-src` | `'self'` + 12 tag hosts | `'self'` |
+| `frame-src` | 4 hosts | `'none'` |
+
+`default-src`, `object-src`, `worker-src`, `base-uri`, `form-action` and
+`frame-ancestors` are unchanged.
+
+Three things had to move to make `style-src 'self'` safe, because the browser
+drops an inline style the policy does not allow:
+
+- the spam honeypot in `contact.html` and the one the footer sign-up form
+  builds in `script.js` now use a `.honeypot` class in `styles.css`;
+- the "Protected" pill beside an owner's name in the staff console now uses an
+  `.admin-protected-badge` class in `admin.css`.
+
+`tests/csp.test.mjs` holds the policy to the mode the site is deployed in. It
+checks that the policy allows every source the shipped pages actually use, that
+the shipped pages set no inline style, and that the policy allows no
+third-party host and no inline script while the site is in demonstration mode.
+
+**Arming the site for real changes the policy.** A live site pastes tracking
+tags in as inline scripts and loads the bot check from Cloudflare, so its
+policy has to allow both. That is a third deliberate step alongside
+`DEMO_MODE=false` and `LIVE_MODE_ACK=true` (see `functions/api/_lib/demo.mjs`),
+the hosts to allow are the application's own list in
+`functions/api/_lib/snippet-core.mjs`, and `tests/csp.test.mjs` fails at the
+moment the mode is armed without it.
+
 ## 3. The pages, reviewed and updated
 
 | Page | Reviewed | Updated | Notes |

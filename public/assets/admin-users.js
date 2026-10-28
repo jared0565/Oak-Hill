@@ -22,8 +22,7 @@
       const tr = el("tr");
       const nameTd = el("td", u.name);
       if (u.protected) {
-        const badge = el("span", "Protected");
-        badge.style.cssText = "margin-left:.4rem;font-size:.72em;font-weight:600;color:#0a7d28;border:1px solid #0a7d28;border-radius:999px;padding:.05rem .45rem;vertical-align:middle;";
+        const badge = el("span", "Protected", "admin-protected-badge");
         badge.title = "Protected owner — can't be deleted, disabled, or demoted.";
         nameTd.appendChild(badge);
       }
