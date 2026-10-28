@@ -53,16 +53,21 @@
     return theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
   }
 
+  // The switches on the page. One place knows how to find them.
+  function switches() {
+    return document.querySelectorAll("[data-theme-toggle]");
+  }
+
   // Every switch on the page names the same action, because the mode is the
   // same for all of them. They are renamed whenever the mode moves — whether
   // the visitor pressed a switch or the operating system did — so that no
   // switch is ever naming the action it will not take.
-  function syncLabels() {
+  function syncLabels(buttons) {
     var label = labelFor(current());
-    var buttons = document.querySelectorAll("[data-theme-toggle]");
-    for (var i = 0; i < buttons.length; i++) {
-      buttons[i].setAttribute("aria-label", label);
-      buttons[i].setAttribute("title", label);
+    var list = buttons || switches();
+    for (var i = 0; i < list.length; i++) {
+      list[i].setAttribute("aria-label", label);
+      list[i].setAttribute("title", label);
     }
   }
 
@@ -72,11 +77,11 @@
   }
 
   function bind() {
-    var buttons = document.querySelectorAll("[data-theme-toggle]");
+    var buttons = switches();
     for (var i = 0; i < buttons.length; i++) {
       bindButton(buttons[i]);
     }
-    syncLabels();
+    syncLabels(buttons);
   }
 
   // One switch at a time, and each is bound on its own: the staff console
