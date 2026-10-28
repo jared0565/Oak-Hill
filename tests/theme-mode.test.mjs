@@ -35,18 +35,26 @@ const PUBLIC_PAGES = [
 ];
 
 // ---- run theme.js against a stubbed browser ------------------------------
-function runTheme({ stored = null, systemDark = false } = {}) {
-  const rootAttrs = new Map();
-  const store = new Map();
-  if (stored) store.set("bytesfx-theme", stored);
-
+function makeButton() {
   const listeners = {};
-  const button = {
+  return {
     attrs: {},
     setAttribute(name, value) { this.attrs[name] = value; },
     getAttribute(name) { return this.attrs[name] ?? null; },
     addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
+    fire(type) { (listeners[type] || []).forEach((fn) => fn({})); },
   };
+}
+
+function runTheme({ stored = null, systemDark = false, buttonCount = 1 } = {}) {
+  const rootAttrs = new Map();
+  const store = new Map();
+  if (stored) store.set("bytesfx-theme", stored);
+
+  // One listener set per button: the staff console carries two switches, and
+  // a click has to reach the one that was clicked.
+  const buttons = [];
+  for (let i = 0; i < buttonCount; i++) buttons.push(makeButton());
 
   const root = {
     setAttribute(name, value) { rootAttrs.set(name, value); },
@@ -58,7 +66,7 @@ function runTheme({ stored = null, systemDark = false } = {}) {
     readyState: "complete",
     addEventListener() {},
     querySelectorAll(selector) {
-      return selector === "[data-theme-toggle]" ? [button] : [];
+      return selector === "[data-theme-toggle]" ? buttons : [];
     },
   };
 
@@ -86,9 +94,11 @@ function runTheme({ stored = null, systemDark = false } = {}) {
 
   return {
     root,
-    button,
+    button: buttons[0],
+    buttons,
     store,
-    click() { (listeners.click || []).forEach((fn) => fn()); },
+    click() { buttons[0].fire("click"); },
+    clickButton(i) { buttons[i].fire("click"); },
     // The operating system changes its setting, and the page is told.
     systemChange(dark) {
       media.matches = dark;
@@ -160,6 +170,33 @@ test("the switch names the action it will take", () => {
   const t = runTheme({ systemDark: false });
   assert.equal(t.button.getAttribute("aria-label"), "Switch to dark mode");
   t.click();
+  assert.equal(t.button.getAttribute("aria-label"), "Switch to light mode");
+});
+
+test("a page with two switches renames the one that was clicked", () => {
+  // The staff console carries two switches: one in the signed-out head, one in
+  // the signed-in top bar. Each has to name the action IT will take — a switch
+  // still labelled "Switch to light mode" after the site has gone dark is
+  // telling a screen-reader user the opposite of the truth.
+  const t = runTheme({ systemDark: false, buttonCount: 2 });
+  assert.equal(t.buttons[0].getAttribute("aria-label"), "Switch to dark mode");
+  assert.equal(t.buttons[1].getAttribute("aria-label"), "Switch to dark mode");
+
+  t.clickButton(0);
+  assert.equal(t.root.getAttribute("data-theme"), "dark");
+  assert.equal(t.buttons[0].getAttribute("aria-label"), "Switch to light mode");
+  assert.equal(t.buttons[1].getAttribute("aria-label"), "Switch to light mode");
+});
+
+test("the switch is renamed when the operating system changes the theme", () => {
+  // The page follows the operating system when nothing is stored, so the
+  // switch has to follow it too. A switch that still says "Switch to dark
+  // mode" on a dark page is naming the wrong action.
+  const t = runTheme({ systemDark: false });
+  assert.equal(t.button.getAttribute("aria-label"), "Switch to dark mode");
+
+  t.systemChange(true);
+  assert.equal(t.root.getAttribute("data-theme"), "dark");
   assert.equal(t.button.getAttribute("aria-label"), "Switch to light mode");
 });
 

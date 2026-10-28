@@ -44,7 +44,7 @@
   // With nothing stored, keep following the operating system.
   if (!stored && window.matchMedia) {
     var query = window.matchMedia("(prefers-color-scheme: dark)");
-    var follow = function (event) { apply(event.matches ? "dark" : "light"); };
+    var follow = function (event) { setTheme(event.matches ? "dark" : "light"); };
     if (query.addEventListener) query.addEventListener("change", follow);
     else if (query.addListener) query.addListener(follow);
   }
@@ -53,23 +53,40 @@
     return theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
   }
 
+  // Every switch on the page names the same action, because the mode is the
+  // same for all of them. They are renamed whenever the mode moves — whether
+  // the visitor pressed a switch or the operating system did — so that no
+  // switch is ever naming the action it will not take.
+  function syncLabels() {
+    var label = labelFor(current());
+    var buttons = document.querySelectorAll("[data-theme-toggle]");
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute("aria-label", label);
+      buttons[i].setAttribute("title", label);
+    }
+  }
+
+  function setTheme(theme) {
+    apply(theme);
+    syncLabels();
+  }
+
   function bind() {
     var buttons = document.querySelectorAll("[data-theme-toggle]");
     for (var i = 0; i < buttons.length; i++) {
-      var button = buttons[i];
-      var sync = function () {
-        var label = labelFor(current());
-        button.setAttribute("aria-label", label);
-        button.setAttribute("title", label);
-      };
-      button.addEventListener("click", function () {
-        var next = current() === "dark" ? "light" : "dark";
-        apply(next);
-        writeStored(next);
-        sync();
-      });
-      sync();
+      bindButton(buttons[i]);
     }
+    syncLabels();
+  }
+
+  // One switch at a time, and each is bound on its own: the staff console
+  // carries two of them, and each has to name the action IT will take.
+  function bindButton(button) {
+    button.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      setTheme(next);
+      writeStored(next);
+    });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
