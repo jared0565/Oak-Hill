@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy notice | BytesFX Café &amp; Bookings</title>
-  <meta name="description" content="What the BytesFX Café does with what you type: the forms are checked and then discarded, and the only thing kept on your device is your cookie choice.">
+  <meta name="description" content="What the BytesFX Café does with what you type: the forms are checked and then discarded, and the only things kept on your device are your cookie choice and your light or dark mode preference.">
   <link rel="canonical" href="https://oak-hill-park-cafe.pages.dev/privacy.html">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
@@ -23,6 +23,7 @@
   <meta property="og:image:alt" content="BytesFX Café &amp; Bookings card showing an illustrated café interior">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="assets/styles.css">
+<script src="assets/theme.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -51,6 +52,7 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="theme-toggle__moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><g class="theme-toggle__sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></svg></button>
         <button class="nav-share" type="button" data-share aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg><span>Share</span></button>
         <a class="button" href="calendar.html">Book a party</a>
       </div>
@@ -62,7 +64,7 @@
     <section class="page-hero">
       <div class="section-inner">
         <h1>Privacy notice</h1>
-        <p class="section-lede">We do not store the personal details you enter in our forms. The forms are checked and then discarded, and the only thing kept on your device is your cookie choice. This page explains exactly that. Last updated 21 October 2026.</p>
+        <p class="section-lede">We do not store the personal details you enter in our forms. The forms are checked and then discarded, and the only things kept on your device are your cookie choice and your light or dark mode preference. This page explains exactly that. Last updated 28 October 2026.</p>
       </div>
     </section>
 
@@ -94,8 +96,9 @@
         <p>That is the same behaviour as the sign-in page in the dashboard itself, which is where the form sends you if a second factor is needed. Nothing here weakens it: the bot check, the lockout and the two-factor requirement all still apply.</p>
 
         <h2>What is stored on your device</h2>
-        <p>One entry, or two if you sign in as staff. When you use the cookie banner, your choice is written to your browser's local storage under the name <code>bytesfx-consent</code>. It records which categories you allowed and when you decided. It stays on your device until you clear it.</p>
-        <p>Signing in as staff adds one more. The session token is kept in your browser's <strong>session storage</strong> under the name <code>bfx-admin-token</code>. Session storage is cleared when you close the tab, and it is never sent to any other site. If you do not sign in, your cookie choice is the only thing stored.</p>
+        <p>Two entries, or three if you sign in as staff. When you use the cookie banner, your choice is written to your browser's local storage under the name <code>bytesfx-consent</code>. It records which categories you allowed and when you decided. It stays on your device until you clear it.</p>
+        <p>The second is the light or dark mode preference, written under the name <code>bytesfx-theme</code> when you use the mode switch in the header. It holds the word <code>light</code> or <code>dark</code> and nothing else. Until you use the switch, the site follows the setting on your operating system and writes nothing at all.</p>
+        <p>Signing in as staff adds one more. The session token is kept in your browser's <strong>session storage</strong> under the name <code>bfx-admin-token</code>. Session storage is cleared when you close the tab, and it is never sent to any other site. If you do not sign in, the cookie choice and the mode preference are the only things stored.</p>
         <p>That is all. This site sets no cookies of its own, and it stores no advertising identifier, no fingerprint and no analytics identifier. The <a href="cookies.html">cookie notice</a> sets out the same point in table form.</p>
 
         <h2>What the server does</h2>
@@ -116,16 +119,16 @@
           <li><strong>Contact records and bookings.</strong> None are created, so none are retained.</li>
           <li><strong>Marketing consent.</strong> None is recorded, so there is no list and no record of who asked to be contacted.</li>
           <li><strong>Server logs.</strong> Retained by the hosting provider for as long as its own policy says. We do not add to them and we do not use them to build a profile of visitors.</li>
-          <li><strong>Your cookie choice.</strong> Held in your browser's local storage until you clear it, either through the cookie settings on the site or through your browser's site data controls.</li>
+          <li><strong>Your cookie choice and your mode preference.</strong> Held in your browser's local storage until you clear them, either through the cookie settings on the site or through your browser's site data controls.</li>
           <li><strong>Staff sessions and the activity log.</strong> A session lasts until it expires or you sign out. The activity log is pruned on a twelve-month cycle, as are expired sessions.</li>
         </ul>
 
         <h2>Your rights under UK GDPR</h2>
-        <p>UK GDPR gives you rights over personal data. BytesFX is the controller for anything this site holds. In practice that is almost nothing: server logs held by the hosting provider, and your cookie choice, which sits in your own browser rather than on our servers. If you sign in as staff, a session record and an activity-log entry are created — see <a href="#the-staff-sign-in">the staff sign-in</a> above.</p>
+        <p>UK GDPR gives you rights over personal data. BytesFX is the controller for anything this site holds. In practice that is almost nothing: server logs held by the hosting provider, and your cookie choice and mode preference, which sit in your own browser rather than on our servers. If you sign in as staff, a session record and an activity-log entry are created — see <a href="#the-staff-sign-in">the staff sign-in</a> above.</p>
         <ul class="check-list">
           <li><strong>Access.</strong> You can ask for a copy of the personal data held about you. There is no contact record, booking or mailing list to hand over. The only personal data is in the hosting provider's logs, which Cloudflare holds, and we can point you to how to ask them.</li>
           <li><strong>Rectification.</strong> You can ask us to correct inaccurate data. There is no stored profile of you to correct.</li>
-          <li><strong>Erasure.</strong> You can ask us to delete your data. There is no contact record or booking to erase. You can also clear your cookie choice yourself in your browser.</li>
+          <li><strong>Erasure.</strong> You can ask us to delete your data. There is no contact record or booking to erase. You can also clear your cookie choice and your mode preference yourself in your browser.</li>
           <li><strong>Restriction.</strong> You can ask us to stop using your data. Nothing this site holds is used to make decisions about you.</li>
           <li><strong>Objection.</strong> You can object to our use of your data. The site does not use your data for marketing or profiling, so there is nothing in practice to object to.</li>
           <li><strong>Portability.</strong> You can ask for your data in a portable format. There is no data set to export.</li>

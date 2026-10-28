@@ -9,12 +9,16 @@
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/admin.css">
+<script src="assets/theme.js"></script>
 </head>
 <body>
   <main id="main" class="section">
     <div class="section-inner admin">
         <p class="demo-badge">Demonstration site</p>
-      <span class="kicker">Staff only</span>
+      <div class="admin-view-head">
+        <span class="kicker">Staff only</span>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="theme-toggle__moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><g class="theme-toggle__sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></svg></button>
+      </div>
       <!-- The app shell's "Overview" is the page's one real h1. This heading is the
            logged-out view's level-1 heading without adding a second h1 to the DOM:
            role="heading" + aria-level="1" still exposes it as a level-1 heading.
@@ -136,6 +140,7 @@
             <h1 class="admin-section-title" data-admin-title>Overview</h1>
             <div class="admin-topbar-right">
               <p class="admin-whoami" data-admin-whoami></p>
+              <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="theme-toggle__moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><g class="theme-toggle__sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></svg></button>
               <button class="button ghost admin-topbar-signout" type="button" data-admin-logout>Sign out</button>
             </div>
           </header>

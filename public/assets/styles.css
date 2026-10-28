@@ -1,17 +1,48 @@
 :root {
-  --park: #2f6b4f;
-  --park-dark: #1d4633;
+  /* Brand colours. */
+  --park: #2f6b4f;        /* mid green — the band behind the green sections */
+  --park-dark: #1d4633;   /* deep green — the top bar, the hero and the page hero */
   --honey: #f4b942;
-  --tomato: #bb4023;   /* AA on white, cream, paper and the error tint */
-  --cream: #fff7ea;
-  --paper: #fffdf8;
-  --white: #ffffff;   /* used for panel fills and for text on a dark fill */
-  --ink: #263238;
-  --muted: #5c6a63;
+  --tomato: #bb4023;      /* AA on white, cream, paper and the error tint */
   --toast: #7b4a2d;
   --sky: #4d8fa0;
+
+  /* Surfaces, lightest to darkest. */
+  --cream: #fff7ea;       /* the page */
+  --paper: #fffdf8;       /* a card or a panel */
+  --raised: #ffffff;      /* a step above a panel: an input, a calendar cell */
+  --white: #ffffff;       /* text on a saturated fill */
+  --ink: #263238;         /* body text */
+  --muted: #5c6a63;       /* secondary text */
+  --footer-bg: #263238;   /* the footer band */
+  --header-bg: rgba(255, 247, 234, 0.94);
   --line: rgba(38, 50, 56, 0.14);
   --shadow: 0 18px 45px rgba(38, 50, 56, 0.16);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.32);
+
+  /* Colour used for text and hairlines that sit on the page. */
+  --brand: #1d4633;       /* the green of a link, a price, a rule */
+  --accent: #bb4023;      /* the tomato of a kicker or a price */
+  --accent-line: rgba(217, 79, 48, 0.38);
+  --danger-text: #a8321c;
+
+  /* Colour used on a saturated fill. */
+  --on-band: #fff7ea;     /* text and focus rings on the deep green bands */
+  --on-honey: #263238;
+  --on-sky: #0b1a20;
+  --inverse-bg: #263238;  /* the skip link, which inverts against the page */
+  --inverse-ink: #fff7ea;
+
+  /* Washes. */
+  --park-tint: rgba(47, 107, 79, 0.11);
+  --park-line: rgba(47, 107, 79, 0.35);
+  --sky-tint: rgba(120, 183, 197, 0.16);
+  --sky-chip: rgba(120, 183, 197, 0.22);
+  --ink-tint: rgba(38, 50, 56, 0.06);
+  --stripe-1: #f3f3f3;
+  --stripe-2: #ececec;
+  --scrim: rgba(20, 30, 25, 0.55);
+
   --radius: 8px;
   --max: 1180px;
   --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
@@ -31,6 +62,51 @@
   --text-2xl: 1.75rem;
   --text-3xl: 2rem;
   color-scheme: light;
+}
+
+/* ---- Dark mode -----------------------------------------------------------
+   The same page in a warm near-black. A card is one step up from the page,
+   an input is two steps up, and the green bands keep the brand colour they
+   already had: they were dark to begin with, and the photography sits on
+   them. Every value below is measured against its own background — text on
+   the page clears 4.5:1, and text on a filled chip clears 4.5:1 too.
+
+   This block is for screens only. Paper is paper: the menu PDF and a
+   visitor's own print-out keep the light palette, whatever the visitor
+   has on screen. */
+@media screen {
+  [data-theme="dark"] {
+    --cream: #171512;
+    --paper: #1e1b18;
+    --raised: #272420;
+    --ink: #e9e4db;
+    --muted: #a8a49b;
+    --footer-bg: #100e0c;
+    --header-bg: rgba(20, 18, 16, 0.9);
+    --line: rgba(255, 255, 255, 0.15);
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.65);
+
+    --brand: #7ecfa4;
+    --accent: #f0876a;
+    --accent-line: rgba(240, 135, 106, 0.45);
+    --danger-text: #ff8f7a;
+
+    --inverse-bg: #f2ece1;
+    --inverse-ink: #1a1613;
+
+    --park-tint: rgba(126, 207, 164, 0.16);
+    --park-line: rgba(126, 207, 164, 0.4);
+    --sky-tint: rgba(120, 183, 197, 0.18);
+    --sky-chip: rgba(120, 183, 197, 0.24);
+    --ink-tint: rgba(255, 255, 255, 0.07);
+    --stripe-1: #232019;
+    --stripe-2: #1a1815;
+    --scrim: rgba(0, 0, 0, 0.65);
+
+    --focus: #7ecfa4;
+    color-scheme: dark;
+  }
 }
 
 * {
@@ -94,7 +170,7 @@ a {
 .page-hero :focus-visible,
 .site-footer :focus-visible,
 .topbar :focus-visible {
-  outline-color: var(--cream);
+  outline-color: var(--on-band);
 }
 
 .skip-link {
@@ -103,8 +179,8 @@ a {
   top: 1rem;
   z-index: 1000;
   transform: translateY(-160%);
-  background: var(--ink);
-  color: white;
+  background: var(--inverse-bg);
+  color: var(--inverse-ink);
   padding: 0.7rem 1rem;
   border-radius: var(--radius);
 }
@@ -118,7 +194,7 @@ a {
   top: 0;
   z-index: 100;
   border-bottom: 1px solid var(--line);
-  background: rgba(255, 247, 234, 0.94);
+  background: var(--header-bg);
   backdrop-filter: blur(16px);
 }
 
@@ -255,19 +331,65 @@ a {
   padding: 0.72rem 0.82rem;
   text-decoration: none;
   font-weight: 800;
-  color: #36423c;
+  color: var(--ink);
 }
 
 .primary-nav a:hover,
 .primary-nav a[aria-current="page"] {
-  background: rgba(47, 107, 79, 0.11);
-  color: var(--park-dark);
+  background: var(--park-tint);
+  color: var(--brand);
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 0.55rem;
+}
+
+/* ---- Light and dark mode -----------------------------------------------
+   The switch sits with the other header actions, and it is the one control
+   that stays in the header on a phone: the Share button and the booking
+   link move down to the bottom bar, but a visitor who wants the dark page
+   should not have to hunt for the switch. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  /* No transition on the background. The button's text colour changes with
+     the theme, and a background that faded while the text snapped would
+     leave the icon unreadable for the length of the fade. It changes with
+     the rest of the page instead, and the hover tint is instant — the same
+     as the Share button beside it. */
+}
+
+.theme-toggle:hover {
+  background: var(--park-tint);
+}
+
+.theme-toggle svg {
+  display: block;
+}
+
+/* The icon shows the mode the button would switch to: a moon on the light
+   page, a sun on the dark one. */
+.theme-toggle__sun {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle__sun {
+  display: inline;
+}
+
+[data-theme="dark"] .theme-toggle__moon {
+  display: none;
 }
 
 .button,
@@ -349,7 +471,7 @@ button.button {
    tomato on park was 1.53:1: both fail WCAG AA. */
 .section .eyebrow,
 .notice .eyebrow {
-  color: var(--tomato);
+  color: var(--accent);
 }
 
 .page-hero .eyebrow {
@@ -358,7 +480,7 @@ button.button {
 
 .band .eyebrow,
 .band .kicker {
-  color: var(--cream);
+  color: var(--on-band);
 }
 
 .hero h1,
@@ -441,7 +563,7 @@ button.button {
 .quick-card span,
 .kicker {
   display: block;
-  color: var(--tomato);
+  color: var(--accent);
   font-size: var(--text-2xs);
   font-weight: 950;
   letter-spacing: 0.08em;
@@ -693,7 +815,7 @@ button.button {
 }
 
 .menu-item .price {
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 950;
   white-space: nowrap;
 }
@@ -703,8 +825,8 @@ button.button {
   align-items: center;
   border-radius: 999px;
   padding: 0.18rem 0.45rem;
-  background: rgba(47, 107, 79, 0.12);
-  color: var(--park-dark);
+  background: var(--park-tint);
+  color: var(--brand);
   font-size: var(--text-2xs);
   font-weight: 950;
   text-transform: uppercase;
@@ -726,12 +848,12 @@ button.button {
 }
 
 .price-card.featured {
-  border-color: rgba(217, 79, 48, 0.38);
+  border-color: var(--accent-line);
   box-shadow: var(--shadow);
 }
 
 .price {
-  color: var(--tomato);
+  color: var(--accent);
   font-size: var(--text-3xl);
   font-weight: 950;
 }
@@ -794,7 +916,7 @@ button.button {
 label {
   display: grid;
   gap: 0.35rem;
-  color: #39463f;
+  color: var(--ink);
   font-weight: 850;
 }
 
@@ -806,7 +928,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 0.72rem 0.78rem;
-  background: white;
+  background: var(--raised);
   color: var(--ink);
   font: inherit;
   /* The label is bold, so `font: inherit` would set the field's own text in
@@ -830,11 +952,11 @@ textarea {
 }
 
 .form-status.is-success {
-  color: var(--park-dark);
+  color: var(--brand);
 }
 
 .form-status.is-error {
-  color: var(--tomato);
+  color: var(--danger-text);
 }
 
 .calculator-output {
@@ -843,7 +965,7 @@ textarea {
   margin-top: 1rem;
   border-radius: var(--radius);
   padding: 1rem;
-  background: rgba(120, 183, 197, 0.16);
+  background: var(--sky-tint);
 }
 
 .calculator-output strong {
@@ -892,7 +1014,7 @@ textarea {
 }
 
 .booking-slot-label {
-  color: var(--tomato) !important;
+  color: var(--accent) !important;
   font-size: var(--text-2xs);
   font-weight: 950;
   letter-spacing: 0.05em;
@@ -902,7 +1024,7 @@ textarea {
 .booking-slot[aria-pressed="true"] {
   border-color: var(--park);
   box-shadow: 0 0 0 2px var(--park);
-  background: white;
+  background: var(--raised);
 }
 
 .booking-note {
@@ -912,7 +1034,7 @@ textarea {
 
 .booking-note a,
 .booking-fallback a {
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 750;
 }
 
@@ -936,16 +1058,16 @@ textarea {
   margin-top: 1.25rem;
   max-width: 720px;
   padding: 1.25rem;
-  border: 1px solid rgba(47, 107, 79, 0.3);
+  border: 1px solid var(--park-line);
   border-radius: var(--radius);
-  background: rgba(47, 107, 79, 0.08);
+  background: var(--park-tint);
 }
 
 .booking-success strong {
   display: block;
   font-family: var(--serif);
   font-size: var(--text-lg);
-  color: var(--park-dark);
+  color: var(--brand);
 }
 
 .booking-success p {
@@ -953,7 +1075,7 @@ textarea {
 }
 
 .booking-success a {
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 750;
 }
 
@@ -1010,7 +1132,7 @@ textarea {
 }
 
 .admin-table th {
-  color: var(--park-dark);
+  color: var(--brand);
   font-size: var(--text-2xs);
   font-weight: 900;
   letter-spacing: 0.05em;
@@ -1071,7 +1193,7 @@ textarea {
 }
 
 .site-footer {
-  background: var(--ink);
+  background: var(--footer-bg);
   color: white;
   padding: 2.5rem 0 6rem;
 }
@@ -1119,6 +1241,10 @@ textarea {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    /* The navigation is a fixed panel from here down, so the header holds
+       only the brand and the actions. The auto margin packs them against
+       the right edge instead of leaving the switch in the middle of it. */
+    margin-left: auto;
   }
 
   .primary-nav {
@@ -1188,11 +1314,36 @@ textarea {
     height: 48px;
   }
 
+  /* The mode switch has to fit in the header as well, and a 390px phone
+     has room for the logo and the name, or the logo and the tagline, but
+     not for both. The name stays; the tagline goes, and the full brand is
+     still in the footer. */
   .brand strong {
-    font-size: var(--text-md);
+    font-size: var(--text-sm);
   }
 
+  .brand-tag {
+    display: none;
+  }
+
+  .nav-inner {
+    gap: 0.75rem;
+  }
+
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* On a phone the Share button and the booking link live in the bottom
+     bar. The theme switch stays in the header: it is the one control here
+     that has to be reachable at any width. */
   .nav-actions {
+    display: flex;
+  }
+
+  .nav-actions .nav-share,
+  .nav-actions .button {
     display: none;
   }
 
@@ -1268,7 +1419,7 @@ textarea {
 }
 
 .legal-content a {
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 750;
 }
 
@@ -1289,7 +1440,7 @@ textarea {
 }
 
 .cookie-table th {
-  color: var(--park-dark);
+  color: var(--brand);
   font-size: var(--text-2xs);
   font-weight: 900;
   letter-spacing: 0.06em;
@@ -1300,7 +1451,7 @@ textarea {
   border: none;
   padding: 0;
   background: none;
-  color: var(--park-dark);
+  color: var(--brand);
   font: inherit;
   font-weight: 750;
   text-decoration: underline;
@@ -1379,7 +1530,7 @@ textarea {
 }
 
 .consent-text a {
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 750;
 }
 
@@ -1413,12 +1564,12 @@ textarea {
 
 .form-note {
   margin: 0.8rem 0 0;
-  color: #4c5a52;
+  color: var(--muted);
   font-size: var(--text-sm);
 }
 
 .form-note a {
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 750;
 }
 
@@ -1453,7 +1604,7 @@ textarea {
   padding: 0.62rem 0.85rem;
   cursor: pointer;
 }
-.nav-share:hover { background: rgba(47, 107, 79, 0.09); }
+.nav-share:hover { background: var(--park-tint); }
 .nav-share svg { display: block; }
 
 .share-modal[hidden] { display: none; }
@@ -1466,7 +1617,7 @@ textarea {
   justify-content: center;
   padding: 18px;
 }
-.share-backdrop { position: absolute; inset: 0; background: rgba(20, 30, 25, 0.55); }
+.share-backdrop { position: absolute; inset: 0; background: var(--scrim); }
 .share-dialog {
   position: relative;
   z-index: 1;
@@ -1476,7 +1627,7 @@ textarea {
   background: var(--paper);
   border-radius: 14px;
   padding: 26px 24px 22px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  box-shadow: var(--shadow-lg);
 }
 .share-x {
   position: absolute;
@@ -1492,7 +1643,7 @@ textarea {
   cursor: pointer;
   border-radius: 50%;
 }
-.share-x:hover { background: rgba(0, 0, 0, 0.06); color: var(--ink); }
+.share-x:hover { background: var(--ink-tint); color: var(--ink); }
 .share-dialog h2 {
   font-family: var(--serif);
   font-size: var(--text-xl);
@@ -1535,7 +1686,7 @@ textarea {
   font-weight: 800;
   font-size: var(--text-md);
 }
-.share-links a:hover { background: rgba(47, 107, 79, 0.09); }
+.share-links a:hover { background: var(--park-tint); }
 .share-status { color: var(--muted); font-size: var(--text-sm); margin: 0.8rem 0 0; min-height: 1.1em; }
 .share-back {
   border: none;
@@ -1567,21 +1718,21 @@ body.share-open { overflow: hidden; }
 .cal-head .cal-nav { margin-left: auto; display: flex; gap: 0.4rem; }
 .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .cal-dow { font-size: var(--text-2xs); font-weight: 700; color: var(--muted); text-align: center; padding: 0.25rem 0; }
-.cal-cell { min-height: 84px; border: 1px solid var(--line); border-radius: 6px; padding: 4px; background: var(--white); text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
+.cal-cell { min-height: 84px; border: 1px solid var(--line); border-radius: 6px; padding: 4px; background: var(--raised); text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
 .cal-cell:hover { border-color: var(--park); }
 .cal-cell.is-empty { background: transparent; border-color: transparent; cursor: default; }
 .cal-cell.is-today { outline: 2px solid var(--honey); }
 .cal-cell.is-past { opacity: 0.55; }
-.cal-cell.is-closed { background: repeating-linear-gradient(45deg, #f3f3f3, #f3f3f3 6px, #ececec 6px, #ececec 12px); }
+.cal-cell.is-closed { background: repeating-linear-gradient(45deg, var(--stripe-1), var(--stripe-1) 6px, var(--stripe-2) 6px, var(--stripe-2) 12px); }
 .cal-date { font-size: var(--text-2xs); font-weight: 700; color: var(--ink); }
 .cal-chip { font-size: var(--text-2xs); line-height: 1.2; padding: 2px 4px; border-radius: 4px; color: var(--white); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cal-chip.s-available { background: var(--park); }
-.cal-chip.s-held { background: var(--honey); color: var(--ink); }
+.cal-chip.s-held { background: var(--honey); color: var(--on-honey); }
 .cal-chip.s-booked { background: #b3403a; }
-.cal-chip.s-closed { background: #8a8f8c; }
-.cal-chip.e-event { background: var(--sky); color: var(--ink); }
+.cal-chip.s-closed { background: #6f7472; }
+.cal-chip.e-event { background: var(--sky); color: var(--on-sky); }
 .cal-chip.e-closure { background: #6b7280; }
-.cal-warn { font-size: var(--text-2xs); color: #b3403a; font-weight: 700; }
+.cal-warn { font-size: var(--text-2xs); color: var(--danger-text); font-weight: 700; }
 .cal-day-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--paper); }
 .cal-day-panel h3 { margin: 0 0 0.5rem; }
 .cal-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.35rem 0; border-bottom: 1px solid var(--line); }
@@ -1602,14 +1753,14 @@ body.share-open { overflow: hidden; }
 .pubcal-note { color: var(--muted); }
 .pubcal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
 .pubcal-dow { text-align: center; font-size: var(--text-2xs); font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); padding: 0.25rem 0; }
-.pubcal-cell { min-height: 92px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); padding: 6px; display: flex; flex-direction: column; gap: 4px; }
+.pubcal-cell { min-height: 92px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--raised); padding: 6px; display: flex; flex-direction: column; gap: 4px; }
 .pubcal-cell.is-empty { background: transparent; border-color: transparent; }
 .pubcal-cell.is-today { outline: 2px solid var(--honey); }
 .pubcal-cell.is-past { opacity: 0.5; }
-.pubcal-cell.is-closed { background: repeating-linear-gradient(45deg, #f4f1ea, #f4f1ea 7px, #ece7dc 7px, #ece7dc 14px); }
+.pubcal-cell.is-closed { background: repeating-linear-gradient(45deg, var(--stripe-1), var(--stripe-1) 7px, var(--stripe-2) 7px, var(--stripe-2) 14px); }
 .pubcal-date { font-size: var(--text-sm); font-weight: 800; color: var(--ink); }
 .pubcal-chip { font-size: var(--text-2xs); line-height: 1.25; padding: 2px 6px; border-radius: 999px; font-weight: 700; align-self: flex-start; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pubcal-chip.is-event { background: rgba(120, 183, 197, 0.22); color: var(--park-dark); }
+.pubcal-chip.is-event { background: var(--sky-chip); color: var(--brand); }
 .pubcal-chip.is-closure { background: #6b7280; color: var(--white); }
 .pubcal-chip.is-open { background: var(--park); color: var(--white); border: 0; cursor: pointer; font: inherit; font-size: var(--text-2xs); font-weight: 800; padding: 3px 8px; }
 .pubcal-chip.is-open:hover { background: var(--park-dark); }
@@ -1624,8 +1775,8 @@ body.share-open { overflow: hidden; }
 .report-switch { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
 .report-switch .is-active { background: var(--park); color: var(--white); }
 .report-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-.report-stat { border: 1px solid var(--line); border-radius: var(--radius); padding: 0.9rem; background: var(--white); text-align: center; }
-.report-stat strong { display: block; font-size: var(--text-xl); color: var(--park-dark); }
+.report-stat { border: 1px solid var(--line); border-radius: var(--radius); padding: 0.9rem; background: var(--raised); text-align: center; }
+.report-stat strong { display: block; font-size: var(--text-xl); color: var(--brand); }
 .report-stat span { font-size: var(--text-xs); color: var(--muted); }
 .report-funnel { font-weight: 700; color: var(--ink); }
 .report-list { margin-top: 1rem; }
@@ -1634,14 +1785,14 @@ body.share-open { overflow: hidden; }
 .contacts-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
 .contacts-bar input[type="search"] { flex: 1 1 220px; padding: 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); }
 .contacts-row { cursor: pointer; }
-.contacts-row:hover { background: rgba(47, 107, 79, 0.06); }
+.contacts-row:hover { background: var(--park-tint); }
 .contact-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--paper); display: flex; flex-direction: column; gap: 0.5rem; }
 .contact-panel h3 { margin: 0; }
 .contact-panel textarea { width: 100%; }
 .contact-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
-.tag-chip { background: rgba(120,183,197,0.22); color: var(--park-dark); border-radius: 999px; padding: 2px 8px; font-size: var(--text-2xs); font-weight: 700; cursor: pointer; }
+.tag-chip { background: var(--sky-chip); color: var(--brand); border-radius: 999px; padding: 2px 8px; font-size: var(--text-2xs); font-weight: 700; cursor: pointer; }
 .contact-timeline { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: var(--text-sm); }
-.contact-erase { color: #b3403a; border-color: #b3403a; align-self: flex-start; margin-top: 0.5rem; }
+.contact-erase { color: var(--danger-text); border-color: var(--danger-text); align-self: flex-start; margin-top: 0.5rem; }
 .footer-signup { border-bottom: 1px solid rgba(255,255,255,0.18); padding: 0 0 1.5rem; margin: 0 0 1.75rem; text-align: center; }
 .footer-signup-inner { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(1rem, 4vw, 3rem); }
 .footer-signup-text { max-width: 30rem; }
@@ -1649,9 +1800,9 @@ body.share-open { overflow: hidden; }
 .footer-signup p { margin: 0.35rem 0 0; color: rgba(255,255,255,0.82); font-size: var(--text-sm); }
 .footer-signup a { text-decoration: underline; margin-left: auto; margin-right: auto; }
 .footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; max-width: 480px; }
-.footer-signup-form input[type="email"] { flex: 1 1 220px; min-height: 46px; padding: 0.6rem 0.8rem; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius); background: rgba(255,255,255,0.95); color: var(--ink); }
+.footer-signup-form input[type="email"] { flex: 1 1 220px; min-height: 46px; padding: 0.6rem 0.8rem; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius); background: var(--raised); color: var(--ink); }
 .footer-signup-status { min-height: 1.2em; text-align: center; }
-.admin-whoami { font-size: var(--text-sm); color: var(--ink-soft, #5b6b62); margin: 0 0 1rem; }
+.admin-whoami { font-size: var(--text-sm); color: var(--muted); margin: 0 0 1rem; }
 .users-add { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1rem; }
 .users-add input, .users-add select { padding: 0.45rem; border: 1px solid var(--line); border-radius: var(--radius); }
 .admin-table select { padding: 0.3rem; border: 1px solid var(--line); border-radius: var(--radius); }
@@ -1776,8 +1927,8 @@ body.admin-shell .section-inner.admin .demo-badge {
 }
 
 .menu-cat-nav a:hover {
-  background: rgba(47, 107, 79, 0.1);
-  border-color: rgba(47, 107, 79, 0.35);
+  background: var(--park-tint);
+  border-color: var(--park-line);
 }
 
 .menu-group + .menu-group {
@@ -1792,7 +1943,7 @@ body.admin-shell .section-inner.admin .demo-badge {
   gap: 0.5rem 1rem;
   margin: 0 0 0.9rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--park-dark);
+  border-bottom: 2px solid var(--brand);
 }
 
 .menu-group-head h2 {
@@ -1860,11 +2011,11 @@ body.admin-shell .section-inner.admin .demo-badge {
 /* ---- Forms -------------------------------------------------------------- */
 
 .form-status.is-error {
-  color: #a8321c;
+  color: var(--danger-text);
 }
 
 .form-status.is-success {
-  color: var(--park-dark);
+  color: var(--brand);
 }
 
 .form-status.is-pending {
@@ -1874,7 +2025,7 @@ body.admin-shell .section-inner.admin .demo-badge {
 /* A field that has been prefilled with sample data, so the visitor can see
    the flow without entering anything of their own. */
 .field-sample input {
-  background: #fbf6ec;
+  background: var(--raised);
   border-style: dashed;
 }
 

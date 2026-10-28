@@ -68,6 +68,13 @@ const AUDIT = () => {
     demoBadge: document.querySelectorAll(".demo-badge").length,
     demoNotes: document.querySelectorAll(".notice-box").length,
     captions: document.querySelectorAll(".demo-caption").length,
+    // Only one switch may be on screen: the staff console carries one for
+    // the signed-out view and another for the signed-in top bar, and only
+    // one of the two is showing at a time.
+    themeSwitch: [...document.querySelectorAll("[data-theme-toggle]")].filter(
+      (b) => b.getClientRects().length > 0
+    ).length,
+    theme: document.documentElement.getAttribute("data-theme"),
     title: document.title,
     canonical: document.querySelector("link[rel=canonical]")?.href || null,
     ogImage: document.querySelector('meta[property="og:image"]')?.content || null,
@@ -126,6 +133,10 @@ for (const vp of VIEWPORTS) {
     if (a.h1 !== 1) issues.push(`h1 count ${a.h1}`);
     // Every visitor-facing page carries the badge that says what the site is.
     if (a.demoBadge !== 1) issues.push(`demo badge count ${a.demoBadge}`);
+    // Every page must offer the mode switch, and the page must know which
+    // mode it is in before it paints.
+    if (a.themeSwitch !== 1) issues.push(`theme switch count ${a.themeSwitch}`);
+    if (a.theme !== "light" && a.theme !== "dark") issues.push(`theme not set: ${a.theme}`);
     if (a.jumps.length) issues.push(`heading jumps ${a.jumps.join(",")}`);
     if (a.overflow) issues.push(`h-overflow ${a.overflow}`);
     if (a.deadAnchors.length) issues.push(`dead anchors ${a.deadAnchors.join(",")}`);
@@ -135,6 +146,116 @@ for (const vp of VIEWPORTS) {
     if (issues.length) problems += issues.length;
     console.log(`  ${issues.length ? "X" : "ok"} ${p.padEnd(18)} ${issues.join(" | ")}`);
   }
+  await page.close();
+}
+
+// ---- the mode switch ------------------------------------------------------
+// The switch has to do three things: follow the operating system until the
+// visitor says otherwise, remember what the visitor said, and leave the
+// dark page legible. The first two are checked here; the third is checked
+// by measuring the contrast of the text that carries the page.
+console.log("\n=== theme ===");
+{
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 1 });
+  const issues = [];
+
+  const read = () =>
+    page.evaluate(() => ({
+      theme: document.documentElement.getAttribute("data-theme"),
+      bg: getComputedStyle(document.body).backgroundColor,
+      stored: localStorage.getItem("bytesfx-theme"),
+      label: document.querySelector("[data-theme-toggle]")?.getAttribute("aria-label") || null,
+    }));
+
+  await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "dark" }]);
+  await page.goto(`${BASE}/index.html`, { waitUntil: "networkidle2", timeout: 45000 });
+  const system = await read();
+  if (system.theme !== "dark") issues.push(`a dark system did not give a dark page (${system.theme})`);
+  if (system.stored) issues.push(`the system preference was stored (${system.stored})`);
+
+  // The visitor overrides the system, and the choice survives a reload.
+  await page.click("[data-theme-toggle]");
+  const clicked = await read();
+  if (clicked.theme !== "light") issues.push(`the switch did not turn the page light (${clicked.theme})`);
+  if (clicked.stored !== "light") issues.push(`the choice was not stored (${clicked.stored})`);
+  await page.reload({ waitUntil: "networkidle2" });
+  const reloaded = await read();
+  if (reloaded.theme !== "light") issues.push(`the stored choice was lost on reload (${reloaded.theme})`);
+
+  // Back to the dark page, and measure it.
+  await page.click("[data-theme-toggle]");
+  // Let any transition settle before the colours are read.
+  await new Promise((r) => setTimeout(r, 400));
+  const dark = await read();
+  if (dark.theme !== "dark") issues.push(`the switch did not turn the page dark (${dark.theme})`);
+
+  const samples = await page.evaluate(() => {
+    const parse = (value) => {
+      const n = (value.match(/[\d.]+/g) || []).map(Number);
+      return { rgb: n.slice(0, 3), a: n.length > 3 ? n[3] : 1 };
+    };
+    const lum = (rgb) => {
+      const [r, g, b] = rgb.map((v) => {
+        const c = v / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const ratio = (a, b) => {
+      const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    // Composite the background chain and the text over it, so a translucent
+    // layer is measured as it is actually seen.
+    const backdropOf = (el) => {
+      const layers = [];
+      let node = el;
+      while (node) {
+        const layer = parse(getComputedStyle(node).backgroundColor);
+        if (layer.a > 0) {
+          layers.push(layer);
+          if (layer.a >= 1) break;
+        }
+        node = node.parentElement;
+      }
+      let base = [255, 255, 255];
+      for (let i = layers.length - 1; i >= 0; i--) {
+        const l = layers[i];
+        base = l.rgb.map((c, j) => l.a * c + (1 - l.a) * base[j]);
+      }
+      return base;
+    };
+    const targets = [
+      ["body text", "body"],
+      ["section lede", ".section-lede"],
+      ["price", ".price"],
+      ["footer link", ".site-footer a"],
+      ["hero heading", ".hero h1"],
+      ["hero eyebrow", ".hero .eyebrow"],
+      ["demo badge", ".demo-badge"],
+      ["primary button", ".hero-actions .button"],
+      ["nav link", ".primary-nav a"],
+      ["share button", ".nav-share"],
+      ["theme switch", ".theme-toggle"],
+    ];
+    return targets.map(([name, selector]) => {
+      const el = document.querySelector(selector);
+      if (!el) return { name, missing: true };
+      const bg = backdropOf(el);
+      const fg = parse(getComputedStyle(el).color);
+      const flat = fg.rgb.map((c, j) => fg.a * c + (1 - fg.a) * bg[j]);
+      return { name, ratio: Number(ratio(flat, bg).toFixed(2)) };
+    });
+  });
+
+  for (const s of samples) {
+    if (s.missing) { issues.push(`missing: ${s.name}`); continue; }
+    if (s.ratio < 4.5) issues.push(`contrast ${s.name} ${s.ratio}:1`);
+    console.log(`  ${s.ratio >= 4.5 ? "ok" : "X"}  ${s.name.padEnd(16)} ${s.ratio}:1`);
+  }
+  if (issues.length) problems += issues.length;
+  console.log(`  ${issues.length ? "X" : "ok"} theme switch${issues.length ? ": " + issues.join(" | ") : ""}`);
   await page.close();
 }
 

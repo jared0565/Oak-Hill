@@ -6,12 +6,25 @@
 :root {
   --admin-sidebar-w: 240px;
   --admin-topbar-h: 60px;
+  --admin-bg: #ffffff;               /* the app canvas */
+  --admin-card: #ffffff;             /* the top bar and the cards on it */
   --admin-surface: #f6f4ee;          /* soft neutral sidebar surface */
-  --admin-active: rgba(47, 107, 79, 0.12);
+  --admin-active: var(--park-tint);
+}
+
+/* The console follows the same switch as the public site, so a staff member
+   who works in the dark on one works in the dark on the other. Screens only,
+   for the same reason as the rest of the palette. */
+@media screen {
+  [data-theme="dark"] {
+    --admin-bg: #12100e;
+    --admin-card: #1f1c19;
+    --admin-surface: #1b1815;
+  }
 }
 
 /* ---- full-bleed shell (only while the signed-in app is showing) ---- */
-body.admin-shell { background: var(--white); }
+body.admin-shell { background: var(--admin-bg); }
 body.admin-shell #main.section { padding: 0; }
 body.admin-shell .section-inner.admin {
   max-width: none;
@@ -19,9 +32,16 @@ body.admin-shell .section-inner.admin {
   padding: 0;
 }
 /* The page H1 / kicker belong to the centred setup/login flow, not the app shell. */
-body.admin-shell #main > .section-inner.admin > .kicker,
+body.admin-shell #main > .section-inner.admin > .admin-view-head,
 body.admin-shell #main > .section-inner.admin > .admin-view-title,
 body.admin-shell #main > .section-inner.admin > h1 { display: none; }
+
+/* The signed-out view's label and the theme switch share a line. */
+.admin-view-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
 /* Inter + tighter type throughout the admin app (drop the public Georgia serif). */
 body.admin-shell [data-admin-app] h1,
@@ -62,7 +82,7 @@ body.admin-shell [data-admin-app] h3 {
   padding: 0.4rem 0.6rem 0.9rem;
   font-weight: 900;
   letter-spacing: -0.01em;
-  color: var(--park-dark);
+  color: var(--brand);
 }
 .admin-brand svg { flex: none; }
 .admin-nav { display: flex; flex-direction: column; gap: 2px; }
@@ -81,13 +101,13 @@ body.admin-shell [data-admin-app] h3 {
   line-height: 1.2;
 }
 .admin-nav a svg { flex: none; color: var(--muted); }
-.admin-nav a:hover { background: rgba(38, 50, 56, 0.06); }
+.admin-nav a:hover { background: var(--ink-tint); }
 .admin-nav a[aria-current="page"] {
   background: var(--admin-active);
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 800;
 }
-.admin-nav a[aria-current="page"] svg { color: var(--park); }
+.admin-nav a[aria-current="page"] svg { color: var(--brand); }
 .admin-nav a:focus-visible,
 .admin-topbar button:focus-visible,
 .admin-quick a:focus-visible,
@@ -118,7 +138,7 @@ body.admin-shell [data-admin-app] h3 {
   gap: 1rem;
   height: var(--admin-topbar-h);
   padding: 0 1.5rem;
-  background: var(--white);
+  background: var(--admin-card);
   border-bottom: 1px solid var(--line);
 }
 .admin-topbar .admin-section-title {
@@ -167,7 +187,7 @@ body.admin-shell [data-admin-app] h3 {
   inset: 0;
   display: none;
   border: 0;
-  background: rgba(38, 50, 56, 0.4);
+  background: var(--scrim);
 }
 .admin-panel > h2 {
   margin: 0 0 0.4rem;
@@ -183,7 +203,7 @@ body.admin-shell [data-admin-app] h3 {
   margin: 0.5rem 0 1.75rem;
 }
 .admin-kpi {
-  background: var(--white);
+  background: var(--admin-card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: 0 6px 18px rgba(38, 50, 56, 0.06);
@@ -194,7 +214,7 @@ body.admin-shell [data-admin-app] h3 {
   font-size: var(--text-3xl);
   font-weight: 900;
   line-height: 1.1;
-  color: var(--park-dark);
+  color: var(--brand);
 }
 .admin-kpi .admin-kpi-label {
   display: block;
@@ -212,7 +232,7 @@ body.admin-shell [data-admin-app] h3 {
   align-items: start;
 }
 .admin-card {
-  background: var(--white);
+  background: var(--admin-card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.1rem 1.2rem;
@@ -231,8 +251,8 @@ body.admin-shell [data-admin-app] h3 {
   border-bottom: 1px solid var(--line);
 }
 .admin-recent a:last-child { border-bottom: 0; }
-.admin-recent a:hover { background: rgba(38, 50, 56, 0.05); }
-.admin-recent .admin-recent-ref { font-weight: 800; color: var(--park-dark); font-size: var(--text-sm); }
+.admin-recent a:hover { background: var(--ink-tint); }
+.admin-recent .admin-recent-ref { font-weight: 800; color: var(--brand); font-size: var(--text-sm); }
 .admin-recent .admin-recent-name { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-recent .admin-recent-meta { color: var(--muted); font-size: var(--text-xs); white-space: nowrap; }
 .admin-quick { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -249,7 +269,7 @@ body.admin-shell [data-admin-app] h3 {
   border-radius: 50%;
   overflow: hidden;
   background: var(--admin-active);
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 800;
   font-size: var(--text-md);
   line-height: 1;
@@ -259,7 +279,7 @@ body.admin-shell [data-admin-app] h3 {
 
 /* ---- Account panel: cards ---- */
 .account-card {
-  background: var(--white);
+  background: var(--admin-card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: 0 6px 18px rgba(38, 50, 56, 0.06);
@@ -267,7 +287,7 @@ body.admin-shell [data-admin-app] h3 {
   max-width: 560px;
   margin: 0 0 1.25rem;
 }
-.account-card > h3 { margin: 0 0 0.9rem; font-size: var(--text-body); color: var(--park-dark); }
+.account-card > h3 { margin: 0 0 0.9rem; font-size: var(--text-body); color: var(--brand); }
 .account-card h4 { margin: 0 0 0.6rem; font-size: var(--text-md); }
 .account-field { display: flex; flex-direction: column; gap: 0.3rem; margin: 0 0 0.8rem; }
 .account-field > span { font-size: var(--text-sm); font-weight: 650; color: var(--muted); }
@@ -294,7 +314,7 @@ body.admin-shell [data-admin-app] h3 {
   border-radius: 50%;
   overflow: hidden;
   background: var(--admin-active);
-  color: var(--park-dark);
+  color: var(--brand);
   font-weight: 800;
   line-height: 1;
   user-select: none;
@@ -308,15 +328,16 @@ body.admin-shell [data-admin-app] h3 {
 }
 .account-subblock { padding-top: 1rem; margin-top: 1rem; border-top: 1px solid var(--line); }
 .account-subblock:first-of-type { padding-top: 0; margin-top: 0; border-top: 0; }
-.account-2fa-on { margin: 0 0 0.7rem; font-weight: 650; color: var(--park-dark); }
+.account-2fa-on { margin: 0 0 0.7rem; font-weight: 650; color: var(--brand); }
 .account-2fa-disable { margin-top: 0.6rem; }
 .account-2fa-setup { margin-top: 0.6rem; }
 
-/* QR for 2FA setup */
+/* QR for 2FA setup. The white stays white in the dark theme: a scanner
+   needs the light quiet zone around the code to read it. */
 .account-qr {
   display: inline-block;
   padding: 8px;
-  background: var(--white);
+  background: #ffffff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   margin: 0.4rem 0 0.8rem;

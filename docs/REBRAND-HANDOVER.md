@@ -140,6 +140,54 @@ All twelve rewritten: `index`, `menu`, `soft-play`, `parties`, `calendar`,
 Added: `public/assets/bytesfx-cafe-menu.pdf`, a printable A4 sample menu
 generated from `public/menu.html` itself.
 
+### Light and dark mode
+
+Added 28 October 2026, after the audit scored the theming 2/4 for having no
+dark variant.
+
+**The switch.** A 44px icon button in the header's action group, on every
+public page and in the staff console, drawn in the same stroke and weight as
+the icons already on the site. The icon shows the mode the button would
+switch *to* — a moon on the light page, a sun on the dark one — and the
+accessible name says the same thing ("Switch to dark mode"). On a phone the
+Share button and the booking link move down to the bottom bar, but the switch
+stays in the header, because it is the one control there that has to be
+reachable at any width.
+
+**How the theme is decided.** `public/assets/theme.js` is loaded from `<head>`
+*without* `defer`, on purpose: it sets the theme before the first paint, so
+the page never flashes cream and then turns black. With nothing stored, the
+site follows the operating system and keeps following it. After the visitor
+uses the switch, their choice is stored under `bytesfx-theme` and wins over
+the system setting from then on.
+
+**The palette.** The stylesheet's colour tokens were split so that each one
+means one thing, because several of them meant two: `--cream` was both the
+page background and the text on the green bands; `--ink` was both the body
+text and the footer; `--white` was both the text on a filled chip and a
+near-white panel; `--tomato` was both the button fill and the accent text;
+`--park-dark` was both the band and the green of a link. The new tokens
+(`--brand`, `--accent`, `--raised`, `--on-band`, `--footer-bg`, `--inverse-bg`
+and the rest) each carry a single job, and the dark palette is a second
+block that overrides them.
+
+The dark page is a warm near-black, a card is one step up from it and an
+input two steps up. The green bands keep the brand colour they already had:
+they were dark to begin with, and the photography sits on them. Every value
+in the dark block was measured against its own background — the eleven text
+pairs on the home page are checked by `tools/check-pages.mjs` and all clear
+4.5:1, the lowest being the hero eyebrow at 6:1.
+
+**Paper stays paper.** The dark block is inside `@media screen`, so the
+menu PDF and a visitor's own print-out keep the light palette whatever the
+visitor has on screen.
+
+**What it costs the visitor.** One more entry in their browser's storage —
+`bytesfx-theme`, holding the word `light` or `dark` and nothing else, written
+only when the visitor uses the switch. The privacy notice and the cookie
+notice both say so, and the cookie notice's storage table lists it. Until
+the switch is used, nothing is written at all.
+
 ### Code and configuration
 
 - `window.OHP*` → `window.BFX*`; `ohpc-consent` → `bytesfx-consent`;
@@ -213,11 +261,12 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **83 tests, 83 pass, 0 fail.**
+`npm test` — **95 tests, 95 pass, 0 fail.** (84 before the mode switch, 11
+more in `tests/theme-mode.test.mjs`.)
 
-`tests/demo-mode.test.mjs` is new and is the safety net. Each test asserts on
-the *absence* of a write or a request, so it would fail if a guard were
-removed:
+`tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
+Each test asserts on the *absence* of a write or a request, so it would fail
+if a guard were removed:
 
 | Test | Proves |
 |---|---|
@@ -247,6 +296,22 @@ widths by `tools/check-pages.mjs`:
 - **No console errors** on any page.
 - **No old-brand text** in any page's rendered text.
 - Every local `src`/`href` in every page resolves to a file that exists.
+- **Exactly one mode switch on screen** on every page, and the page knows
+  which mode it is in before it paints.
+
+`tools/check-pages.mjs` also runs a mode pass at the end, which checks that
+the system setting is followed while nothing is stored, that the switch
+overrides it, that the choice survives a reload, and that the dark page is
+legible — eleven text pairs measured on the real rendered colours, all at
+4.5:1 or better.
+
+`tests/theme-mode.test.mjs` runs `public/assets/theme.js` in a sandbox with a
+stubbed browser, so it tests what the script does rather than what it
+contains: with nothing stored the page follows the system setting, a stored
+choice beats it, nothing is written until the visitor uses the switch, the
+switch flips the theme and remembers it, and the accessible name follows the
+action. The harness was checked against a deliberately broken switch: two of
+its tests failed, so it is not a test that passes on anything.
 
 The API was exercised directly against the running server:
 
@@ -438,5 +503,7 @@ Tests
 | `functions/api/_lib/demo.mjs` | The demonstration boundary. |
 | `functions/api/_lib/demo-store.mjs` | The isolated demo slot and calendar store. |
 | `tests/demo-mode.test.mjs` | The safety net for the boundary. |
-| `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls and old-brand text. |
+| `public/assets/theme.js` | The light/dark mode switch. Loaded from `<head>` without `defer` so the theme is set before the first paint. |
+| `tests/theme-mode.test.mjs` | Runs the mode switch against a stubbed browser, and checks that the notice discloses what it stores. |
+| `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls, old-brand text, and the mode switch's state and contrast. |
 | `tools/capture-screenshots.mjs` | Captures the handover screenshots. |

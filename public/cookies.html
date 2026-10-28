@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cookie notice | BytesFX Café &amp; Bookings</title>
-  <meta name="description" content="This site sets no tracking cookies. It stores one entry in your own browser to remember your cookie choice, and this notice explains it.">
+  <meta name="description" content="This site sets no tracking cookies. It stores two entries in your own browser to remember your cookie choices and your light or dark mode preference, and this notice explains them.">
   <link rel="canonical" href="https://oak-hill-park-cafe.pages.dev/cookies.html">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
@@ -16,13 +16,14 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://oak-hill-park-cafe.pages.dev/cookies.html">
   <meta property="og:title" content="Cookie notice for the BytesFX Café">
-  <meta property="og:description" content="No tracking cookies on this site. One entry in your browser remembers your choice, and nothing else is stored on your device.">
+  <meta property="og:description" content="No tracking cookies on this site. Two entries in your browser remember your choices, and nothing else is stored on your device.">
   <meta property="og:image" content="https://oak-hill-park-cafe.pages.dev/assets/og/og-home.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="BytesFX Café &amp; Bookings card showing an illustrated café interior">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="assets/styles.css">
+<script src="assets/theme.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -51,6 +52,7 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="theme-toggle__moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><g class="theme-toggle__sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></svg></button>
         <button class="nav-share" type="button" data-share aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg><span>Share</span></button>
         <a class="button" href="calendar.html">Book a party</a>
       </div>
@@ -62,7 +64,7 @@
     <section class="page-hero">
       <div class="section-inner">
         <h1>Cookie notice</h1>
-        <p class="section-lede">This site sets no tracking cookies. One entry in your browser's own storage remembers the choice you make, and nothing else is stored on your device. Last updated 21 October 2026.</p>
+        <p class="section-lede">This site sets no tracking cookies. Two entries in your browser's own storage remember the choices you make — your cookie choices, and whether you want the light or the dark page — and nothing else is stored on your device. Last updated 28 October 2026.</p>
         <div class="cluster"><button class="button" type="button" data-cookie-settings>Open cookie settings</button></div>
       </div>
     </section>
@@ -74,20 +76,21 @@
         <p>The site does include a first-party, cookieless page-view counter, which would store only the name of an event and the path visited. On this site that counter records nothing at all.</p>
 
         <h2>What is stored on your device</h2>
-        <p>One entry, and it is stored by your browser rather than by us. When you use the cookie banner, the choice you make is written to your browser's local storage so that the banner does not ask again on your next visit. It stays there until you clear it.</p>
+        <p>Two entries, and both are stored by your browser rather than by us. When you use the cookie banner, the choice you make is written to your browser's local storage so that the banner does not ask again on your next visit. When you use the light or dark mode switch in the header, the mode you pick is written alongside it. Both stay there until you clear them.</p>
         <table class="cookie-table">
           <thead><tr><th scope="col">Name</th><th scope="col">Provider</th><th scope="col">Purpose</th><th scope="col">Lasts</th></tr></thead>
           <tbody>
             <tr><td>bytesfx-consent</td><td>This site</td><td>Stores the cookie choices you made</td><td>Until you clear it</td></tr>
+            <tr><td>bytesfx-theme</td><td>This site</td><td>Stores whether you chose the light or the dark page. Written only when you use the mode switch; until then the site follows your operating system and writes nothing.</td><td>Until you clear it</td></tr>
             <tr><td>bfx-admin-token</td><td>This site</td><td>Holds your staff session so the dashboard knows you are signed in. Session storage, not a cookie, and only if you sign in.</td><td>Until you close the tab</td></tr>
             <tr><td>None</td><td>This site</td><td>No cookies are set</td><td>Not applicable</td></tr>
           </tbody>
         </table>
-        <p>Neither entry is a cookie in the technical sense: both live in the browser's storage API. The first is local storage and stays until you clear it; the second is session storage and is cleared when you close the tab. Neither is sent to any other site, and neither identifies you to anyone but this one.</p>
+        <p>None of these is a cookie in the technical sense: they all live in the browser's storage API. The first two are local storage and stay until you clear them; the third is session storage and is cleared when you close the tab. None is sent to any other site, and none identifies you to anyone but this one.</p>
 
         <h2>The cookie banner</h2>
         <p>The banner at the foot of the page offers three ways to decide: allow all categories, reject the optional ones, or choose which categories you allow. Whichever you pick is saved in your browser, as described above, and the banner then stays out of the way. If you make no choice at all, the site stores nothing and the banner will ask again next time.</p>
-        <p>One honest caveat: choosing analytics or advertising does not start a tracker, because no analytics or advertising tag is served at all. Accepting everything still stores only the one entry described above. The categories are still offered so that the flow is complete and the consent model is visible. On a live site, the choices would switch tags on and off.</p>
+        <p>One honest caveat: choosing analytics or advertising does not start a tracker, because no analytics or advertising tag is served at all. Accepting everything still stores only the entries described above. The categories are still offered so that the flow is complete and the consent model is visible. On a live site, the choices would switch tags on and off.</p>
 
         <h2>Owner-configured tracking snippets</h2>
         <p>The site has a feature for owner-configured tracking code. A snippet of head or body HTML is entered in the admin console, given a page scope and a consent category, and injected into the page only when the matching category has been allowed.</p>
@@ -98,7 +101,7 @@
         <p>The one party that necessarily handles your request is Cloudflare, the hosting provider, which processes standard server logs such as the IP address, the address requested, the browser's user agent and the timing. That is part of delivering the site and protecting it from abuse, and the retention period for those logs is set by Cloudflare rather than by us.</p>
 
         <h2>Changing your mind</h2>
-        <p>Use the <button class="link-button" type="button" data-cookie-settings>Cookie settings</button> button, in the footer of every page, to review or change your choice at any time. You can also delete the stored choice through your browser's site data settings. The site works either way, and if you clear the choice the banner will ask you again.</p>
+        <p>Use the <button class="link-button" type="button" data-cookie-settings>Cookie settings</button> button, in the footer of every page, to review or change your choice at any time. You can also delete the stored choices through your browser's site data settings. The site works either way, and if you clear the cookie choice the banner will ask you again.</p>
       </div>
     </section>
   </main>

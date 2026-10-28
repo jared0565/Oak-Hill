@@ -103,7 +103,7 @@
     banner.innerHTML =
       '<div class="consent-text">' +
       '<strong>Cookies on this site</strong>' +
-      '<p>This site stores one choice of yours in your browser. No analytics or advertising tags run here. See the <a href="cookies.html">cookie notice</a>.</p>' +
+      '<p>This site stores your cookie choice and your light or dark mode preference in your browser. No analytics or advertising tags run here. See the <a href="cookies.html">cookie notice</a>.</p>' +
       '</div>' +
       '<form class="consent-options" hidden>' +
       '<label><input type="checkbox" id="consent-necessary" name="necessary" checked disabled> Strictly necessary (always on)</label>' +
