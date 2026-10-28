@@ -62,9 +62,18 @@ function runTheme({ stored = null, systemDark = false } = {}) {
     },
   };
 
+  // One media query object, shared by every call to matchMedia, so that the
+  // page can be told the system setting changed after it has loaded.
+  const mediaListeners = [];
+  const media = {
+    matches: systemDark,
+    addEventListener(type, fn) { if (type === "change") mediaListeners.push(fn); },
+    addListener(fn) { mediaListeners.push(fn); },
+  };
+
   const context = {
     document,
-    window: { matchMedia: () => ({ matches: systemDark, addEventListener() {}, addListener() {} }) },
+    window: { matchMedia: () => media },
     localStorage: {
       getItem: (key) => (store.has(key) ? store.get(key) : null),
       setItem: (key, value) => store.set(key, value),
@@ -80,6 +89,11 @@ function runTheme({ stored = null, systemDark = false } = {}) {
     button,
     store,
     click() { (listeners.click || []).forEach((fn) => fn()); },
+    // The operating system changes its setting, and the page is told.
+    systemChange(dark) {
+      media.matches = dark;
+      for (const fn of mediaListeners) fn({ matches: dark });
+    },
   };
 }
 
@@ -94,6 +108,33 @@ test("with nothing stored, the page follows the operating system", () => {
 
 test("a stored choice beats the operating system", () => {
   const t = runTheme({ stored: "light", systemDark: true });
+  assert.equal(t.root.getAttribute("data-theme"), "light");
+});
+
+test("a stored dark choice beats a light operating system", () => {
+  const t = runTheme({ stored: "dark", systemDark: false });
+  assert.equal(t.root.getAttribute("data-theme"), "dark");
+});
+
+test("a stored value that is not a mode is ignored", () => {
+  // Something else in the browser's storage, under the same name, must not
+  // be mistaken for a choice.
+  const t = runTheme({ stored: "banana", systemDark: true });
+  assert.equal(t.root.getAttribute("data-theme"), "dark");
+  assert.equal(t.store.get("bytesfx-theme"), "banana");
+});
+
+test("with nothing stored, the page follows the operating system as it changes", () => {
+  const t = runTheme({ stored: null, systemDark: false });
+  assert.equal(t.root.getAttribute("data-theme"), "light");
+  t.systemChange(true);
+  assert.equal(t.root.getAttribute("data-theme"), "dark");
+});
+
+test("a stored choice is not overridden when the operating system changes", () => {
+  const t = runTheme({ stored: "light", systemDark: false });
+  assert.equal(t.root.getAttribute("data-theme"), "light");
+  t.systemChange(true);
   assert.equal(t.root.getAttribute("data-theme"), "light");
 });
 
