@@ -9,8 +9,13 @@ const PLACEMENTS = new Set(["head", "body_start", "body_end"]);
 const CATEGORIES = new Set(["analytics", "advertising"]);
 const SCOPE_RE = /^\/[a-z0-9-]*\.html$/;
 
-// Mirrors the _headers CSP allowlist; used only for an advisory at-save warning.
-const ALLOWED_SUFFIXES = [
+// The hosts an owner-pasted tag may load from. The site's Content-Security-Policy
+// in public/_headers does NOT allow these while the site is a demonstration: a
+// demonstration loads no third-party tag at all, and the policy says so to the
+// browser as well as to the server. Arming the site for real therefore means
+// widening that policy to match this list (plus challenges.cloudflare.com for
+// the bot check) — see the arming note in functions/api/_lib/demo.mjs.
+export const ALLOWED_SUFFIXES = [
   "googletagmanager.com", "google-analytics.com", "googleadservices.com", "doubleclick.net",
   "google.com", "google.co.uk", "gstatic.com", "googleapis.com",
   "facebook.net", "facebook.com", "licdn.com", "tiktok.com", "bing.com", "clarity.ms",
