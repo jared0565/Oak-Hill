@@ -312,7 +312,7 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **136 tests, 136 pass, 0 fail.** (95 at the rebrand; 109
+`npm test` — **140 tests, 140 pass, 0 fail.** (95 at the rebrand; 109
 after the mode switch, the policy and the dependency work; 27 more in
 the four files the mutation gate had flagged, which until then had no
 test of their own — `tests/demo-store.test.mjs`,
@@ -604,6 +604,7 @@ Tests
 | `tests/booking.test.mjs` | The booking script in a sandbox with a stubbed DOM: what stops a request, and what it says. |
 | `tests/calendar.test.mjs` | The sentence under the calendar, written from the data on screen. |
 | `tests/check-pages.test.mjs` | The page checker against a fake browser and a page whose DOM the test controls. |
+| `tests/photo-band.test.mjs` | Holds the full-bleed band: the picture stays described, and the wash keeps a colour the page checker can measure. |
 | `public/assets/theme.js` | The light/dark mode switch. Loaded from `<head>` without `defer` so the theme is set before the first paint. |
 | `tests/theme-mode.test.mjs` | Runs the mode switch against a stubbed browser, and checks that the notice discloses what it stores. |
 | `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls, old-brand text, and the mode switch's state and contrast. |
