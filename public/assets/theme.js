@@ -94,6 +94,13 @@
     });
   }
 
+  // A page that carries the script tag twice would otherwise bind every
+  // switch twice, and one click would flip the theme and flip it straight
+  // back again -- a switch that looks dead. The mark on the page stops the
+  // second copy from binding at all.
+  if (root.bfxThemeBound) return;
+  root.bfxThemeBound = true;
+
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
   else bind();
 })();

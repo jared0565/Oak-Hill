@@ -46,7 +46,7 @@ function makeButton() {
   };
 }
 
-function runTheme({ stored = null, systemDark = false, buttonCount = 1 } = {}) {
+function runTheme({ stored = null, systemDark = false, buttonCount = 1, runs = 1 } = {}) {
   const rootAttrs = new Map();
   const store = new Map();
   if (stored) store.set("bytesfx-theme", stored);
@@ -90,7 +90,11 @@ function runTheme({ stored = null, systemDark = false, buttonCount = 1 } = {}) {
   };
   context.globalThis = context;
   vm.createContext(context);
-  vm.runInContext(read("public/assets/theme.js"), context);
+  // "runs" loads the script more than once, the way a page that carries the
+  // script tag twice would.
+  for (let i = 0; i < runs; i++) {
+    vm.runInContext(read("public/assets/theme.js"), context);
+  }
 
   return {
     root,
@@ -198,6 +202,18 @@ test("the switch is renamed when the operating system changes the theme", () => 
   t.systemChange(true);
   assert.equal(t.root.getAttribute("data-theme"), "dark");
   assert.equal(t.button.getAttribute("aria-label"), "Switch to light mode");
+});
+
+test("a page that loads the script twice still flips the theme once", () => {
+  // Two copies of the script mean two click handlers on the same switch, and
+  // a click would flip the theme and flip it straight back. The switch would
+  // look dead.
+  const t = runTheme({ systemDark: false, runs: 2 });
+  assert.equal(t.root.getAttribute("data-theme"), "light");
+
+  t.click();
+  assert.equal(t.root.getAttribute("data-theme"), "dark");
+  assert.equal(t.store.get("bytesfx-theme"), "dark");
 });
 
 // ---- the markup ----------------------------------------------------------
