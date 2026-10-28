@@ -182,6 +182,40 @@ pairs on the home page are checked by `tools/check-pages.mjs` and all clear
 menu PDF and a visitor's own print-out keep the light palette whatever the
 visitor has on screen.
 
+### The page: warm paper, 28 October 2026
+
+The light theme's page background was the yellow cream `#fff7ea` — the
+first marker in `PRODUCT.md`'s anti-reference list. The operator decided to
+move off it, and the page is now **warm paper `#faf3f0`**: the colour the
+reference café site uses, barely pink rather than yellow, so it reads as
+paper rather than as a template's cream.
+
+Two things had to be true for that to work:
+
+- **Each surface on the page is a step crisper than it.** The page is
+  `#faf3f0`, a card is `#fffdf8` and a raised surface is `#ffffff`. The old
+  ladder was the same shape but with a saturated cream under it, so a card
+  barely separated from the page. `--raised` has to stay the brightest step
+  because the selected booking slot uses it — an unselected slot is a
+  `--card` and the selected one is `--raised`, and the selected one has to
+  be the brighter of the two.
+- **The tokens were renamed to say what they are.** `--cream` is now
+  `--page` and `--paper` is now `--card`, because the page is the paper and
+  the card is not. The dark block was renamed the same way and keeps its
+  values; the ladder still runs the same way in both modes, dark to light.
+
+Every text pair that sits directly on the page came out slightly *lower*,
+because the new paper is a shade darker than the old cream — body text
+12.00:1 (it was 12.37:1), the muted colour 5.18:1 (was 5.34:1) and the
+tomato accent 4.95:1 (was 5.10:1). All are still well above the 4.5:1
+that body text needs, and the tightest of them, the accent, is the only
+one within half a point of the line. The page checker's own readings did
+not move at all, because the pairs it measures sit on the white cards and
+the deep green bands rather than on the page.
+
+The menu PDF is untouched: the print block paints the page `--white` and
+hides the sticky category navigation, so it never saw the cream.
+
 **What it costs the visitor.** One more entry in their browser's storage —
 `bytesfx-theme`, holding the word `light` or `dark` and nothing else, written
 only when the visitor uses the switch. The privacy notice and the cookie

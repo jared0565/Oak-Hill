@@ -7,15 +7,17 @@
   --toast: #7b4a2d;
   --sky: #4d8fa0;
 
-  /* Surfaces, lightest to darkest. */
-  --cream: #fff7ea;       /* the page */
-  --paper: #fffdf8;       /* a card or a panel */
-  --raised: #ffffff;      /* a step above a panel: an input, a calendar cell */
+  /* Surfaces, lightest to darkest. The page is warm paper and everything
+     that sits on it is crisper than it, so a card reads as an object on the
+     paper rather than as another shade of the same cream. */
+  --page: #faf3f0;        /* the page: warm paper */
+  --card: #fffdf8;        /* a card or a panel */
+  --raised: #ffffff;      /* a step above a card: an input, a calendar cell */
   --white: #ffffff;       /* text on a saturated fill */
   --ink: #263238;         /* body text */
   --muted: #5c6a63;       /* secondary text */
   --footer-bg: #263238;   /* the footer band */
-  --header-bg: rgba(255, 247, 234, 0.94);
+  --header-bg: rgba(250, 243, 240, 0.94);
   --line: rgba(38, 50, 56, 0.14);
   --shadow: 0 18px 45px rgba(38, 50, 56, 0.16);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.32);
@@ -27,7 +29,9 @@
   --danger-text: #a8321c;
 
   /* Colour used on a saturated fill. */
-  --on-band: #fff7ea;     /* text and focus rings on the deep green bands */
+  --on-band: #fff7ea;     /* text and focus rings on the deep green bands.
+                            A warmer white than the page, because it has to
+                            hold its contrast against the deep green. */
   --on-honey: #263238;
   --on-sky: #0b1a20;
   --inverse-bg: #263238;  /* the skip link, which inverts against the page */
@@ -76,8 +80,8 @@
    has on screen. */
 @media screen {
   [data-theme="dark"] {
-    --cream: #171512;
-    --paper: #1e1b18;
+    --page: #171512;
+    --card: #1e1b18;
     --raised: #272420;
     --ink: #e9e4db;
     --muted: #a8a49b;
@@ -119,7 +123,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--cream);
+  background: var(--page);
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--text-body);
@@ -275,7 +279,7 @@ a {
   display: none;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   min-width: 46px;
   min-height: 46px;
@@ -360,7 +364,7 @@ a {
   height: 44px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   cursor: pointer;
   /* No transition on the background. The button's text colour changes with
@@ -426,7 +430,7 @@ button.button {
 
 .button.ghost {
   border-color: var(--line);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
 }
 
@@ -552,7 +556,7 @@ button.button {
 .info-panel {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
 }
 
 .quick-card {
@@ -581,7 +585,7 @@ button.button {
 }
 
 .section.alt {
-  background: var(--paper);
+  background: var(--card);
 }
 
 .section-head {
@@ -862,7 +866,7 @@ button.button {
 .tab-button {
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   padding: 0.65rem 0.95rem;
   font: inherit;
@@ -1112,7 +1116,7 @@ textarea {
   padding: 1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   text-align: left;
   font: inherit;
   cursor: pointer;
@@ -1239,7 +1243,7 @@ textarea {
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--paper);
+  background: var(--card);
   font-size: var(--text-md);
 }
 
@@ -1293,7 +1297,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--paper);
+  background: var(--card);
 }
 .map-embed-inner {
   display: grid;
@@ -1377,7 +1381,7 @@ textarea {
     border: 1px solid var(--line);
     border-radius: var(--radius);
     padding: 0.8rem;
-    background: var(--paper);
+    background: var(--card);
     box-shadow: var(--shadow);
   }
 
@@ -1501,7 +1505,7 @@ textarea {
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     border-top: 1px solid var(--line);
-    background: var(--paper);
+    background: var(--card);
   }
 
   .mobile-actions a,
@@ -1549,7 +1553,7 @@ textarea {
   margin-top: 0.9rem;
   border: 1px solid var(--line);
   border-collapse: collapse;
-  background: var(--paper);
+  background: var(--card);
   font-size: var(--text-md);
 }
 
@@ -1630,7 +1634,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.1rem 1.2rem;
-  background: var(--paper);
+  background: var(--card);
   box-shadow: var(--shadow);
 }
 
@@ -1716,7 +1720,7 @@ textarea {
   gap: 0.4rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   font: inherit;
   font-weight: 800;
@@ -1745,7 +1749,7 @@ textarea {
   width: min(420px, 100%);
   max-height: calc(100vh - 36px);
   overflow: auto;
-  background: var(--paper);
+  background: var(--card);
   border-radius: 14px;
   padding: 26px 24px 22px;
   box-shadow: var(--shadow-lg);
@@ -1784,7 +1788,7 @@ textarea {
   justify-content: center;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   font: inherit;
   font-weight: 800;
@@ -1854,7 +1858,7 @@ body.share-open { overflow: hidden; }
 .cal-chip.e-event { background: var(--sky); color: var(--on-sky); }
 .cal-chip.e-closure { background: #6b7280; }
 .cal-warn { font-size: var(--text-2xs); color: var(--danger-text); font-weight: 700; }
-.cal-day-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--paper); }
+.cal-day-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--card); }
 .cal-day-panel h3 { margin: 0 0 0.5rem; }
 .cal-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.35rem 0; border-bottom: 1px solid var(--line); }
 .cal-row:last-child { border-bottom: 0; }
@@ -1907,7 +1911,7 @@ body.share-open { overflow: hidden; }
 .contacts-bar input[type="search"] { flex: 1 1 220px; padding: 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); }
 .contacts-row { cursor: pointer; }
 .contacts-row:hover { background: var(--park-tint); }
-.contact-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--paper); display: flex; flex-direction: column; gap: 0.5rem; }
+.contact-panel { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; background: var(--card); display: flex; flex-direction: column; gap: 0.5rem; }
 .contact-panel h3 { margin: 0; }
 .contact-panel textarea { width: 100%; }
 .contact-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
@@ -2029,7 +2033,7 @@ body.admin-shell .section-inner.admin .demo-badge {
   margin: 0 0 1.5rem;
   padding: 0.6rem 0;
   overflow-x: auto;
-  background: var(--cream);
+  background: var(--page);
   border-bottom: 1px solid var(--line);
   scrollbar-width: thin;
 }
@@ -2039,7 +2043,7 @@ body.admin-shell .section-inner.admin .demo-badge {
   padding: 0.45rem 0.8rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   font-size: var(--text-md);
   font-weight: 700;

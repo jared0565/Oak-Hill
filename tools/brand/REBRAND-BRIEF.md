@@ -196,8 +196,10 @@ gratuitous animation, emoji, and drop shadows used as decoration.
 - Focus is visible (the stylesheet handles the ring) — do not remove outlines.
 - `prefers-reduced-motion` is already handled in CSS; do not add your own
   animation.
-- Colour contrast must hold: `--muted` on `--cream` is about 4.9:1, `--tomato`
-  on `--cream` about 4.6:1. Do not introduce a lighter grey for body text.
+- Colour contrast must hold: `--muted` on the page is about 5.2:1, `--tomato`
+  on the page about 5.0:1. Do not introduce a lighter grey for body text.
+  (The page token was `--cream` when this brief was written; it is `--page`
+  now, and the page is warm paper rather than the yellow cream.)
 
 ## 9. Forms in the demo
 

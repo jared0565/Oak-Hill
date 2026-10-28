@@ -237,7 +237,7 @@ test("the stylesheet defines a dark theme that overrides the surfaces", () => {
   const css = read("public/assets/styles.css");
   const dark = css.match(/\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/);
   assert.ok(dark, "no [data-theme=\"dark\"] block in styles.css");
-  for (const token of ["--cream", "--paper", "--raised", "--ink", "--muted", "--line", "--brand", "--accent"]) {
+  for (const token of ["--page", "--card", "--raised", "--ink", "--muted", "--line", "--brand", "--accent"]) {
     assert.match(dark[1], new RegExp(`${token}:`), `the dark block does not set ${token}`);
   }
 });
@@ -253,6 +253,75 @@ test("every colour token the stylesheet uses is defined somewhere", () => {
   }
   const missing = [...used].filter((name) => !defined.has(name));
   assert.deepEqual(missing, [], `undefined tokens: ${missing.join(", ")}`);
+});
+
+// ---- the page --------------------------------------------------------------
+// The page used to be the yellow cream that PRODUCT.md names as one of the
+// generic-AI-landing-page markers. It is now warm paper: barely pink, a long
+// way from the saturated yellow of a template's background. The surfaces on
+// it are each a step crisper, so a card reads as an object on the paper
+// rather than as another shade of the same colour.
+const channel = (hex) => {
+  const [r, g, b] = hex.replace("#", "").match(/../g).map((h) => parseInt(h, 16));
+  return { r, g, b };
+};
+const lightness = (hex) => {
+  const { r, g, b } = channel(hex);
+  const [cr, cg, cb] = [r, g, b]
+    .map((v) => v / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * cr + 0.7152 * cg + 0.0722 * cb;
+};
+
+test("the page is warm paper, and each surface on it is a step crisper", () => {
+  const css = read("public/assets/styles.css");
+  const light = css.match(/:root \{([\s\S]*?)\n\}/)[1];
+  const value = (token) => {
+    const m = light.match(new RegExp(`${token}:\\s*(#[0-9a-f]{6})`, "i"));
+    assert.ok(m, `the light theme does not set ${token}`);
+    return m[1].toLowerCase();
+  };
+
+  const page = value("--page");
+  const card = value("--card");
+  const raised = value("--raised");
+
+  // Not the old cream, and not any other saturated yellow: the paper is
+  // warm, so red is the strongest channel, but only just.
+  assert.notEqual(page, "#fff7ea", "the page is back to the old cream");
+  const { r, g, b } = channel(page);
+  assert.ok(r >= g && g >= b, `the paper is not warm: ${page}`);
+  assert.ok(r - b <= 12, `the paper is too saturated to read as paper: ${page}`);
+
+  // The ladder: page, then a card, then a step above the card.
+  assert.ok(lightness(page) < lightness(card), "a card is not crisper than the page");
+  assert.ok(lightness(card) < lightness(raised), "a raised surface is not crisper than a card");
+});
+
+test("the sticky header is the page colour, so no seam shows under it", () => {
+  const css = read("public/assets/styles.css");
+  const light = css.match(/:root \{([\s\S]*?)\n\}/)[1];
+  const page = light.match(/--page:\s*(#[0-9a-f]{6})/i)[1].toLowerCase();
+  const header = light.match(/--header-bg:\s*rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  assert.ok(header, "the header has no translucent background of its own");
+  const { r, g, b } = channel(page);
+  assert.deepEqual(
+    [Number(header[1]), Number(header[2]), Number(header[3])],
+    [r, g, b],
+    "the header is not the page colour"
+  );
+});
+
+test("the dark page keeps the same ladder, in the other direction", () => {
+  const css = read("public/assets/styles.css");
+  const dark = css.match(/\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/)[1];
+  const value = (token) => {
+    const m = dark.match(new RegExp(`${token}:\\s*(#[0-9a-f]{6})`, "i"));
+    assert.ok(m, `the dark theme does not set ${token}`);
+    return m[1].toLowerCase();
+  };
+  assert.ok(lightness(value("--page")) < lightness(value("--card")));
+  assert.ok(lightness(value("--card")) < lightness(value("--raised")));
 });
 
 // ---- the disclosure ------------------------------------------------------

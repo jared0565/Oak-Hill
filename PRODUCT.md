@@ -46,6 +46,14 @@ never have to wonder whether the café on screen really exists.
 
 - Generic AI-generated landing pages: cream background, Inter, uppercase kicker
   above every section, identical card grids.
+
+  **The first of these no longer applies.** On 28 October 2026 the page was
+  moved off the yellow cream it used to be onto a warm paper (`#faf3f0`), the
+  colour the reference café site uses, with every surface on it a step
+  crisper so a card reads as an object on the paper. The site's own type is
+  a system sans and a serif, not Inter. The uppercase kicker and the card
+  grids are still here: they were kept on purpose, and the kicker is the one
+  marker in the list the site owns rather than avoids.
 - Corporate SaaS aesthetics (stat blocks, "conversion funnel" language visible
   to customers).
 - Clip-art / template kids-party sites with rainbow Comic Sans energy; fun

@@ -176,7 +176,7 @@ body.admin-shell [data-admin-app] h3 {
   padding: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   cursor: pointer;
 }
@@ -309,7 +309,7 @@ body.admin-shell [data-admin-app] h3 {
   padding: 0.55rem 0.7rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
   font: inherit;
 }
