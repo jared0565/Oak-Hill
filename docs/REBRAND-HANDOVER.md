@@ -312,8 +312,12 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **95 tests, 95 pass, 0 fail.** (84 before the mode switch, 11
-more in `tests/theme-mode.test.mjs`.)
+`npm test` — **136 tests, 136 pass, 0 fail.** (95 at the rebrand; 109
+after the mode switch, the policy and the dependency work; 27 more in
+the four files the mutation gate had flagged, which until then had no
+test of their own — `tests/demo-store.test.mjs`,
+`tests/booking.test.mjs`, `tests/calendar.test.mjs` and
+`tests/check-pages.test.mjs`.)
 
 `tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
 Each test asserts on the *absence* of a write or a request, so it would fail
@@ -492,6 +496,22 @@ Verified on the live deployment:
 - the demonstration's own promise still holds: no third-party host is allowed
   by the policy, and `/api/code` still serves no snippet.
 
+**Deployed a fourth time on 28 October 2026**, with the four missing
+test suites and nothing else: two commits on `master` (`0111746` the
+tests, `015cd77` two more assertions). The behaviour of the site is
+unchanged — the source changes are one extra space inside nineteen
+statements, so that the mutation gate would re-examine them — and the
+workflow ran the unit tests, applied the migrations — **"No migrations
+to apply!"** — and rebuilt the Pages project.
+
+Verified on the live deployment: the page checker passes on the live
+site, all twelve pages at 1280px and 390px, with no issues and no
+console errors, and the mode pass clears 4.5:1 on all eleven text
+pairs. The mutation gate's ledger is now clear: **0 open findings**,
+25 of them closed by the gate itself after it watched the mutants
+die, and 7 by a ledger-logged override (five whose line no longer
+exists, and two mutants no test can tell from the original).
+
 What is already done:
 
 1. **The origin is set** — `https://oak-hill-park-cafe.pages.dev`, the URL the
@@ -580,6 +600,10 @@ Tests
 | `functions/api/_lib/demo.mjs` | The demonstration boundary. |
 | `functions/api/_lib/demo-store.mjs` | The isolated demo slot and calendar store. |
 | `tests/demo-mode.test.mjs` | The safety net for the boundary. |
+| `tests/demo-store.test.mjs` | The synthetic café's contract: the 28-day window, Monday to Friday, the private-hire day. |
+| `tests/booking.test.mjs` | The booking script in a sandbox with a stubbed DOM: what stops a request, and what it says. |
+| `tests/calendar.test.mjs` | The sentence under the calendar, written from the data on screen. |
+| `tests/check-pages.test.mjs` | The page checker against a fake browser and a page whose DOM the test controls. |
 | `public/assets/theme.js` | The light/dark mode switch. Loaded from `<head>` without `defer` so the theme is set before the first paint. |
 | `tests/theme-mode.test.mjs` | Runs the mode switch against a stubbed browser, and checks that the notice discloses what it stores. |
 | `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls, old-brand text, and the mode switch's state and contrast. |
