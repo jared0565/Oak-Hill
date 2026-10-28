@@ -312,12 +312,14 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **140 tests, 140 pass, 0 fail.** (95 at the rebrand; 109
+`npm test` — **143 tests, 143 pass, 0 fail.** (95 at the rebrand; 109
 after the mode switch, the policy and the dependency work; 27 more in
 the four files the mutation gate had flagged, which until then had no
 test of their own — `tests/demo-store.test.mjs`,
 `tests/booking.test.mjs`, `tests/calendar.test.mjs` and
-`tests/check-pages.test.mjs`.)
+`tests/check-pages.test.mjs`; 4 more in the full-bleed band's
+`tests/photo-band.test.mjs` and 3 more in
+`tests/portrait-anchor.test.mjs`.)
 
 `tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
 Each test asserts on the *absence* of a write or a request, so it would fail
@@ -512,6 +514,20 @@ pairs. The mutation gate's ledger is now clear: **0 open findings**,
 die, and 7 by a ledger-logged override (five whose line no longer
 exists, and two mutants no test can tell from the original).
 
+**Deployed a fifth time on 28 October 2026**, with the homepage's portrait
+anchor: `4663ae2` on `master`. The "Everything you can do here" section
+carried a square illustration beside the copy; it now carries a 3:4 portrait
+— the cake — and nothing else on the site is in that proportion. The picture
+it replaced, `party-table-detail.jpg`, carried pastel bunting and cone
+hats, which is the "template kids-party site" look `PRODUCT.md` names as the
+anti-reference.
+
+Verified on the live deployment: the page checker passes on the live site,
+all twelve pages at 1280px and 390px, with no issues, and the mode pass
+still clears 4.5:1 on every text pair. The portrait is served from the
+site's own origin at 487×649 CSS pixels, cropped from the 486×486 square at
+its native resolution, so nothing on the page is upscaled.
+
 What is already done:
 
 1. **The origin is set** — `https://oak-hill-park-cafe.pages.dev`, the URL the
@@ -605,6 +621,7 @@ Tests
 | `tests/calendar.test.mjs` | The sentence under the calendar, written from the data on screen. |
 | `tests/check-pages.test.mjs` | The page checker against a fake browser and a page whose DOM the test controls. |
 | `tests/photo-band.test.mjs` | Holds the full-bleed band: the picture stays described, and the wash keeps a colour the page checker can measure. |
+| `tests/portrait-anchor.test.mjs` | Holds the one portrait picture: it stays the cake rather than the bunting, it declares a 3:4 box, and the rule that pins its ratio stays scoped to the image stack. |
 | `public/assets/theme.js` | The light/dark mode switch. Loaded from `<head>` without `defer` so the theme is set before the first paint. |
 | `tests/theme-mode.test.mjs` | Runs the mode switch against a stubbed browser, and checks that the notice discloses what it stores. |
 | `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls, old-brand text, and the mode switch's state and contrast. |
