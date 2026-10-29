@@ -44,7 +44,7 @@ const OG = [
     photo: "cafe-interior-hero.jpg",
     title: "BytesFX Café &amp; Bookings",
     sub: "A sample menu, a soft play corner and a party booking flow",
-    kicker: "Demonstration site",
+    kicker: "Demo Site",
   },
   {
     file: "og-menu.jpg",
@@ -58,21 +58,21 @@ const OG = [
     photo: "soft-play-room.jpg",
     title: "Soft play",
     sub: "A sample soft play area, priced and laid out for illustration",
-    kicker: "Demonstration site",
+    kicker: "Demo Site",
   },
   {
     file: "og-parties.jpg",
     photo: "party-setup.jpg",
     title: "Party packages",
     sub: "A sample two-hour party package with food and a cake ceremony",
-    kicker: "Demonstration site",
+    kicker: "Demo Site",
   },
   {
     file: "og-contact.jpg",
     photo: "cafe-courtyard.jpg",
     title: "Contact",
     sub: "A demo enquiry form — no message is sent and nothing is stored",
-    kicker: "Demonstration site",
+    kicker: "Demo Site",
   },
 ];
 

@@ -99,8 +99,10 @@ All twelve rewritten: `index`, `menu`, `soft-play`, `parties`, `calendar`,
 
 - The site reads as a café website rather than as a demonstration. The
   standing banner and the in-context notices are gone, and a small
-  **"Demonstration site" badge** floats in the upper right of the hero on
-  every visitor-facing page instead. The image caption reads *"Demo Image"*.
+  **"Demo Site" badge** floats in the upper right of the hero on
+  every visitor-facing page instead (shortened from "Demonstration site" on
+  29 October 2026, because the badge was too long in the header). The image
+  caption reads *"Demo Image"*.
   The only place the demonstration is still stated in as many words is the
   message a visitor reads back after submitting a form, and it is there
   deliberately: a visitor who has just handed over a name, a phone number

@@ -29,7 +29,7 @@
 // deployment can never quietly accept real bookings. Arming live takes two
 // deliberate settings, and neither can be flipped by a visitor.
 
-// The standing notice. The site carries a small "Demonstration site" badge
+// The standing notice. The site carries a small "Demo Site" badge
 // rather than a notice across every page, so this is the one place the
 // boundary is stated in full — and it is what the server says if a caller
 // ever asks what mode it is in.
