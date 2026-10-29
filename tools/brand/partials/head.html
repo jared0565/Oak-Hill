@@ -29,6 +29,9 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="{{OG_IMAGE_ALT}}">
   <meta name="twitter:card" content="summary_large_image">
+  <!-- The display face is preloaded so the headings arrive in Fraunces with
+       the first paint, rather than swapping from the fallback after it. -->
+  <link rel="preload" href="assets/fonts/fraunces-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/styles.css">
   <!-- Loaded without defer, on purpose: the mode has to be set before the
        first paint, so the page never flashes the wrong one. -->

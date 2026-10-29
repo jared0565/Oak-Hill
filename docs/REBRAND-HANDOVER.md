@@ -287,6 +287,54 @@ not made here: the live path cannot be exercised end to end, because there is
 no live deployment, no third-party tag and no real bot check to test against,
 and the demonstration's own policy allows no inline script at all.
 
+### The display face: Fraunces, 29 October 2026
+
+The site's serif was Georgia — a system font, which the browser only has if
+the operating system has it. It is now **Fraunces**, the variable serif the
+reference café site uses, and it is a **design variable**:
+
+```
+--font-display: "Fraunces", Georgia, "Iowan Old Style", …
+--font-body:    "Segoe UI", ui-sans-serif, system-ui, …
+```
+
+`--serif` and `--sans` are gone; every rule that used them now uses one of
+the two, so the typeface can be changed in one place and nowhere else.
+
+Three things had to be arranged around it.
+
+- **It is served from this repository**, at
+  `public/assets/fonts/fraunces-latin-variable.woff2` — the latin subset of
+  the variable font, 67KB, weights 100 to 900, with the optical size axis
+  applied by the browser. It is not fetched from a font CDN, for two
+  reasons: the content-security policy allows no third-party font at all,
+  and a visitor's address should not be handed to a font house to read a
+  heading. The SIL Open Font License travels with it in
+  `public/assets/fonts/OFL.txt`.
+- **Every page preloads it**, before the stylesheet that asks for the face,
+  so the headings do not arrive in the fallback and swap after the first
+  paint. The text face is still the system sans, so nothing is downloaded
+  to read a paragraph.
+- **The menu PDF is built over http, not from a file.** Chrome treats every
+  file as its own origin, so a `file://` page cannot load the display face
+  from the repository beside it — the PDF would silently be set in a
+  fallback serif and would stop matching the page it is built from.
+  `tools/build-menu-pdf.mjs` now serves `public/` on a loopback port and
+  prints from there. The headings in the PDF are set in Fraunces as vector
+  outlines, because a variable font cannot be subset-embedded the way a
+  static one is; the text is still selectable and the file is still seven
+  pages.
+
+**The social preview cards were rebuilt too.** `tools/build-brand-assets.mjs`
+had its own hard-coded Georgia stack, so the cards would have kept the old
+face while the site changed; the builder now inlines the font as a data URI
+and the five cards are set in Fraunces. The icons came out byte-identical.
+
+**What was checked.** The printed page was rendered before and after and
+compared by pixel: the same height, the same seven pages, and 0.26% of the
+pixels changed — in exactly seven bands, each 14 to 21 points tall, which
+are the seven headings. No body text moved and nothing reflowed.
+
 ## 3. The pages, reviewed and updated
 
 | Page | Reviewed | Updated | Notes |
@@ -346,14 +394,14 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **146 tests, 146 pass, 0 fail.** (95 at the rebrand; 109
+`npm test` — **152 tests, 152 pass, 0 fail.** (95 at the rebrand; 109
 after the mode switch, the policy and the dependency work; 27 more in
 the four files the mutation gate had flagged, which until then had no
 test of their own — `tests/demo-store.test.mjs`,
 `tests/booking.test.mjs`, `tests/calendar.test.mjs` and
 `tests/check-pages.test.mjs`; 4 more in the full-bleed band's
-`tests/photo-band.test.mjs`, 3 more in `tests/portrait-anchor.test.mjs`
-and 3 more holding the page colour.)
+`tests/photo-band.test.mjs`, 3 more in `tests/portrait-anchor.test.mjs`,
+3 more holding the page colour, and 6 in `tests/typeface.test.mjs`.)
 
 `tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
 Each test asserts on the *absence* of a write or a request, so it would fail
@@ -667,6 +715,7 @@ Tests
 | `tests/check-pages.test.mjs` | The page checker against a fake browser and a page whose DOM the test controls. |
 | `tests/photo-band.test.mjs` | Holds the full-bleed band: the picture stays described, and the wash keeps a colour the page checker can measure. |
 | `tests/portrait-anchor.test.mjs` | Holds the one portrait picture: it stays the cake rather than the bunting, it declares a 3:4 box, and the rule that pins its ratio stays scoped to the image stack. |
+| `tests/typeface.test.mjs` | Holds the display face: it is a design variable, the file is in this repository, the licence travels with it, every page preloads it, and no page loads a font from another origin. |
 | `public/assets/theme.js` | The light/dark mode switch. Loaded from `<head>` without `defer` so the theme is set before the first paint. |
 | `tests/theme-mode.test.mjs` | Runs the mode switch against a stubbed browser, and checks that the notice discloses what it stores. |
 | `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls, old-brand text, and the mode switch's state and contrast. |

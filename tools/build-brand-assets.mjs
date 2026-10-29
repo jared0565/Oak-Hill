@@ -76,14 +76,23 @@ const OG = [
   },
 ];
 
-function ogHtml({ title, sub, kicker, photoDataUri }) {
+function ogHtml({ title, sub, kicker, photoDataUri, fontDataUri }) {
   return `<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><style>
   * { box-sizing: border-box; }
+  /* The brand's display face, inlined: the card is rendered from a string
+     with no origin of its own, so it cannot fetch the font from the site. */
+  @font-face {
+    font-family: "Fraunces";
+    src: url("${fontDataUri}") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: block;
+  }
   html, body { margin: 0; padding: 0; width: 1200px; height: 630px; overflow: hidden; }
   body {
     position: relative;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
     color: #fff;
     background: ${GREEN};
   }
@@ -156,8 +165,10 @@ async function main() {
       sub: card.sub,
       kicker: card.kicker,
       photoDataUri: dataUri(photoPath, "image/jpeg"),
+      fontDataUri: dataUri(path.join(root, "public", "assets", "fonts", "fraunces-latin-variable.woff2"), "font/woff2"),
     }).replace("MARK_SVG_DATA_URI", dataUri(path.join(brandDir, "logo.svg"), "image/svg+xml"));
     await page.setContent(html, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: path.join(outOg, card.file), type: "jpeg", quality: 88 });
     await page.close();
     console.log(`og     ${card.file}`);

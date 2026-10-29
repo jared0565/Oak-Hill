@@ -1,3 +1,27 @@
+/* ---- The display face ---------------------------------------------------
+   Fraunces is the site's display face: a variable serif with an optical
+   size axis, which is why the headings look right at 64px and at 18px
+   from the same file.
+
+   It is served from this origin rather than from a font CDN, for two
+   reasons. The content-security policy allows no third-party font, so a
+   CDN is not an option; and a visitor's address should not be handed to a
+   font house to read a heading.
+
+   The file is the latin subset of the variable font — 67KB, weights 100 to
+   900, with the optical size axis applied by the browser. Its licence, the
+   SIL Open Font License, sits beside it in public/assets/fonts/OFL.txt. */
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/fraunces-latin-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* Brand colours. */
   --park: #2f6b4f;        /* mid green — the band behind the green sections */
@@ -49,8 +73,10 @@
 
   --radius: 8px;
   --max: 1180px;
-  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
-  --sans: "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  /* Typefaces. The display face is Fraunces, self-hosted; the text face is
+     the system sans, so nothing is downloaded to read a paragraph. */
+  --font-display: "Fraunces", Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+  --font-body: "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   --focus: #1d4633;
   --header-h: 117px;
 
@@ -125,7 +151,7 @@ body {
   margin: 0;
   background: var(--page);
   color: var(--ink);
-  font-family: var(--sans);
+  font-family: var(--font-body);
   font-size: var(--text-body);
   line-height: 1.62;
 }
@@ -259,7 +285,7 @@ a {
 
 .brand-name {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-base);
   line-height: 1.15;
   letter-spacing: -0.005em;
@@ -490,7 +516,7 @@ button.button {
 .hero h1,
 .page-hero h1 {
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: clamp(2.5rem, 4.8vw, 4.5rem);
   line-height: 1.05;
   letter-spacing: -0.01em;
@@ -599,7 +625,7 @@ button.button {
 .section h2,
 .page-hero h1 {
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: clamp(2.1rem, 4vw, 4rem);
   line-height: 1.05;
   text-wrap: balance;
@@ -649,7 +675,7 @@ button.button {
 .info-panel h2,
 .calendar-panel h2 {
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   line-height: 1.08;
 }
@@ -769,7 +795,7 @@ button.button {
 .photo-band h2 {
   max-width: 17ch;
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw, 3.2rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
@@ -1129,7 +1155,7 @@ textarea {
 }
 
 .booking-slot strong {
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
 }
 
@@ -1175,7 +1201,7 @@ textarea {
 
 .booking-form h3 {
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
 }
 
@@ -1190,7 +1216,7 @@ textarea {
 
 .booking-success strong {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
   color: var(--brand);
 }
@@ -1211,7 +1237,7 @@ textarea {
 .admin > h1,
 .admin > .admin-view-title {
   margin: 0.3rem 0 1.5rem;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   color: var(--ink);
@@ -1229,7 +1255,7 @@ textarea {
 
 .admin-block h2 {
   margin: 0 0 0.5rem;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
 }
 
@@ -1345,7 +1371,7 @@ textarea {
 .site-footer h2,
 .site-footer h3 {
   margin: 0 0 0.75rem;
-  font-family: var(--serif);
+  font-family: var(--font-display);
 }
 
 .site-footer p {
@@ -1530,7 +1556,7 @@ textarea {
 
 .legal-content h2 {
   margin: 2.4rem 0 0.6rem;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   line-height: 1.08;
 }
@@ -1645,7 +1671,7 @@ textarea {
 }
 
 .consent-text strong {
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
 }
 
@@ -1770,7 +1796,7 @@ textarea {
 }
 .share-x:hover { background: var(--ink-tint); color: var(--ink); }
 .share-dialog h2 {
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
   margin: 0 1.6rem 0.3rem 0;
   color: var(--ink);
@@ -1872,7 +1898,7 @@ body.share-open { overflow: hidden; }
 
 /* ---- Public calendar (calendar.html) ---- */
 .pubcal-head { display: flex; align-items: center; gap: 1rem; margin: 0 0 1rem; }
-.pubcal-head h3 { margin: 0; font-family: var(--serif); font-size: var(--text-xl); }
+.pubcal-head h3 { margin: 0; font-family: var(--font-display); font-size: var(--text-xl); }
 .pubcal-head .pubcal-nav { margin-left: auto; display: flex; gap: 0.4rem; }
 .pubcal-head .pubcal-nav .button { min-height: 40px; padding: 0.4rem 0.9rem; }
 .pubcal-note { color: var(--muted); }
@@ -1921,7 +1947,7 @@ body.share-open { overflow: hidden; }
 .footer-signup { border-bottom: 1px solid rgba(255,255,255,0.18); padding: 0 0 1.5rem; margin: 0 0 1.75rem; text-align: center; }
 .footer-signup-inner { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(1rem, 4vw, 3rem); }
 .footer-signup-text { max-width: 30rem; }
-.footer-signup strong { display: block; font-family: var(--serif); font-size: var(--text-lg); }
+.footer-signup strong { display: block; font-family: var(--font-display); font-size: var(--text-lg); }
 .footer-signup p { margin: 0.35rem 0 0; color: rgba(255,255,255,0.82); font-size: var(--text-sm); }
 .footer-signup a { text-decoration: underline; margin-left: auto; margin-right: auto; }
 .footer-signup-form { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; max-width: 480px; }
@@ -2286,7 +2312,7 @@ body.admin-shell .section-inner.admin > .notice {
 
 .footer-staff-text strong {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-size: var(--text-body);
 }
 
