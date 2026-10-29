@@ -621,6 +621,18 @@ computed page colour on the live site reads `rgb(250, 243, 240)` with a
 card at `rgb(255, 253, 248)` and a translucent header that matches the
 page exactly.
 
+**Deployed a seventh time on 29 October 2026**, with the display face:
+`c1c0290` on `master`. The site's serif was Georgia, a system font; it is
+now Fraunces, self-hosted and held in a design variable. The workflow ran
+the unit tests, applied the migrations — **"No migrations to apply!"** —
+and rebuilt the Pages project.
+
+Verified on the live deployment: the page checker passes on the live site,
+all twelve pages at 1280px and 390px, with no issues; the font is served
+from the deployment itself — `200`, `font/woff2`, 67,304 bytes — and the
+licence with it; and the browser reports the heading's family as
+`Fraunces` with the face loaded.
+
 What is already done:
 
 1. **The origin is set** — `https://oak-hill-park-cafe.pages.dev`, the URL the
