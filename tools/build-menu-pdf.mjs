@@ -11,14 +11,14 @@
 //
 // The page is served over http rather than opened as a file:// URL. Chrome
 // treats every file as its own origin, so a file:// page cannot load the
-// display face from the repository next to it — the PDF would silently be set
-// in a fallback serif and would stop matching the page it is built from.
+// display face from the repository next to it — the PDF would silently be
+// set in a fallback serif and would stop matching the page it is built from.
 
 import puppeteer from "puppeteer";
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -26,6 +26,9 @@ const publicDir = path.join(root, "public");
 const source = path.join(publicDir, "menu.html");
 const outDir = path.join(publicDir, "assets");
 const outFile = path.join(outDir, "bytesfx-cafe-menu.pdf");
+
+// How long the page has to load before the build gives up on it.
+export const PAGE_TIMEOUT_MS = 60000;
 
 const TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -43,12 +46,37 @@ const TYPES = {
   ".webmanifest": "application/manifest+json",
 };
 
-function serve(directory) {
+/**
+ * Work out which file a request is asking for, and whether it may have it.
+ *
+ * The requested path is resolved and then compared with the directory it has
+ * to sit inside, so a request that climbs out of it is refused rather than
+ * served. A plain prefix test would not do: the directory is `…/public`, and
+ * a sibling directory called `public-backup` starts with the same string.
+ * Percent-encoded slashes matter too — the URL parser leaves `%2f` alone,
+ * and decoding it afterwards turns `/..%2fpublic-backup%2fsecret` into a
+ * climb that the parser never normalised.
+ *
+ * Returns the file, or null when the request may not have it.
+ */
+export function resolveRequest(directory, requestUrl) {
+  const url = new URL(requestUrl, "http://127.0.0.1");
+  const relative = decodeURIComponent(url.pathname).replace(/^\/+/, "") || "index.html";
+  const file = path.resolve(directory, relative);
+  const inside = path.relative(directory, file);
+  if (inside.startsWith("..") || path.isAbsolute(inside)) {
+    return null;
+  }
+  if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+    return null;
+  }
+  return file;
+}
+
+export function serve(directory) {
   const server = http.createServer((request, response) => {
-    const url = new URL(request.url, "http://127.0.0.1");
-    const relative = decodeURIComponent(url.pathname).replace(/^\/+/, "") || "index.html";
-    const file = path.join(directory, relative);
-    if (!file.startsWith(directory) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+    const file = resolveRequest(directory, request.url);
+    if (!file) {
       response.writeHead(404, { "content-type": "text/plain" });
       response.end("not found");
       return;
@@ -71,7 +99,7 @@ async function main() {
   const browser = await puppeteer.launch({ headless: "new" });
   try {
     const page = await browser.newPage();
-    await page.goto(`http://127.0.0.1:${port}/menu.html`, { waitUntil: "networkidle0", timeout: 60000 });
+    await page.goto(`http://127.0.0.1:${port}/menu.html`, { waitUntil: "networkidle0", timeout: PAGE_TIMEOUT_MS });
     // Wait for the display face to be in the font cache, before and after
     // the print emulation: the PDF is set in it, and without this the
     // headings quietly fall back to a system serif.
@@ -93,7 +121,11 @@ async function main() {
   console.log(`✓ ${path.relative(root, outFile)} (${kb} KB)`);
 }
 
-main().catch((err) => {
-  console.error("Error:", err.message);
-  process.exit(1);
-});
+// Only build when this file is the thing being run: the tests import it.
+const isEntryPoint = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isEntryPoint) {
+  main().catch((err) => {
+    console.error("Error:", err.message);
+    process.exit(1);
+  });
+}
