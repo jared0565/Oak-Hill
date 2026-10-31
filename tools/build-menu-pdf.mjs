@@ -14,7 +14,6 @@
 // display face from the repository next to it — the PDF would silently be
 // set in a fallback serif and would stop matching the page it is built from.
 
-import puppeteer from "puppeteer";
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
@@ -94,6 +93,13 @@ async function main() {
     throw new Error("public/menu.html not found");
   }
   fs.mkdirSync(outDir, { recursive: true });
+
+  // Puppeteer is imported here rather than at the top of the file, because
+  // this module is also imported by its tests, and the tests run where no
+  // dependencies are installed: CI checks out the repository and runs
+  // `node --test` with nothing else. A top-level import of puppeteer would
+  // fail there and take the whole test file down with it.
+  const { default: puppeteer } = await import("puppeteer");
 
   const { server, port } = await serve(publicDir);
   const browser = await puppeteer.launch({ headless: "new" });
