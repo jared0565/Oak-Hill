@@ -32,7 +32,7 @@
       "suffix": "photo",
       "extra": "no bunting, no banner, no balloons, no sign, no board, no parasol, no umbrella",
       "prompt": "A long outdoor party table set for a birthday party in a leafy walled garden, empty of people, plain white tablecloth, paper plates and cups, a round cake on a wooden stand, simple wooden chairs, clipped hedge and trees behind, dappled afternoon sunlight",
-      "crop": "A 1024x420 band, cut from the middle of the generated square: the trees and hedge fill the upper two thirds for the hero's type to sit in, and the cakes and the near end of the table sit in the lower third. A band this wide is wider than the hero at ordinary window sizes, so the crop is horizontal and the table stays in frame."
+      "crop": "A 1024x420 band cut from the generated 1024x1024 square, from row 330 to row 750: the hedge and the tree fill the upper third, and the table itself - the white cloth, the plates, the cups and the two cakes on their wooden stands - fills the rest. The band is wider than the hero at ordinary window sizes, so the browser crops it horizontally and the table stays in frame. The first cut took the top of the square instead, which left the cakes at the very bottom edge where the hero could not show them."
     },
     {
       "file": "soft-play-room.jpg",

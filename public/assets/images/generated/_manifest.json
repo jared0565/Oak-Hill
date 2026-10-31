@@ -38,7 +38,7 @@
       "purpose": "Homepage hero",
       "width": 1024,
       "height": 420,
-      "bytes": 103503,
+      "bytes": 109220,
       "provider": "Cloudflare Workers AI",
       "model": "@cf/black-forest-labs/flux-1-schnell",
       "prompt": "A long outdoor party table set for a birthday party in a leafy walled garden, empty of people, plain white tablecloth, paper plates and cups, a round cake on a wooden stand, simple wooden chairs, clipped hedge and trees behind, dappled afternoon sunlight, no bunting, no banner, no balloons, no sign, no board, no parasol, no umbrella, amateur editorial photograph taken on a camera, natural available light, real materials and real textures, shallow depth of field, gentle photographic grain, natural colours, no people, no children, no faces, no text, no lettering, no logos, no brands, no watermark"
@@ -628,7 +628,7 @@
         "format": "webp",
         "width": 512,
         "height": 210,
-        "bytes": 26860
+        "bytes": 23064
       },
       {
         "file": "party-outdoor-hero-1024.webp",
@@ -636,7 +636,7 @@
         "format": "webp",
         "width": 1024,
         "height": 420,
-        "bytes": 74442
+        "bytes": 62576
       },
       {
         "file": "soft-play-room-512.webp",
