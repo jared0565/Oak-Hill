@@ -232,7 +232,7 @@ console.log("\n=== theme ===");
       ["price", ".price"],
       ["footer link", ".site-footer a"],
       ["hero heading", ".hero h1"],
-      ["hero eyebrow", ".hero .eyebrow"],
+      ["hero tagline", ".hero__tagline"],
       ["demo badge", ".demo-badge"],
       ["primary button", ".hero-actions .button"],
       ["nav link", ".primary-nav a"],

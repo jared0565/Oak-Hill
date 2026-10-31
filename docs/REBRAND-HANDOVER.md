@@ -337,6 +337,52 @@ compared by pixel: the same height, the same seven pages, and 0.26% of the
 pixels changed — in exactly seven bands, each 14 to 21 points tall, which
 are the seven headings. No body text moved and nothing reflowed.
 
+### The homepage hero: one full-bleed photograph, 31 October 2026
+
+The hero used to be a green band with the photograph in a card beside the
+text. It is now **one full-bleed photograph with the type centred over it**,
+in the manner of the reference café site: the picture is the hero, not a card
+beside it.
+
+- The picture is `party-outdoor-hero.jpg` — a **1024×420 band** cut from a
+  generated square. The generator only makes squares, and a band this wide
+  is wider than the hero at ordinary window sizes, so the crop is horizontal
+  and the table stays in frame; a narrower band put the table at the bottom
+  edge, where a wide window cut it away.
+- The wash over the photograph is a flat **62% near-black**. The reference
+  uses 40%; ours is heavier because our illustration is brighter and the
+  type has to clear AA against the photograph itself.
+- **Measured against the photograph's own pixels**, not the colour behind
+  it: the heading **5.41:1**, the lede **10.95:1**, the tagline **5.32:1**
+  and the "Demo Image" caption **15.47:1**.
+- The caption sits **outside** the washed layer. Under the wash it measured
+  3.26:1, which is below the 4.5:1 that small text needs.
+- The page checker's "hero eyebrow" target became **"hero tagline"**, which
+  now measures the icon-and-tagline line over the photograph.
+- Two things the reviewed mock had dropped are gone from the homepage: the
+  third button ("See the soft play area" — the page is still in the
+  navigation) and the note under the buttons about the soft play corner
+  and the two-hour packages. One line each to bring back.
+
+`cafe-interior-hero.jpg`, the café interior that used to sit in the hero's
+card, is now used by no page. It is kept in the repository as a brand asset.
+
+### The badge: a stamp with a pulse, 31 October 2026
+
+The badge said "Demonstration site", which was too long for the header, and
+it was a pill. It now reads **"Demo Site"** and is shaped like a stamp: a
+crisp rectangle with a hairline keyline inside the fill, and a small square
+mark set on its corner the way a printer's mark sits on a block of type.
+
+It also **pulses**. The pulse is a slow honey ring that expands out of the
+stamp and fades — a ring and not a fade, because fading the stamp would dim
+its own text. It stops entirely for anyone who has asked for less movement.
+
+The demonstration boundary itself did not change: the standing notice the
+worker returns, and the three messages a visitor reads back after a
+booking, an enquiry or a sign-up, still say "as this is a demonstration
+site" in as many words. Only the badge's label is short.
+
 ## 3. The pages, reviewed and updated
 
 | Page | Reviewed | Updated | Notes |
@@ -396,14 +442,15 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **152 tests, 152 pass, 0 fail.** (95 at the rebrand; 109
+`npm test` — **160 tests, 160 pass, 0 fail.** (95 at the rebrand; 109
 after the mode switch, the policy and the dependency work; 27 more in
 the four files the mutation gate had flagged, which until then had no
 test of their own — `tests/demo-store.test.mjs`,
 `tests/booking.test.mjs`, `tests/calendar.test.mjs` and
 `tests/check-pages.test.mjs`; 4 more in the full-bleed band's
 `tests/photo-band.test.mjs`, 3 more in `tests/portrait-anchor.test.mjs`,
-3 more holding the page colour, and 6 in `tests/typeface.test.mjs`.)
+3 more holding the page colour, 6 in `tests/typeface.test.mjs`, 5 in
+`tests/hero.test.mjs` and 3 in `tests/demo-badge.test.mjs`.)
 
 `tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
 Each test asserts on the *absence* of a write or a request, so it would fail
@@ -730,6 +777,8 @@ Tests
 | `tests/photo-band.test.mjs` | Holds the full-bleed band: the picture stays described, and the wash keeps a colour the page checker can measure. |
 | `tests/portrait-anchor.test.mjs` | Holds the one portrait picture: it stays the cake rather than the bunting, it declares a 3:4 box, and the rule that pins its ratio stays scoped to the image stack. |
 | `tests/typeface.test.mjs` | Holds the display face: it is a design variable, the file is in this repository, the licence travels with it, every page preloads it, and no page loads a font from another origin. |
+| `tests/hero.test.mjs` | Holds the homepage hero: one full-bleed picture, described; the picture and its renditions in the repository with the prompt recorded; the wash is a colour the checker can measure; the type is centred; the caption is outside the washed layer. |
+| `tests/demo-badge.test.mjs` | Holds the badge: one on every page, saying "Demo Site"; shaped as a stamp rather than a pill; pulsing as a ring, and only for anyone who has not asked for less motion. |
 | `public/assets/theme.js` | The light/dark mode switch. Loaded from `<head>` without `defer` so the theme is set before the first paint. |
 | `tests/theme-mode.test.mjs` | Runs the mode switch against a stubbed browser, and checks that the notice discloses what it stores. |
 | `tools/check-pages.mjs` | Walks every public page and reports broken images, overflow, heading order, unlabelled controls, old-brand text, and the mode switch's state and contrast. |

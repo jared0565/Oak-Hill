@@ -27,6 +27,14 @@
       "prompt": "A wooden cafe table and two chairs in a small walled garden, low old brick wall covered in ivy, a clipped hedge, gravel underfoot, terracotta pots with shrubs, dappled afternoon sunlight through tree leaves"
     },
     {
+      "file": "party-outdoor-hero.jpg",
+      "purpose": "Homepage hero",
+      "suffix": "photo",
+      "extra": "no bunting, no banner, no balloons, no sign, no board, no parasol, no umbrella",
+      "prompt": "A long outdoor party table set for a birthday party in a leafy walled garden, empty of people, plain white tablecloth, paper plates and cups, a round cake on a wooden stand, simple wooden chairs, clipped hedge and trees behind, dappled afternoon sunlight",
+      "crop": "A 1024x420 band, cut from the middle of the generated square: the trees and hedge fill the upper two thirds for the hero's type to sit in, and the cakes and the near end of the table sit in the lower third. A band this wide is wider than the hero at ordinary window sizes, so the crop is horizontal and the table stays in frame."
+    },
+    {
       "file": "soft-play-room.jpg",
       "purpose": "Soft play page; homepage",
       "suffix": "photo",
@@ -131,42 +139,142 @@
     "height2x": 480,
     "crop": "centre square",
     "resample": "LANCZOS",
-    "jpeg": { "quality": 80, "subsampling": 2, "progressive": true, "optimize": true },
-    "webp": { "quality": 80, "method": 6 },
+    "jpeg": {
+      "quality": 80,
+      "subsampling": 2,
+      "progressive": true,
+      "optimize": true
+    },
+    "webp": {
+      "quality": 80,
+      "method": 6
+    },
     "files": [
-      { "file": "menu-breakfast-thumb.jpg", "source": "menu-breakfast.jpg", "format": "jpeg" },
-      { "file": "menu-breakfast-thumb.webp", "source": "menu-breakfast.jpg", "format": "webp" },
-      { "file": "menu-toastie-thumb.jpg", "source": "menu-toastie.jpg", "format": "jpeg" },
-      { "file": "menu-toastie-thumb.webp", "source": "menu-toastie.jpg", "format": "webp" },
-      { "file": "menu-sandwich-thumb.jpg", "source": "menu-sandwich.jpg", "format": "jpeg" },
-      { "file": "menu-sandwich-thumb.webp", "source": "menu-sandwich.jpg", "format": "webp" },
-      { "file": "menu-kids-meal-thumb.jpg", "source": "menu-kids-meal.jpg", "format": "jpeg" },
-      { "file": "menu-kids-meal-thumb.webp", "source": "menu-kids-meal.jpg", "format": "webp" },
-      { "file": "menu-cake-carrot-thumb.jpg", "source": "menu-cake-carrot.jpg", "format": "jpeg" },
-      { "file": "menu-cake-carrot-thumb.webp", "source": "menu-cake-carrot.jpg", "format": "webp" },
-      { "file": "menu-chocolate-cake-thumb.jpg", "source": "menu-chocolate-cake.jpg", "format": "jpeg" },
-      { "file": "menu-chocolate-cake-thumb.webp", "source": "menu-chocolate-cake.jpg", "format": "webp" },
-      { "file": "menu-hot-chocolate-thumb.jpg", "source": "menu-hot-chocolate.jpg", "format": "jpeg" },
-      { "file": "menu-hot-chocolate-thumb.webp", "source": "menu-hot-chocolate.jpg", "format": "webp" },
-      { "file": "menu-coffee-thumb.jpg", "source": "menu-coffee.jpg", "format": "jpeg" },
-      { "file": "menu-coffee-thumb.webp", "source": "menu-coffee.jpg", "format": "webp" },
-      { "file": "menu-cold-drinks-thumb.jpg", "source": "menu-cold-drinks.jpg", "format": "jpeg" },
-      { "file": "menu-cold-drinks-thumb.webp", "source": "menu-cold-drinks.jpg", "format": "webp" },
-      { "file": "menu-soup-thumb.jpg", "source": "menu-soup.jpg", "format": "jpeg" },
-      { "file": "menu-soup-thumb.webp", "source": "menu-soup.jpg", "format": "webp" },
-      { "file": "menu-pancakes-thumb.jpg", "source": "menu-pancakes.jpg", "format": "jpeg" },
-      { "file": "menu-pancakes-thumb.webp", "source": "menu-pancakes.jpg", "format": "webp" }
+      {
+        "file": "menu-breakfast-thumb.jpg",
+        "source": "menu-breakfast.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-breakfast-thumb.webp",
+        "source": "menu-breakfast.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-toastie-thumb.jpg",
+        "source": "menu-toastie.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-toastie-thumb.webp",
+        "source": "menu-toastie.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-sandwich-thumb.jpg",
+        "source": "menu-sandwich.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-sandwich-thumb.webp",
+        "source": "menu-sandwich.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-kids-meal-thumb.jpg",
+        "source": "menu-kids-meal.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-kids-meal-thumb.webp",
+        "source": "menu-kids-meal.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-cake-carrot-thumb.jpg",
+        "source": "menu-cake-carrot.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-cake-carrot-thumb.webp",
+        "source": "menu-cake-carrot.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-chocolate-cake-thumb.jpg",
+        "source": "menu-chocolate-cake.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-chocolate-cake-thumb.webp",
+        "source": "menu-chocolate-cake.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-hot-chocolate-thumb.jpg",
+        "source": "menu-hot-chocolate.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-hot-chocolate-thumb.webp",
+        "source": "menu-hot-chocolate.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-coffee-thumb.jpg",
+        "source": "menu-coffee.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-coffee-thumb.webp",
+        "source": "menu-coffee.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-cold-drinks-thumb.jpg",
+        "source": "menu-cold-drinks.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-cold-drinks-thumb.webp",
+        "source": "menu-cold-drinks.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-soup-thumb.jpg",
+        "source": "menu-soup.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-soup-thumb.webp",
+        "source": "menu-soup.jpg",
+        "format": "webp"
+      },
+      {
+        "file": "menu-pancakes-thumb.jpg",
+        "source": "menu-pancakes.jpg",
+        "format": "jpeg"
+      },
+      {
+        "file": "menu-pancakes-thumb.webp",
+        "source": "menu-pancakes.jpg",
+        "format": "webp"
+      }
     ]
   },
   "webpVariants": {
     "_comment": "WebP renditions of the photographs above, at the widths the pages actually draw them at. These are the same pixels at a smaller size, not a re-crop, so a page can pick one with srcset instead of shipping a 1024px JPEG to a 380px box. The JPEG originals are kept: they are the fallback for a browser without WebP, and the 1024px rendition is still the right choice on a 3x display. Built by tools/build-image-variants.py.",
     "quality": 80,
     "method": 6,
-    "widths": [512, 1024],
+    "widths": [
+      512,
+      1024
+    ],
     "sources": [
       "cafe-interior-hero.jpg",
       "cafe-window-table.jpg",
       "cafe-courtyard.jpg",
+      "party-outdoor-hero.jpg",
       "soft-play-room.jpg",
       "soft-play-corner.jpg",
       "party-setup.jpg",

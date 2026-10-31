@@ -34,6 +34,16 @@
       "prompt": "A wooden cafe table and two chairs in a small walled garden, low old brick wall covered in ivy, a clipped hedge, gravel underfoot, terracotta pots with shrubs, dappled afternoon sunlight through tree leaves, no building, no awning, no parasol, no umbrella, no shopfront, no window, no wall sign, no plaque, no board, no banner, amateur editorial photograph taken on a camera, natural available light, real materials and real textures, shallow depth of field, gentle photographic grain, natural colours, no people, no children, no faces, no text, no lettering, no logos, no brands, no watermark"
     },
     {
+      "file": "party-outdoor-hero.jpg",
+      "purpose": "Homepage hero",
+      "width": 1024,
+      "height": 420,
+      "bytes": 103503,
+      "provider": "Cloudflare Workers AI",
+      "model": "@cf/black-forest-labs/flux-1-schnell",
+      "prompt": "A long outdoor party table set for a birthday party in a leafy walled garden, empty of people, plain white tablecloth, paper plates and cups, a round cake on a wooden stand, simple wooden chairs, clipped hedge and trees behind, dappled afternoon sunlight, no bunting, no banner, no balloons, no sign, no board, no parasol, no umbrella, amateur editorial photograph taken on a camera, natural available light, real materials and real textures, shallow depth of field, gentle photographic grain, natural colours, no people, no children, no faces, no text, no lettering, no logos, no brands, no watermark"
+    },
+    {
       "file": "soft-play-room.jpg",
       "purpose": "Soft play page; homepage",
       "width": 1024,
@@ -611,6 +621,22 @@
         "width": 1024,
         "height": 683,
         "bytes": 167222
+      },
+      {
+        "file": "party-outdoor-hero-512.webp",
+        "source": "party-outdoor-hero.jpg",
+        "format": "webp",
+        "width": 512,
+        "height": 210,
+        "bytes": 26860
+      },
+      {
+        "file": "party-outdoor-hero-1024.webp",
+        "source": "party-outdoor-hero.jpg",
+        "format": "webp",
+        "width": 1024,
+        "height": 420,
+        "bytes": 74442
       },
       {
         "file": "soft-play-room-512.webp",

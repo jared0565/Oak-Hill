@@ -76,25 +76,29 @@
 </header>
 
   <main id="main">
+    <!-- The hero is one full-bleed photograph with the type centred over
+         it, in the manner of the reference café site: the picture is the
+         hero, not a card beside the text. -->
     <section class="hero">
+      <div class="hero__media">
+        <picture>
+          <source type="image/webp" srcset="assets/images/generated/party-outdoor-hero-512.webp 512w, assets/images/generated/party-outdoor-hero-1024.webp 1024w" sizes="100vw">
+          <img class="hero__img" src="assets/images/generated/party-outdoor-hero.jpg" srcset="assets/images/generated/party-outdoor-hero.jpg 1024w" sizes="100vw" width="1024" height="420" alt="Illustration of a long outdoor party table in a leafy walled garden, with a white tablecloth, paper plates and cups, and two cakes on wooden stands, empty of people" decoding="async" fetchpriority="high">
+        </picture>
+      </div>
+      <p class="demo-caption hero__caption">Demo Image</p>
       <div class="hero-inner">
         <div class="hero-text">
-          <p class="eyebrow">Café, soft play and parties</p>
+          <p class="hero__tagline">
+            <span class="hero__tagline-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+            <span>Café, soft play and parties</span>
+          </p>
           <h1>Good food, soft play and party packages.</h1>
           <p class="hero-copy">A family café with a soft play corner and a party booking desk. Breakfasts and sandwiches through the day, and parties for the birthdays that need a room of their own.</p>
           <div class="hero-actions">
             <a class="button" href="menu.html">Browse the menu</a>
-            <a class="button secondary" href="soft-play.html">See the soft play area</a>
             <a class="button ghost" href="calendar.html">Book a party</a>
           </div>
-          <p class="hero-note">The soft play corner sits apart from the café seating, and every party package runs for two hours.</p>
-        </div>
-        <div class="quick-card">
-          <picture>
-            <source type="image/webp" srcset="assets/images/generated/cafe-interior-hero-512.webp 512w, assets/images/generated/cafe-interior-hero-1024.webp 1024w" sizes="(max-width: 680px) calc(100vw - 64px), 426px">
-            <img src="assets/images/generated/cafe-interior-hero.jpg" srcset="assets/images/generated/cafe-interior-hero.jpg 1024w" sizes="(max-width: 680px) calc(100vw - 64px), 426px" width="1024" height="683" alt="Illustration of a café interior with wooden tables, banquette seating and daylight through sash windows" decoding="async" fetchpriority="high">
-          </picture>
-          <p class="demo-caption">Demo Image</p>
         </div>
       </div>
     </section>

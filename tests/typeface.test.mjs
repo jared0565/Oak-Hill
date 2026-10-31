@@ -31,7 +31,8 @@ test("the typeface is a design variable, not a font stack written into a rule", 
   assert.match(css, /--font-display:\s*"Fraunces"/, "there is no --font-display token");
   assert.match(css, /--font-body:\s*"Segoe UI"/, "there is no --font-body token");
   // The headings take the variable, so changing the face is one edit.
-  assert.match(css, /\.hero h1,[^{]*\{[^}]*font-family:\s*var\(--font-display\)/s);
+  assert.match(css, /\.hero h1 \{[^}]*font-family:\s*var\(--font-display\)/s);
+  assert.match(css, /\.page-hero h1 \{[^}]*font-family:\s*var\(--font-display\)/s);
   // The old tokens are gone, so nothing is left pointing at a face that is
   // no longer the site's.
   assert.doesNotMatch(css, /--serif:/);
