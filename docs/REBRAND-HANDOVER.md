@@ -176,9 +176,11 @@ block that overrides them.
 The dark page is a warm near-black, a card is one step up from it and an
 input two steps up. The green bands keep the brand colour they already had:
 they were dark to begin with, and the photography sits on them. Every value
-in the dark block was measured against its own background — the eleven text
+in the dark block was measured against its own background — the twelve text
 pairs on the home page are checked by `tools/check-pages.mjs` and all clear
-4.5:1, the lowest being the hero eyebrow at 6:1.
+4.5:1, the lowest being the demo badge at 5.43:1. The hero's type is
+measured separately, against the photograph itself, because the checker
+cannot see the picture: see "The homepage hero" below.
 
 **Paper stays paper.** The dark block is inside `@media screen`, so the
 menu PDF and a visitor's own print-out keep the light palette whatever the
@@ -346,15 +348,22 @@ beside it.
 
 - The picture is `party-outdoor-hero.jpg` — a **1024×420 band** cut from a
   generated square. The generator only makes squares, and a band this wide
-  is wider than the hero at ordinary window sizes, so the crop is horizontal
-  and the table stays in frame; a narrower band put the table at the bottom
-  edge, where a wide window cut it away.
+  is wider than the hero at ordinary window sizes, so the browser crops it
+  horizontally and the table stays in frame. The band is cut from rows 330
+  to 750 of the square: the hedge and the tree fill the upper third, and
+  the table itself — the white cloth, the plates, the cups and the two
+  cakes on their wooden stands — fills the rest. The first cut took the
+  top of the square instead, which left the table below the frame; the
+  operator saw the garden and not the party.
 - The wash over the photograph is a flat **62% near-black**. The reference
   uses 40%; ours is heavier because our illustration is brighter and the
   type has to clear AA against the photograph itself.
 - **Measured against the photograph's own pixels**, not the colour behind
-  it: the heading **5.41:1**, the lede **10.95:1**, the tagline **5.32:1**
-  and the "Demo Image" caption **15.47:1**.
+  it — the type painted a marker colour in a second screenshot, so the
+  glyphs can be told from the background behind them. At 1280×900: the
+  heading **5.29:1**, the lede **5.31:1**, the tagline **16.43:1**. At
+  390×844: **5.63:1**, **5.35:1** and **17.15:1**. The "Demo Image"
+  caption sits outside the wash and measures 15.47:1.
 - The caption sits **outside** the washed layer. Under the wash it measured
   3.26:1, which is below the 4.5:1 that small text needs.
 - The page checker's "hero eyebrow" target became **"hero tagline"**, which
@@ -428,8 +437,15 @@ isolated demo store. The admin console needs an owner account, bootstrapped
 through the admin page.
 
 ```bash
-npm test                   # 83 tests, no dependencies
+npm test                   # 167 tests, no dependencies
 ```
+
+The deploy's test job installs nothing either: it checks out the repository
+and runs `node --test`. A test that imports a package — puppeteer, say —
+fails there and takes the whole deploy with it, so anything a test imports
+has to be importable with no `node_modules` present. `tools/build-menu-pdf.mjs`
+therefore imports puppeteer inside the build rather than at the top of the
+module, which is what lets its own tests run on the runner.
 
 ### Demo configuration and the isolation controls
 
@@ -442,7 +458,7 @@ npm test                   # 83 tests, no dependencies
 
 ## 6. Tests run, and what they show
 
-`npm test` — **160 tests, 160 pass, 0 fail.** (95 at the rebrand; 109
+`npm test` — **167 tests, 167 pass, 0 fail.** (95 at the rebrand; 109
 after the mode switch, the policy and the dependency work; 27 more in
 the four files the mutation gate had flagged, which until then had no
 test of their own — `tests/demo-store.test.mjs`,
@@ -450,7 +466,10 @@ test of their own — `tests/demo-store.test.mjs`,
 `tests/check-pages.test.mjs`; 4 more in the full-bleed band's
 `tests/photo-band.test.mjs`, 3 more in `tests/portrait-anchor.test.mjs`,
 3 more holding the page colour, 6 in `tests/typeface.test.mjs`, 5 in
-`tests/hero.test.mjs` and 3 in `tests/demo-badge.test.mjs`.)
+`tests/hero.test.mjs` and 3 in `tests/demo-badge.test.mjs`; 7 more in
+`tests/build-menu-pdf.test.mjs`, which covers the loopback server the
+menu PDF is built through — including a request that tries to climb out
+of the directory it serves.)
 
 `tests/demo-mode.test.mjs` is the safety net for the demonstration boundary.
 Each test asserts on the *absence* of a write or a request, so it would fail
